@@ -1,0 +1,5 @@
+name: UHCWars
+version: 0.0.1
+author: NoReach
+main: me.noreach.uhcwars
+commands:
