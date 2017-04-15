@@ -2,6 +2,7 @@ package me.noreach.uhcwars.util;
 
 import me.noreach.uhcwars.UHCWars;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * Created by Ryan on 10/04/2017.
@@ -9,6 +10,8 @@ import org.bukkit.ChatColor;
 public class References {
 
     private UHCWars uhcWars;
+    private FileConfiguration config;
+
     private String prefix;
     private String spawnWorld;
     private String gameWorld;
@@ -22,5 +25,8 @@ public class References {
 
     public References(UHCWars uhcWars){
         this.uhcWars = uhcWars;
+        this.uhcWars.reloadConfig();
+        this.config = this.uhcWars.getConfig();
+
     }
 }
