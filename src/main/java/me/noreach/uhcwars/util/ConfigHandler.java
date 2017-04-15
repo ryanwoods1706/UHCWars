@@ -36,6 +36,8 @@ public class ConfigHandler {
         this.config.addDefault("Settings.Messages.scoreboardIP", "defaultIP");
         this.config.addDefault("Settings.Messages.mainColor", ChatColor.AQUA.toString());
         this.config.addDefault("Settings.Messages.secondaryColor", ChatColor.GOLD.toString());
+        this.config.addDefault("Settings.gameSettings.spawnWorld", "spawn");
+        this.config.addDefault("Settings.gameSettings.gameWorld", "world");
         this.config.addDefault("Settings.gameSettings.minStart", 20);
         this.config.addDefault("Settings.gameSettings.maxSlots", 50);
         this.config.addDefault("Settings.gameSettings.timeLimit", 900);

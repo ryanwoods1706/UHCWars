@@ -27,6 +27,10 @@ public class References {
         this.uhcWars = uhcWars;
         this.uhcWars.reloadConfig();
         this.config = this.uhcWars.getConfig();
+        this.prefix = this.config.getString("Settings.Messages.prefix");
+        this.spawnWorld = this.config.getString("Settings.gameSettings.spawnWorld");
+        this.gameWorld = this.config.getString("Settings.gameSettings.gameWorld");
+
 
     }
 }
