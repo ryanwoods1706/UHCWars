@@ -1,5 +1,9 @@
 package me.noreach.uhcwars;
 
+import me.noreach.uhcwars.enums.StateManager;
+import me.noreach.uhcwars.sql.SQLHandler;
+import me.noreach.uhcwars.teams.TeamManager;
+import me.noreach.uhcwars.timers.PreGame;
 import me.noreach.uhcwars.util.References;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,16 +16,25 @@ public class UHCWars extends JavaPlugin {
 
 
     private References references;
+    private SQLHandler sqlHandler;
+    private StateManager stateManager;
+    private TeamManager teamManager;
+
 
     @Override
     public void onEnable() {
         getConfig();
         this.references = new References(this);
+        this.sqlHandler = new SQLHandler(this, getConfig().getString("Settings.SQL.ip"), getConfig().getString("Settings.SQL.database"), getConfig().getString("Settings.SQL.username"), getConfig().getString("Settings.SQL.password"));
+        this.stateManager = new StateManager(this);
+        this.teamManager = new TeamManager(this);
+        new PreGame(this).runTaskTimer(this, 0, 20L);
+
     }
 
     @Override
     public void onDisable() {
-
+        this.sqlHandler.closeConnection();
     }
 
 
@@ -37,4 +50,11 @@ public class UHCWars extends JavaPlugin {
     public References getReferences(){
         return this.references;
     }
+    public SQLHandler getSqlHandler(){
+        return this.sqlHandler;
+    }
+    public StateManager getStateManager(){
+        return this.stateManager;
+    }
+    public TeamManager getTeamManager(){ return this.teamManager;}
 }

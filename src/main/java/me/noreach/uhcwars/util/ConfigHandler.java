@@ -3,6 +3,7 @@ package me.noreach.uhcwars.util;
 import me.noreach.uhcwars.UHCWars;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
@@ -26,8 +27,8 @@ public class ConfigHandler {
     }
 
     private void checkConfig(){
+        this.config.addDefault("Settings.SQL.stats", false);
         this.config.addDefault("Settings.SQL.ip", "localhost");
-        this.config.addDefault("Settings.SQL.port", 3306);
         this.config.addDefault("Settings.SQL.database", "database");
         this.config.addDefault("Settings.SQL.username", "username");
         this.config.addDefault("Settings.SQL.password", "password");
@@ -38,6 +39,7 @@ public class ConfigHandler {
         this.config.addDefault("Settings.Messages.secondaryColor", ChatColor.GOLD.toString());
         this.config.addDefault("Settings.gameSettings.spawnWorld", "spawn");
         this.config.addDefault("Settings.gameSettings.gameWorld", "world");
+        this.config.addDefault("Settings.gameSettings.wallBlock", Material.BEDROCK);
         this.config.addDefault("Settings.gameSettings.minStart", 20);
         this.config.addDefault("Settings.gameSettings.maxSlots", 50);
         this.config.addDefault("Settings.gameSettings.timeLimit", 900);
