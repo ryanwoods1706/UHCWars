@@ -1,6 +1,7 @@
 package me.noreach.uhcwars;
 
 import me.noreach.uhcwars.enums.StateManager;
+import me.noreach.uhcwars.game.GameManager;
 import me.noreach.uhcwars.sql.SQLHandler;
 import me.noreach.uhcwars.teams.TeamManager;
 import me.noreach.uhcwars.timers.PreGame;
@@ -19,6 +20,7 @@ public class UHCWars extends JavaPlugin {
     private SQLHandler sqlHandler;
     private StateManager stateManager;
     private TeamManager teamManager;
+    private GameManager gameManager;
 
 
     @Override
@@ -28,6 +30,7 @@ public class UHCWars extends JavaPlugin {
         this.sqlHandler = new SQLHandler(this, getConfig().getString("Settings.SQL.ip"), getConfig().getString("Settings.SQL.database"), getConfig().getString("Settings.SQL.username"), getConfig().getString("Settings.SQL.password"));
         this.stateManager = new StateManager(this);
         this.teamManager = new TeamManager(this);
+        this.gameManager = new GameManager(this);
         new PreGame(this).runTaskTimer(this, 0, 20L);
 
     }
@@ -57,4 +60,5 @@ public class UHCWars extends JavaPlugin {
         return this.stateManager;
     }
     public TeamManager getTeamManager(){ return this.teamManager;}
+    public GameManager getGameManager(){ return this.gameManager;}
 }
