@@ -21,6 +21,8 @@ public class RegionManager {
     private Map<Teams, List<Block>> teamAreas = new HashMap<>();
     private List<Region> regionsInUse = new ArrayList<>();
     private List<Location> wallLocation = new ArrayList<>();
+    private Map<UUID, Region> regionFactory = new HashMap<>();
+    private Map<Teams, Location> teamsLocations = new HashMap<>();
     
     
     public RegionManager(UHCWars uhcWars){
@@ -52,8 +54,20 @@ public class RegionManager {
             Location wallPos2 = new Location(Bukkit.getWorld(configuration.getString(wallpos2 + "worldname")), configuration.getDouble(wallpos2 + "x"), configuration.getDouble(wallpos2 + "y"), configuration.getDouble(wallpos2 + "z"));
             this.wallLocation.add(wallPos1);
             this.wallLocation.add(wallPos2);
+            FileConfiguration configuration = uhcWars.getConfig();
+            String path = "Settings.SpawnLocations.Team1.";
+            String path2 = "Settings.SpawnLocations.Team2.";
+            try {
+                Location team1Location = new Location(Bukkit.getWorld(configuration.getString(path + "world")), configuration.getDouble(path + "x"), configuration.getDouble(path + "y"), configuration.getDouble(path + "z"));
+                Location team2Location = new Location(Bukkit.getWorld(configuration.getString(path2 + "world")), configuration.getDouble(path2 + "x"), configuration.getDouble(path2 + "y"), configuration.getDouble(path2 + "z"));
+                this.teamsLocations.put(Teams.Team_1, team1Location);
+                this.teamsLocations.put(Teams.Team_2, team2Location);
+            }catch (Exception e){
+                Bukkit.getLogger().log(Level.SEVERE, "[CONFIG ERROR] Team Spawn locations have not been set!");
+                e.printStackTrace();
+            }
         }catch (Exception e){
-            Bukkit.getLogger().log(Level.SEVERE, ChatColor.RED + "!!!!COULD NOT LOAD REGIONS FROM CONFIG!!!!");
+            Bukkit.getLogger().log(Level.SEVERE, "[CONFIG ERROR] Some regions have not been set!");
             e.printStackTrace();
         }
     }
@@ -62,4 +76,5 @@ public class RegionManager {
     public List<Region> getRegionsInUse(){ return this.regionsInUse;}
     public Map<Teams, List<Block>> getTeamAreas(){ return this.teamAreas;}
     public List<Location> getWallLocation(){return this.wallLocation;}
+    public Map<UUID, Region> getRegionFactory(){ return this.regionFactory;}
 }

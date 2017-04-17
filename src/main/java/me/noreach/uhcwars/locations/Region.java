@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 public class Region {
 
     private FileConfiguration configuration;
+    private UHCWars uhcWars;
 
     private Player player;
     private Location corner1;
@@ -20,7 +21,8 @@ public class Region {
 
     public Region(Player player, UHCWars uhcWars){
         this.player = player;
-        uhcWars.reloadConfig();
+        this.uhcWars = uhcWars;
+        this.uhcWars.reloadConfig();
         this.configuration = uhcWars.getConfig();
 
     }
@@ -42,14 +44,14 @@ public class Region {
         this.regionname = regionname;
     }
 
-    public void attemptSave(){
+    public boolean attemptSave(){
         if (this.corner1 == null){
             sendMessage(ChatColor.RED + "You must set corner 1 before saving!");
-            return;
+            return false;
         }
         if (this.corner2 == null){
             sendMessage(ChatColor.RED + "You must set corner 2 before saving!");
-            return;
+            return false;
         }
         String pos1Path = "Settings.Regions." + regionname + ".pos1.";
         String pos2Path = "Settings.Regions." + regionname + ".pos2.";
@@ -62,8 +64,8 @@ public class Region {
         configuration.set(pos2Path + "x", this.corner2.getX());
         configuration.set(pos2Path + "y", this.corner2.getY());
         configuration.set(pos2Path + "z", this.corner2.getZ());
-
-        return;
+        this.uhcWars.saveConfig();
+        return true;
     }
 
     private void sendMessage(String message){
