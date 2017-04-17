@@ -30,11 +30,11 @@ public class ConfigHandler {
         this.uhcWars.getConfig().addDefault("Settings.Messages.prefix", "defaultPrefix");
         this.uhcWars.getConfig().addDefault("Settings.Messages.scoreboardTitle", "defaultTitle");
         this.uhcWars.getConfig().addDefault("Settings.Messages.scoreboardIP", "defaultIP");
-        this.uhcWars.getConfig().addDefault("Settings.Messages.mainColor", "&c");
-        this.uhcWars.getConfig().addDefault("Settings.Messages.secondaryColor", "&6");
+        this.uhcWars.getConfig().addDefault("Settings.Messages.mainColor", "RED");
+        this.uhcWars.getConfig().addDefault("Settings.Messages.secondaryColor", "GOLD");
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.spawnWorld", "spawn");
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.gameWorld", "world");
-        this.uhcWars.getConfig().addDefault("Settings.gameSettings.wallBlock", Material.BEDROCK);
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.wallBlock", "BEDROCK");
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.minStart", 20);
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.maxSlots", 50);
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.timeLimit", 900);

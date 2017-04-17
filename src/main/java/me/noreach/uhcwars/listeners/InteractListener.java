@@ -42,18 +42,19 @@ public class InteractListener implements Listener {
             }
             else if (e.getAction() == Action.RIGHT_CLICK_BLOCK){
                 region.setCorner2(e.getClickedBlock().getLocation());
-                pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() +"Set Position 2 of region");
-            }
-            if (pl.getItemInHand().getType() == Material.GOLD_AXE && pl.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Objective Maker")) {
-                if (e.getAction() == Action.LEFT_CLICK_BLOCK){
-                    e.setCancelled(true);
-                    Objective objective = this.uhcWars.getObjectiveManager().getObjectiveCache().get(pl.getUniqueId());
-                    objective.setBlock(e.getClickedBlock());
-                }
-
-
+                pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Set Position 2 of region");
             }
 
+
+        }
+        else if (pl.getItemInHand().getType() == Material.GOLD_AXE && pl.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Objective Maker")) {
+            if (e.getAction() == Action.LEFT_CLICK_BLOCK){
+                e.setCancelled(true);
+                Objective objective = this.uhcWars.getObjectiveManager().getObjectiveCache().get(pl.getUniqueId());
+                objective.setBlock(e.getClickedBlock());
+                pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Set " + this.uhcWars.getReferences().getSecondaryColor() + objective.getTeamObjective() + this.uhcWars.getReferences().getMainColor() + " Objective block!");
+
+            }
         }
     }
 }

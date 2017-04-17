@@ -66,6 +66,7 @@ public class ObjectiveCMD implements CommandExecutor {
             }
         }catch (ArrayIndexOutOfBoundsException e){
             //TODO ADD USAGE
+            player.sendMessage("USAGE");
         }
         return false;
     }

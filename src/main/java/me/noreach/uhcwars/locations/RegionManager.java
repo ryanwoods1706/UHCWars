@@ -5,6 +5,7 @@ import me.noreach.uhcwars.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -15,7 +16,7 @@ import java.util.logging.Level;
  * Created by Ryan on 16/04/2017.
  */
 public class RegionManager {
-    
+
     private UHCWars uhcWars;
     private FileConfiguration configuration;
     private Map<Teams, List<Block>> teamAreas = new HashMap<>();
@@ -23,17 +24,17 @@ public class RegionManager {
     private List<Location> wallLocation = new ArrayList<>();
     private Map<UUID, Region> regionFactory = new HashMap<>();
     private Map<Teams, Location> teamsLocations = new HashMap<>();
-    
-    
-    public RegionManager(UHCWars uhcWars){
+
+
+    public RegionManager(UHCWars uhcWars) {
         this.uhcWars = uhcWars;
         this.uhcWars.reloadConfig();
         this.configuration = uhcWars.getConfig();
         loadExisting();
     }
 
-    public void loadExisting(){
-        try{
+    public void loadExisting() {
+        try {
             String team1Path = "Settings.Regions." + Teams.Team_1.toString() + ".pos1.";
             String team1PathPo2 = "Settings.Regions." + Teams.Team_1.toString() + ".pos2.";
             Location team1Pos1 = new Location(Bukkit.getWorld(configuration.getString(team1Path + "worldname")), configuration.getDouble(team1Path + "x"), configuration.getDouble(team1Path + "y"), configuration.getDouble(team1Path + "z"));
@@ -62,19 +63,53 @@ public class RegionManager {
                 Location team2Location = new Location(Bukkit.getWorld(configuration.getString(path2 + "world")), configuration.getDouble(path2 + "x"), configuration.getDouble(path2 + "y"), configuration.getDouble(path2 + "z"));
                 this.teamsLocations.put(Teams.Team_1, team1Location);
                 this.teamsLocations.put(Teams.Team_2, team2Location);
-            }catch (Exception e){
+            } catch (Exception e) {
                 Bukkit.getLogger().log(Level.SEVERE, "[CONFIG ERROR] Team Spawn locations have not been set!");
                 e.printStackTrace();
             }
-        }catch (Exception e){
+
+            try {
+                String path3 = "Settings.Objective.Team_1.location.";
+                World Team1world = Bukkit.getWorld(this.configuration.getString("Settings.Objective.Team_1.location.world"));
+                Block block = Team1world.getBlockAt(this.configuration.getInt(path3 + "x"), this.configuration.getInt(path3 + "y"), this.configuration.getInt(path3 + "z"));
+                Objective objective = new Objective(block);
+                objective.setTeamObjective(Teams.Team_1);
+                this.uhcWars.getObjectiveManager().getActiveObjectives().put(objective.getTeamObjective(), objective);
+
+                String path4 = "Settings.Objective.Team_1.location.";
+                World Team2world = Bukkit.getWorld(this.configuration.getString("Settings.Objective.Team_2.location.world"));
+                Block block2 = Team2world.getBlockAt(this.configuration.getInt(path4 + "x"), this.configuration.getInt(path4 + "y"), this.configuration.getInt(path4 + "z"));
+                Objective objective2 = new Objective(block2);
+                objective2.setTeamObjective(Teams.Team_2);
+                this.uhcWars.getObjectiveManager().getActiveObjectives().put(objective2.getTeamObjective(), objective2);
+                Bukkit.getLogger().log(Level.INFO, "[CONFIG] Successfully loaded all objectives from the config");
+            } catch (Exception e) {
+                Bukkit.getLogger().log(Level.SEVERE, "[CONFIG ERROR] The objectives have not been set!");
+            }
+        } catch (Exception e) {
             Bukkit.getLogger().log(Level.SEVERE, "[CONFIG ERROR] Some regions have not been set!");
             e.printStackTrace();
         }
     }
 
 
-    public List<Region> getRegionsInUse(){ return this.regionsInUse;}
-    public Map<Teams, List<Block>> getTeamAreas(){ return this.teamAreas;}
-    public List<Location> getWallLocation(){return this.wallLocation;}
-    public Map<UUID, Region> getRegionFactory(){ return this.regionFactory;}
+    public List<Region> getRegionsInUse() {
+        return this.regionsInUse;
+    }
+
+    public Map<Teams, List<Block>> getTeamAreas() {
+        return this.teamAreas;
+    }
+
+    public List<Location> getWallLocation() {
+        return this.wallLocation;
+    }
+
+    public Map<UUID, Region> getRegionFactory() {
+        return this.regionFactory;
+    }
+
+    public Map<Teams, Location> getTeamsLocations() {
+        return this.teamsLocations;
+    }
 }

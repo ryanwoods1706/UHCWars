@@ -34,11 +34,9 @@ public class Region {
 
     public void setCorner1(Location corner1){
         this.corner1 = corner1;
-        sendMessage(ChatColor.GREEN + "Successfully set Corner_1!");
     }
     public void setCorner2(Location corner2){
         this.corner2 = corner2;
-        sendMessage(ChatColor.GREEN + "Successfully set Corner_2!");
     }
     public void setRegionname(String regionname){
         this.regionname = regionname;

@@ -1,10 +1,7 @@
 package me.noreach.uhcwars.util;
 
 import me.noreach.uhcwars.UHCWars;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.logging.Level;
@@ -48,9 +45,8 @@ public class References {
                 sbTitle = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardTitle"));
                 sbIP = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardIP"));
                 mainColor = ChatColor.valueOf(config.getString("Settings.Messages.mainColor"));
-                secondaryColor = ChatColor.valueOf(config.getString("Settings.Messages.secondaryColor"));
-                spawnWorld = Bukkit.getWorld(config.getString("Settings.gameSettings.spawnWorld"));
-                gameWorld = Bukkit.getWorld(config.getString("Settings.gameSettings.gameWorld"));
+                spawnWorld = new WorldCreator(config.getString("Settings.gameSettings.spawnWorld")).createWorld();
+                gameWorld = new WorldCreator(config.getString("Settings.gameSettings.gameWorld")).createWorld();
                 wallMaterial = Material.valueOf(config.getString("Settings.gameSettings.wallBlock"));
                 reqStart = config.getInt("Settings.gameSettings.minStart");
                 maxSlots = config.getInt("Settings.gameSettings.maxSlots");
@@ -63,7 +59,6 @@ public class References {
                 Bukkit.getLogger().log(Level.INFO, "[CONFIG] Successfully loaded all values from the config");
             }
         }, 1L);
-
 
         if (this.timeLimit < this.halfTime) {
             Bukkit.getLogger().log(Level.SEVERE, "[CONFIG ERROR] The timelimit must be greater than the half time value!");

@@ -1,9 +1,11 @@
 package me.noreach.uhcwars.game;
 
 import me.noreach.uhcwars.UHCWars;
+import me.noreach.uhcwars.enums.GameState;
 import me.noreach.uhcwars.teams.Teams;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,18 @@ public class GameManager {
         this.uhcWars.getTeamManager().splitPlayers();
         this.uhcWars.getTeamManager().getTeamKills().put(Teams.Team_1, 0);
         this.uhcWars.getTeamManager().getTeamKills().put(Teams.Team_2, 0);
-        //ADD REGISTERING OBJECTIVE BLOCKS
+        this.uhcWars.getTeamManager().splitPlayers();
+
+        for (Player player : this.uhcWars.getTeamManager().getTeam1()){
+            player.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1));
+            //TODO ADD INVENTORY
+        }
+        for (Player player : this.uhcWars.getTeamManager().getTeam2()){
+            player.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2));
+            //TODO ADD INVENTOR
+        }
+        //TODO ADD FILL CHESTS
+        this.uhcWars.getStateManager().setGameState(GameState.INGAME);
     }
 
 

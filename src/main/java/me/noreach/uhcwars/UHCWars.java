@@ -3,6 +3,7 @@ package me.noreach.uhcwars;
 import me.noreach.uhcwars.commands.LocationCMD;
 import me.noreach.uhcwars.commands.ObjectiveCMD;
 import me.noreach.uhcwars.commands.RegionCMD;
+import me.noreach.uhcwars.enums.GameState;
 import me.noreach.uhcwars.enums.StateManager;
 import me.noreach.uhcwars.game.GameManager;
 import me.noreach.uhcwars.inventories.Invent;
@@ -16,10 +17,14 @@ import me.noreach.uhcwars.timers.PreGame;
 import me.noreach.uhcwars.util.ConfigHandler;
 import me.noreach.uhcwars.util.References;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Ref;
+import java.util.logging.Level;
 
 /**
  * Created by Ryan on 10/04/2017.
@@ -50,16 +55,17 @@ public class UHCWars extends JavaPlugin {
         this.invent = new Invent(this);
         this.regionManager = new RegionManager(this);
         this.objectiveManager = new ObjectiveManager(this);
+        this.stateManager.setGameState(GameState.LOBBY);
         new PreGame(this).runTaskTimer(this, 0, 20L);
-
-
         registerEvents();
         registerCommands();
+        generateWall();
     }
 
     @Override
     public void onDisable() {
         this.sqlHandler.closeConnection();
+        degenerateWall();
     }
 
 
@@ -76,19 +82,56 @@ public class UHCWars extends JavaPlugin {
 
     }
 
+    private void generateWall(){
+        Location corner1 = this.regionManager.getWallLocation().get(0);
+        Location corner2 = this.regionManager.getWallLocation().get(1);
+        for (Block block : this.gameManager.blocksFromTwoPoints(corner1, corner2)){
+            block.setType(this.references.getWallMaterial());
+            block.getState().update();
+        }
+        Bukkit.getLogger().log(Level.INFO, "[Walls] Successfully generated the wall!");
+    }
 
-    public References getReferences(){
+    private void degenerateWall(){
+        Location corner1 = this.regionManager.getWallLocation().get(0);
+        Location corner2 = this.regionManager.getWallLocation().get(1);
+        for (Block block : this.gameManager.blocksFromTwoPoints(corner1, corner2)){
+            block.setType(Material.AIR);
+            block.getState().update();
+        }
+        Bukkit.getLogger().log(Level.INFO, "[Walls] Successfully REMOVED the wall!");
+    }
+
+
+    public References getReferences() {
         return this.references;
     }
-    public SQLHandler getSqlHandler(){
+
+    public SQLHandler getSqlHandler() {
         return this.sqlHandler;
     }
-    public StateManager getStateManager(){
+
+    public StateManager getStateManager() {
         return this.stateManager;
     }
-    public TeamManager getTeamManager(){ return this.teamManager;}
-    public GameManager getGameManager(){ return this.gameManager;}
-    public Invent getInvent(){ return this.invent;}
-    public RegionManager getRegionManager(){ return this.regionManager;}
-    public ObjectiveManager getObjectiveManager(){ return this.objectiveManager;}
+
+    public TeamManager getTeamManager() {
+        return this.teamManager;
+    }
+
+    public GameManager getGameManager() {
+        return this.gameManager;
+    }
+
+    public Invent getInvent() {
+        return this.invent;
+    }
+
+    public RegionManager getRegionManager() {
+        return this.regionManager;
+    }
+
+    public ObjectiveManager getObjectiveManager() {
+        return this.objectiveManager;
+    }
 }

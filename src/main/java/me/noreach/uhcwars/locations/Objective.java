@@ -15,6 +15,8 @@ public class Objective {
     private FileConfiguration config;
     private Player creator;
     private UHCWars uhcWars;
+
+    private int health;
     private Teams teamObjective;
     private Block block;
     private Location location;
@@ -25,6 +27,7 @@ public class Objective {
         this.uhcWars.reloadConfig();
         this.config = this.uhcWars.getConfig();
         this.teamObjective = teams;
+        this.health = this.uhcWars.getReferences().getObjectiveHealth();
     }
     public Objective(Block block){
         setBlock(block);
@@ -34,7 +37,7 @@ public class Objective {
     public void setBlock(Block block){
         this.block = block;
         this.location = this.block.getLocation();
-        sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Successfully set " + this.uhcWars.getReferences().getSecondaryColor() + teamObjective + this.uhcWars.getReferences().getMainColor() + " objective block!");
+        //sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Successfully set " + this.uhcWars.getReferences().getSecondaryColor() + teamObjective + this.uhcWars.getReferences().getMainColor() + " objective block!");
         sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Objective ready to save: /objective save");
     }
 
@@ -44,7 +47,7 @@ public class Objective {
         }
         String path = "Settings.Objective." + this.teamObjective + ".blockType";
         String path2 = "Settings.Objective." + this.teamObjective + ".location";
-        config.set(path, block.getType());
+        config.set(path, block.getType().toString());
         config.set(path2 + ".world", location.getWorld().getName());
         config.set(path2 + ".x", location.getX());
         config.set(path2 + ".y", location.getY());
@@ -60,6 +63,8 @@ public class Objective {
         }
     }
 
+    public int getHealth(){ return this.health;}
     public Teams getTeamObjective(){ return this.teamObjective;}
+    public void setTeamObjective(Teams teamObjective){ this.teamObjective = teamObjective;}
 
 }
