@@ -39,24 +39,31 @@ public class References {
 
     public References(UHCWars uhcWars) {
         this.uhcWars = uhcWars;
-        this.uhcWars.reloadConfig();
-        this.config = this.uhcWars.getConfig();
-        this.prefix = ChatColor.translateAlternateColorCodes('&', this.config.getString("Settings.Messages.prefix"));
-        this.sbTitle = ChatColor.translateAlternateColorCodes('&', this.config.getString("Settings.Messages.scoreboardTitle"));
-        this.sbIP = ChatColor.translateAlternateColorCodes('&', this.config.getString("Settings.Messages.scoreboardIP"));
-        this.mainColor = ChatColor.valueOf(this.config.getString("Settings.Messages.mainColor"));
-        this.secondaryColor = ChatColor.valueOf(this.config.getString("Settings.Messages.secondaryColor"));
-        this.spawnWorld = Bukkit.getWorld(this.config.getString("Settings.gameSettings.spawnWorld"));
-        this.gameWorld = Bukkit.getWorld(this.config.getString("Settings.gameSettings.gameWorld"));
-        this.wallMaterial = Material.valueOf(this.config.getString("Settings.gameSettings.wallBlock"));
-        this.reqStart = this.config.getInt("Settings.gameSettings.minStart");
-        this.maxSlots = this.config.getInt("Settings.gameSettings.maxSlots");
-        this.timeLimit = this.config.getInt("Settings.gameSettings.timeLimit");
-        this.wallDropTime = this.config.getInt("Settings.gameSettings.wallDropTime");
-        this.halfTime = this.config.getInt("Settings.gameSettings.halfTime");
-        this.goldenHeadsOnDeath = this.config.getBoolean("Settings.gameSettings.goldenHeadOnDeath");
-        this.objectiveHealth = this.config.getInt("Settings.gameSettings.objectiveHealth");
-        this.objectiveDmgPerHit = this.config.getInt("Settings.gameSettings.objectiveDmgPerHit");
+        Bukkit.getScheduler().runTaskLater(this.uhcWars, new Runnable() {
+            @Override
+            public void run() {
+                uhcWars.reloadConfig();
+                config = uhcWars.getConfig();
+                prefix = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.prefix"));
+                sbTitle = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardTitle"));
+                sbIP = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardIP"));
+                mainColor = ChatColor.valueOf(config.getString("Settings.Messages.mainColor"));
+                secondaryColor = ChatColor.valueOf(config.getString("Settings.Messages.secondaryColor"));
+                spawnWorld = Bukkit.getWorld(config.getString("Settings.gameSettings.spawnWorld"));
+                gameWorld = Bukkit.getWorld(config.getString("Settings.gameSettings.gameWorld"));
+                wallMaterial = Material.valueOf(config.getString("Settings.gameSettings.wallBlock"));
+                reqStart = config.getInt("Settings.gameSettings.minStart");
+                maxSlots = config.getInt("Settings.gameSettings.maxSlots");
+                timeLimit = config.getInt("Settings.gameSettings.timeLimit");
+                wallDropTime = config.getInt("Settings.gameSettings.wallDropTime");
+                halfTime = config.getInt("Settings.gameSettings.halfTime");
+                goldenHeadsOnDeath = config.getBoolean("Settings.gameSettings.goldenHeadOnDeath");
+                objectiveHealth = config.getInt("Settings.gameSettings.objectiveHealth");
+                objectiveDmgPerHit = config.getInt("Settings.gameSettings.objectiveDmgPerHit");
+                Bukkit.getLogger().log(Level.INFO, "[CONFIG] Successfully loaded all values from the config");
+            }
+        }, 1L);
+
 
         if (this.timeLimit < this.halfTime) {
             Bukkit.getLogger().log(Level.SEVERE, "[CONFIG ERROR] The timelimit must be greater than the half time value!");
@@ -68,7 +75,8 @@ public class References {
         }
         if (this.spawnWorld == null || this.gameWorld == null) {
             Bukkit.getLogger().log(Level.SEVERE, "[CONFIG ERROR] Either the spawn or game world does not exist!");
-            Bukkit.getServer().shutdown();
+            //TODO ADD BACK
+            //Bukkit.getServer().shutdown();
         }
 
     }

@@ -18,38 +18,32 @@ public class ConfigHandler {
         this.uhcWars = uhcWars;
         this.uhcWars.reloadConfig();
         this.config = this.uhcWars.getConfig();
-        Bukkit.getScheduler().runTaskLater(this.uhcWars, new Runnable() {
-            @Override
-            public void run() {
-                checkConfig();
-            }
-        }, 20L);
+        checkConfig();
     }
 
     private void checkConfig(){
-        this.config.addDefault("Settings.SQL.stats", false);
-        this.config.addDefault("Settings.SQL.ip", "localhost");
-        this.config.addDefault("Settings.SQL.database", "database");
-        this.config.addDefault("Settings.SQL.username", "username");
-        this.config.addDefault("Settings.SQL.password", "password");
-        this.config.addDefault("Settings.Messages.prefix", "defaultPrefix");
-        this.config.addDefault("Settings.Messages.scoreboardTitle", "defaultTitle");
-        this.config.addDefault("Settings.Messages.scoreboardIP", "defaultIP");
-        this.config.addDefault("Settings.Messages.mainColor", ChatColor.AQUA.toString());
-        this.config.addDefault("Settings.Messages.secondaryColor", ChatColor.GOLD.toString());
-        this.config.addDefault("Settings.gameSettings.spawnWorld", "spawn");
-        this.config.addDefault("Settings.gameSettings.gameWorld", "world");
-        this.config.addDefault("Settings.gameSettings.wallBlock", Material.BEDROCK);
-        this.config.addDefault("Settings.gameSettings.minStart", 20);
-        this.config.addDefault("Settings.gameSettings.maxSlots", 50);
-        this.config.addDefault("Settings.gameSettings.timeLimit", 900);
-        this.config.addDefault("Settings.gameSettings.wallDropTime", 300);
-        this.config.addDefault("Settings.gameSettings.halfTime", 600);
-        this.config.addDefault("Settings.gameSettings.goldenHeadOnDeath", true);
-        this.config.addDefault("Settings.gameSettings.objectiveHealth", 300);
-        this.config.addDefault("Settings.gameSettings.objectiveDmgPerHit", 1);
-        this.config.options().copyDefaults(true);
+        this.uhcWars.getConfig().addDefault("Settings.SQL.stats", false);
+        this.uhcWars.getConfig().addDefault("Settings.SQL.ip", "localhost");
+        this.uhcWars.getConfig().addDefault("Settings.SQL.database", "database");
+        this.uhcWars.getConfig().addDefault("Settings.SQL.username", "username");
+        this.uhcWars.getConfig().addDefault("Settings.SQL.password", "password");
+        this.uhcWars.getConfig().addDefault("Settings.Messages.prefix", "defaultPrefix");
+        this.uhcWars.getConfig().addDefault("Settings.Messages.scoreboardTitle", "defaultTitle");
+        this.uhcWars.getConfig().addDefault("Settings.Messages.scoreboardIP", "defaultIP");
+        this.uhcWars.getConfig().addDefault("Settings.Messages.mainColor", "&c");
+        this.uhcWars.getConfig().addDefault("Settings.Messages.secondaryColor", "&6");
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.spawnWorld", "spawn");
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.gameWorld", "world");
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.wallBlock", Material.BEDROCK);
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.minStart", 20);
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.maxSlots", 50);
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.timeLimit", 900);
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.wallDropTime", 300);
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.halfTime", 600);
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.goldenHeadOnDeath", true);
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.objectiveHealth", 300);
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.objectiveDmgPerHit", 1);
+        this.uhcWars.getConfig().options().copyDefaults(true);
         this.uhcWars.saveConfig();
-        this.uhcWars.reloadConfig();
     }
 }

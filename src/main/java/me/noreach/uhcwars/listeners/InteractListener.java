@@ -47,13 +47,8 @@ public class InteractListener implements Listener {
             if (pl.getItemInHand().getType() == Material.GOLD_AXE && pl.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Objective Maker")) {
                 if (e.getAction() == Action.LEFT_CLICK_BLOCK){
                     e.setCancelled(true);
-                    Objective objective = new Objective(e.getClickedBlock(), Teams.Team_1, uhcWars);
-
-                }
-                if (e.getAction() == Action.RIGHT_CLICK_BLOCK){
-                    e.setCancelled(true);
-                    Objective objective = new Objective(e.getClickedBlock(), Teams.Team_2, uhcWars);
-
+                    Objective objective = this.uhcWars.getObjectiveManager().getObjectiveCache().get(pl.getUniqueId());
+                    objective.setBlock(e.getClickedBlock());
                 }
 
 

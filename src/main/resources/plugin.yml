@@ -1,5 +1,8 @@
 name: UHCWars
-version: 0.2.0
+version: 0.2.1
 author: NoReach
-main: me.noreach.uhcwars
+main: me.noreach.uhcwars.UHCWars
 commands:
+  region:
+  setlocation:
+  objective:

@@ -33,6 +33,7 @@ public class SQLHandler {
     private void openConnection(){
         if (!this.uhcWars.getConfig().getBoolean("Settings.SQL.stats")){
             Bukkit.getLogger().log(Level.INFO, "[SQL] Running plugin without statistics");
+            return;
         }
         try {
             this.connection = DriverManager.getConnection("jdbc:mysql://" + ip + "/" + database, username, password);
@@ -45,6 +46,9 @@ public class SQLHandler {
 
     public void closeConnection(){
         try {
+            if (!this.uhcWars.getConfig().getBoolean("Settings.SQL.stats")){
+                return;
+            }
             if (!this.connection.isClosed()) {
                 this.connection.close();
             }

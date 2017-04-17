@@ -1,16 +1,19 @@
 package me.noreach.uhcwars;
 
 import me.noreach.uhcwars.commands.LocationCMD;
+import me.noreach.uhcwars.commands.ObjectiveCMD;
 import me.noreach.uhcwars.commands.RegionCMD;
 import me.noreach.uhcwars.enums.StateManager;
 import me.noreach.uhcwars.game.GameManager;
 import me.noreach.uhcwars.inventories.Invent;
 import me.noreach.uhcwars.listeners.InteractListener;
+import me.noreach.uhcwars.listeners.LoginHandler;
 import me.noreach.uhcwars.locations.ObjectiveManager;
 import me.noreach.uhcwars.locations.RegionManager;
 import me.noreach.uhcwars.sql.SQLHandler;
 import me.noreach.uhcwars.teams.TeamManager;
 import me.noreach.uhcwars.timers.PreGame;
+import me.noreach.uhcwars.util.ConfigHandler;
 import me.noreach.uhcwars.util.References;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -32,11 +35,13 @@ public class UHCWars extends JavaPlugin {
     private Invent invent;
     private RegionManager regionManager;
     private ObjectiveManager objectiveManager;
+    private ConfigHandler configHandler;
 
 
     @Override
     public void onEnable() {
         getConfig();
+        this.configHandler = new ConfigHandler(this);
         this.references = new References(this);
         this.sqlHandler = new SQLHandler(this, getConfig().getString("Settings.SQL.ip"), getConfig().getString("Settings.SQL.database"), getConfig().getString("Settings.SQL.username"), getConfig().getString("Settings.SQL.password"));
         this.stateManager = new StateManager(this);
@@ -61,11 +66,13 @@ public class UHCWars extends JavaPlugin {
     private void registerCommands() {
         getCommand("region").setExecutor(new RegionCMD(this));
         getCommand("setlocation").setExecutor(new LocationCMD(this));
+        getCommand("objective").setExecutor(new ObjectiveCMD(this));
     }
 
     private void registerEvents() {
         PluginManager plm = Bukkit.getPluginManager();
         plm.registerEvents(new InteractListener(this), this);
+        plm.registerEvents(new LoginHandler(this), this);
 
     }
 
