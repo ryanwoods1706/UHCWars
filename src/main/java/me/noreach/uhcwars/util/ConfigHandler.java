@@ -5,6 +5,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * Created by Ryan on 15/04/2017.
@@ -46,4 +48,5 @@ public class ConfigHandler {
         this.uhcWars.getConfig().options().copyDefaults(true);
         this.uhcWars.saveConfig();
     }
+
 }

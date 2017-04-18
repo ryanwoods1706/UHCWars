@@ -20,20 +20,19 @@ public class PreGame extends BukkitRunnable {
 
     @Override
     public void run() {
-        if (this.uhcWars.getStateManager().getGameState() == GameState.LOBBY) {
-            if (Bukkit.getOnlinePlayers().size() >= this.uhcWars.getReferences().getReqStart()) {
-                if (this.second % 5 == 0) {
-                    this.second -= 5;
-                    Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Starting in " + this.uhcWars.getReferences().getSecondaryColor() + this.second + this.uhcWars.getReferences().getMainColor() + " seconds!");
+        if (this.uhcWars.getStateManager().getGameState() == GameState.LOBBY){
+            if (Bukkit.getOnlinePlayers().size() < this.uhcWars.getReferences().getReqStart()){
+                int difference = this.uhcWars.getReferences().getReqStart() - Bukkit.getOnlinePlayers().size();
+                Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Need " + this.uhcWars.getReferences().getSecondaryColor() + difference + this.uhcWars.getReferences().getMainColor() + " more players to start the game!");
+            }
+            else if (Bukkit.getServer().getOnlinePlayers().size() >= this.uhcWars.getReferences().getReqStart()){
+                second-=5;
+                if (second > 0) {
+                    Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Starting game in: " + this.uhcWars.getReferences().getSecondaryColor() + second + this.uhcWars.getReferences().getMainColor() + " seconds!");
                 }
-                if (this.second == 0){
-                    //TODO ADD START GAME
-                }
-            } else {
-                if (this.second != 30) {
-                    Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Need more players to start the game!");
-                    this.second = 30;
-                    Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Reset the countdown!");
+                if (second == 0){
+                    Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "The game is now starting!");
+                    this.uhcWars.getGameManager().startGame();
                 }
             }
         }

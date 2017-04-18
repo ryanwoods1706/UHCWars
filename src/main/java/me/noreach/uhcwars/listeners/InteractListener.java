@@ -42,7 +42,7 @@ public class InteractListener implements Listener {
             }
             else if (e.getAction() == Action.RIGHT_CLICK_BLOCK){
                 region.setCorner2(e.getClickedBlock().getLocation());
-                pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Set Position 2 of region");
+                pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + ChatColor.GREEN + "Set Position 2 of region");
             }
 
 
@@ -55,6 +55,9 @@ public class InteractListener implements Listener {
                 pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Set " + this.uhcWars.getReferences().getSecondaryColor() + objective.getTeamObjective() + this.uhcWars.getReferences().getMainColor() + " Objective block!");
 
             }
+        }
+        if (pl.getItemInHand().getType() == Material.PAPER && pl.getInventory().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Team Chooser")){
+            pl.openInventory(this.uhcWars.getInvent().getTeamInventory());
         }
     }
 }

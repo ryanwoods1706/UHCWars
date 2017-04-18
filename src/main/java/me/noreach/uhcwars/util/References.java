@@ -26,6 +26,7 @@ public class References {
     private boolean goldenHeadsOnDeath;
     private int objectiveHealth;
     private int objectiveDmgPerHit;
+    private boolean stats;
 
     private String prefix;
     private String sbTitle;
@@ -36,29 +37,31 @@ public class References {
 
     public References(UHCWars uhcWars) {
         this.uhcWars = uhcWars;
-        Bukkit.getScheduler().runTaskLater(this.uhcWars, new Runnable() {
-            @Override
-            public void run() {
-                uhcWars.reloadConfig();
-                config = uhcWars.getConfig();
-                prefix = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.prefix"));
-                sbTitle = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardTitle"));
-                sbIP = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardIP"));
-                mainColor = ChatColor.valueOf(config.getString("Settings.Messages.mainColor"));
-                spawnWorld = new WorldCreator(config.getString("Settings.gameSettings.spawnWorld")).createWorld();
-                gameWorld = new WorldCreator(config.getString("Settings.gameSettings.gameWorld")).createWorld();
-                wallMaterial = Material.valueOf(config.getString("Settings.gameSettings.wallBlock"));
-                reqStart = config.getInt("Settings.gameSettings.minStart");
-                maxSlots = config.getInt("Settings.gameSettings.maxSlots");
-                timeLimit = config.getInt("Settings.gameSettings.timeLimit");
-                wallDropTime = config.getInt("Settings.gameSettings.wallDropTime");
-                halfTime = config.getInt("Settings.gameSettings.halfTime");
-                goldenHeadsOnDeath = config.getBoolean("Settings.gameSettings.goldenHeadOnDeath");
-                objectiveHealth = config.getInt("Settings.gameSettings.objectiveHealth");
-                objectiveDmgPerHit = config.getInt("Settings.gameSettings.objectiveDmgPerHit");
-                Bukkit.getLogger().log(Level.INFO, "[CONFIG] Successfully loaded all values from the config");
-            }
-        }, 1L);
+        uhcWars.reloadConfig();
+        config = uhcWars.getConfig();
+
+
+    }
+
+    public void loadValues(){
+        stats = config.getBoolean("Settings.SQL.stats");
+        prefix = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.prefix"));
+        sbTitle = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardTitle"));
+        sbIP = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardIP"));
+        secondaryColor = ChatColor.valueOf(config.getString("Settings.Messages.secondaryColor"));
+        mainColor = ChatColor.valueOf(config.getString("Settings.Messages.mainColor"));
+        spawnWorld = new WorldCreator(config.getString("Settings.gameSettings.spawnWorld")).createWorld();
+        gameWorld = new WorldCreator(config.getString("Settings.gameSettings.gameWorld")).createWorld();
+        wallMaterial = Material.valueOf(config.getString("Settings.gameSettings.wallBlock"));
+        reqStart = config.getInt("Settings.gameSettings.minStart");
+        maxSlots = config.getInt("Settings.gameSettings.maxSlots");
+        timeLimit = config.getInt("Settings.gameSettings.timeLimit");
+        wallDropTime = config.getInt("Settings.gameSettings.wallDropTime");
+        halfTime = config.getInt("Settings.gameSettings.halfTime");
+        goldenHeadsOnDeath = config.getBoolean("Settings.gameSettings.goldenHeadOnDeath");
+        objectiveHealth = config.getInt("Settings.gameSettings.objectiveHealth");
+        objectiveDmgPerHit = config.getInt("Settings.gameSettings.objectiveDmgPerHit");
+        Bukkit.getLogger().log(Level.INFO, "[CONFIG] Successfully loaded all values from the config");
 
         if (this.timeLimit < this.halfTime) {
             Bukkit.getLogger().log(Level.SEVERE, "[CONFIG ERROR] The timelimit must be greater than the half time value!");
@@ -73,7 +76,6 @@ public class References {
             //TODO ADD BACK
             //Bukkit.getServer().shutdown();
         }
-
     }
 
     public World getSpawnWorld() {
@@ -138,6 +140,10 @@ public class References {
 
     public ChatColor getSecondaryColor() {
         return this.secondaryColor;
+    }
+
+    public boolean getStats() {
+        return this.stats;
     }
 
 

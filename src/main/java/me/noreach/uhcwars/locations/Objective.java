@@ -38,7 +38,7 @@ public class Objective {
         this.block = block;
         this.location = this.block.getLocation();
         //sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Successfully set " + this.uhcWars.getReferences().getSecondaryColor() + teamObjective + this.uhcWars.getReferences().getMainColor() + " objective block!");
-        sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Objective ready to save: /objective save");
+        //sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Objective ready to save: /objective save");
     }
 
     public boolean saveObjective(){
@@ -64,6 +64,8 @@ public class Objective {
     }
 
     public int getHealth(){ return this.health;}
+    public void decrementHealth(){ this.health -=1;}
+
     public Teams getTeamObjective(){ return this.teamObjective;}
     public void setTeamObjective(Teams teamObjective){ this.teamObjective = teamObjective;}
 

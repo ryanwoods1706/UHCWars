@@ -16,10 +16,10 @@ public class Stat {
     }
 
     public ItemStack getItemStack(){ return this.itemStack;}
+
     public int getAmount(){ return this.amount;}
 
+    public void incrementValue(){ this.amount +=1;}
 
-    public void decrementAmount(int amount){
-        this.amount -= amount;
-    }
+    public void setAmount(int amount){ this.amount = amount;}
 }

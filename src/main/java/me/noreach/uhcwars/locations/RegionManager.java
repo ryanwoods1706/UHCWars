@@ -29,7 +29,7 @@ public class RegionManager {
     public RegionManager(UHCWars uhcWars) {
         this.uhcWars = uhcWars;
         this.uhcWars.reloadConfig();
-        this.configuration = uhcWars.getConfig();
+        this.configuration = this.uhcWars.getConfig();
         loadExisting();
     }
 
@@ -49,8 +49,8 @@ public class RegionManager {
             this.regionsInUse.add(region2);
             teamAreas.put(Teams.Team_1, this.uhcWars.getGameManager().blocksFromTwoPoints(team1Pos1, team1Pos2));
             teamAreas.put(Teams.Team_2, this.uhcWars.getGameManager().blocksFromTwoPoints(team2Pos1, team2Pos2));
-            String wallpos1 = "Settings.Regions.Wall.pos1.";
-            String wallpos2 = "Settings.Regions.Wall.pos2.";
+            String wallpos1 = "Settings.Regions.wall.pos1.";
+            String wallpos2 = "Settings.Regions.wall.pos2.";
             Location wallPos1 = new Location(Bukkit.getWorld(configuration.getString(wallpos1 + "worldname")), configuration.getDouble(wallpos1 + "x"), configuration.getDouble(wallpos1 + "y"), configuration.getDouble(wallpos1 + "z"));
             Location wallPos2 = new Location(Bukkit.getWorld(configuration.getString(wallpos2 + "worldname")), configuration.getDouble(wallpos2 + "x"), configuration.getDouble(wallpos2 + "y"), configuration.getDouble(wallpos2 + "z"));
             this.wallLocation.add(wallPos1);
@@ -84,6 +84,7 @@ public class RegionManager {
                 this.uhcWars.getObjectiveManager().getActiveObjectives().put(objective2.getTeamObjective(), objective2);
                 Bukkit.getLogger().log(Level.INFO, "[CONFIG] Successfully loaded all objectives from the config");
             } catch (Exception e) {
+                e.printStackTrace();
                 Bukkit.getLogger().log(Level.SEVERE, "[CONFIG ERROR] The objectives have not been set!");
             }
         } catch (Exception e) {

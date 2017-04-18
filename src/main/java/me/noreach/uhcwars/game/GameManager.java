@@ -2,13 +2,18 @@ package me.noreach.uhcwars.game;
 
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.enums.GameState;
+import me.noreach.uhcwars.player.GamePlayer;
 import me.noreach.uhcwars.teams.Teams;
+import me.noreach.uhcwars.timers.InGame;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Ryan on 16/04/2017.
@@ -16,14 +21,20 @@ import java.util.List;
 public class GameManager {
 
     private UHCWars uhcWars;
+    private ChatColor mainColor;
+    private ChatColor secondaryColor;
 
 
     public GameManager(UHCWars uhcWars){
         this.uhcWars = uhcWars;
+        this.mainColor = this.uhcWars.getReferences().getMainColor();
+        this.secondaryColor = this.uhcWars.getReferences().getSecondaryColor();
     }
 
 
     public void startGame(){
+        this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1).getChunk().load();
+        this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2).getChunk().load();
         this.uhcWars.getTeamManager().splitPlayers();
         this.uhcWars.getTeamManager().getTeamKills().put(Teams.Team_1, 0);
         this.uhcWars.getTeamManager().getTeamKills().put(Teams.Team_2, 0);
@@ -31,14 +42,50 @@ public class GameManager {
 
         for (Player player : this.uhcWars.getTeamManager().getTeam1()){
             player.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1));
-            //TODO ADD INVENTORY
+            this.uhcWars.getInvent().giveItems(player);
         }
         for (Player player : this.uhcWars.getTeamManager().getTeam2()){
             player.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2));
-            //TODO ADD INVENTOR
+            this.uhcWars.getInvent().giveItems(player);
         }
-        //TODO ADD FILL CHESTS
+        for (Player player : Bukkit.getServer().getOnlinePlayers()){
+            this.uhcWars.getPlayerManager().getPlayerKills().put(player.getUniqueId(), 0);
+        }
+        this.uhcWars.getChestManager().fillTeam1Chests(true);
+        this.uhcWars.getChestManager().fillTeam2Chests(true);
+        new InGame(uhcWars).runTaskTimer(this.uhcWars, 0, 20L);
         this.uhcWars.getStateManager().setGameState(GameState.INGAME);
+    }
+
+    public void endGame(){
+        if (this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_1).getHealth() == 0){
+            int health = this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_2).getHealth();
+            Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + "Team 2" + mainColor + " has won the game with " + secondaryColor + health + mainColor + " health remaining!");
+            for (Player player : this.uhcWars.getTeamManager().getTeam2()){
+                GamePlayer gamePlayer = this.uhcWars.getPlayerManager().getPlayerData().get(player.getUniqueId());
+                gamePlayer.getWins().incrementValue();
+                this.uhcWars.getPlayerManager().getPlayerData().put(player.getUniqueId(), gamePlayer);
+            }
+        }
+        if (this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_2).getHealth() == 0){
+            int health = this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_1).getHealth();
+            Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + "Team 1" + mainColor + " has won the game with " + secondaryColor + health + mainColor + " health remaining!");
+            for (Player player : this.uhcWars.getTeamManager().getTeam1()){
+                GamePlayer gamePlayer = this.uhcWars.getPlayerManager().getPlayerData().get(player.getUniqueId());
+                gamePlayer.getWins().incrementValue();
+                this.uhcWars.getPlayerManager().getPlayerData().put(player.getUniqueId(), gamePlayer);
+            }
+        }
+        Bukkit.getScheduler().runTaskLater(this.uhcWars, new Runnable() {
+            @Override
+            public void run() {
+                for (UUID uuid : uhcWars.getPlayerManager().getPlayerData().keySet()){
+                    GamePlayer gamePlayer = uhcWars.getPlayerManager().getPlayerData().get(uuid);
+                    gamePlayer.saveInformation();
+                }
+                Bukkit.getServer().shutdown();
+            }
+        }, 60L);
     }
 
 
@@ -66,5 +113,25 @@ public class GameManager {
         }
 
         return blocks;
+    }
+
+    public String getTime(int secs) {
+        int h = secs / 3600, secondsLeft = secs - h * 3600, m = secondsLeft / 60, s = secondsLeft - m * 60;
+        String timeF = "";
+
+        if (h < 10) {
+            timeF = timeF + "0";
+        }
+        timeF = timeF + h + ":";
+        if (m < 10) {
+            timeF = timeF + "0";
+        }
+        timeF = timeF + m + ":";
+        if (s < 10) {
+            timeF = timeF + "0";
+        }
+        timeF = timeF + s;
+
+        return timeF;
     }
 }

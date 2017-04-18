@@ -1,11 +1,13 @@
 package me.noreach.uhcwars.sql;
 
 import me.noreach.uhcwars.UHCWars;
+import me.noreach.uhcwars.player.Stat;
 import org.bukkit.Bukkit;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 
 /**
@@ -38,6 +40,7 @@ public class SQLHandler {
         try {
             this.connection = DriverManager.getConnection("jdbc:mysql://" + ip + "/" + database, username, password);
             Bukkit.getLogger().info("[SQL] Connected");
+            createTables();
         } catch (SQLException e) {
             e.printStackTrace();
             Bukkit.getLogger().info("[SQL] Failed to connect!");
@@ -67,5 +70,18 @@ public class SQLHandler {
             e.printStackTrace();
         }
         return this.connection;
+    }
+
+    private void createTables(){
+        try {
+            Statement statement = this.connection.createStatement();
+            Statement statement1 = this.connection.createStatement();
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `uhcwars_stats` (`uuid` VARCHAR(60), `kills` INT NOT NULL DEFAULT '0', `deaths` INT NOT NULL DEFAULT '0', `wins` INT NOT NULL DEFAULT '0');");
+            statement1.executeUpdate("CREATE TABLE IF NOT EXISTS `uhcwars_kits` (`uuid` VARCHAR(60), `inv` VARCHAR(999));");
+            statement.close();
+            statement1.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 }

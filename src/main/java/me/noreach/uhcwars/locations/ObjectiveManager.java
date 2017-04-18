@@ -16,14 +16,11 @@ import java.util.logging.Level;
 public class ObjectiveManager {
 
     private UHCWars uhcWars;
-    private FileConfiguration config;
     private Map<UUID, Objective> objectiveCache = new HashMap<>();
     private Map<Teams, Objective> activeObjectives = new HashMap<>();
 
     public ObjectiveManager(UHCWars uhcWars) {
         this.uhcWars = uhcWars;
-        this.uhcWars.reloadConfig();
-        this.config = this.uhcWars.getConfig();
     }
 
 
