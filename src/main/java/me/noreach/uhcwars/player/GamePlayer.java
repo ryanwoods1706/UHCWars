@@ -174,6 +174,15 @@ public class GamePlayer {
         }
     }
 
+    public Inventory getStatsInventory(){
+        Inventory inv = Bukkit.createInventory(null, 9 * 3, this.uhcWars.getReferences().getMainColor() + "Statistics: " + this.uhcWars.getReferences().getSecondaryColor() + Bukkit.getOfflinePlayer(uuid).getName());
+        inv.clear();
+        inv.setItem(0, kills.getItemStack());
+        inv.setItem(1, deaths.getItemStack());
+        inv.setItem(2, wins.getItemStack());
+        return inv;
+    }
+
 
     public Stat getKills(){ return this.kills;}
 

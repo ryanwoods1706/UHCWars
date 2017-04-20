@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 
 /**
  * Created by Ryan on 18/04/2017.
@@ -51,6 +52,27 @@ public class BlockHandler implements Listener{
                     e.setCancelled(true);
                     this.uhcWars.getGameManager().endGame();
                 }
+            }
+        }
+        else if (this.uhcWars.getStateManager().getGameState() == GameState.LOBBY){
+            if (!pl.hasPermission("uhcwars.build.lobby")) {
+                e.setCancelled(true);
+                pl.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You cannot break blocks here!");
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPlace(BlockPlaceEvent e){
+        Player pl = e.getPlayer();
+        Block block = e.getBlock();
+        if (this.uhcWars.getStateManager().getGameState() == GameState.INGAME) {
+            this.uhcWars.getBlockManager().updatePlayerBlocks(pl, block);
+        }
+        else if (this.uhcWars.getStateManager().getGameState() == GameState.LOBBY){
+            if (!pl.hasPermission("uhcwars.build.lobby")) {
+                e.setCancelled(true);
+                pl.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You cannot place blocks here!");
             }
         }
     }

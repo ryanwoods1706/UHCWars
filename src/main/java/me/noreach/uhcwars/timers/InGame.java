@@ -14,13 +14,16 @@ public class InGame extends BukkitRunnable {
 
     private UHCWars uhcWars;
     private ScoreboardManager scoreboard = new ScoreboardManager();
-    private ChatColor mainColor = this.uhcWars.getReferences().getMainColor();
-    private ChatColor secondaryColor = this.uhcWars.getReferences().getSecondaryColor();
+    private ChatColor mainColor;
+    private ChatColor secondaryColor;
+    private int second;
 
     public InGame(UHCWars uhcWars){
         this.uhcWars = uhcWars;
+        this.mainColor = this.uhcWars.getReferences().getMainColor();
+        this.secondaryColor = this.uhcWars.getReferences().getSecondaryColor();
+        this.second = this.uhcWars.getReferences().getTimeLimit();
     }
-    private int second = this.uhcWars.getReferences().getTimeLimit();
     @Override
     public void run() {
         second--;
@@ -35,7 +38,7 @@ public class InGame extends BukkitRunnable {
             Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half time has now ended! May the odds be ever in your favour!");
         }
         if (second == 0){
-            //TODO ADD END GAME METHOD
+            this.uhcWars.getGameManager().endGame();
         }
         for (Player player : Bukkit.getServer().getOnlinePlayers()){
             scoreboard.unrankedSidebarDisplay(player, this.uhcWars.getReferences().getSbTitle(), new String[]{

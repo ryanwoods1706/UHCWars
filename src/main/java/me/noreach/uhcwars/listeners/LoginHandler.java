@@ -26,10 +26,21 @@ public class LoginHandler implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e){
+    public void onJoin(PlayerJoinEvent e) {
         Player pl = e.getPlayer();
-        pl.teleport(this.uhcWars.getReferences().getSpawnWorld().getSpawnLocation());
-        this.uhcWars.getInvent().giveJoinInventory(pl);
+        pl.setFoodLevel(20);
+        pl.setHealth(pl.getMaxHealth());
+        if (this.uhcWars.getStateManager().getGameState() == GameState.LOBBY) {
+            pl.teleport(this.uhcWars.getReferences().getSpawnWorld().getSpawnLocation());
+            this.uhcWars.getInvent().giveJoinInventory(pl);
+        }
+        else if (this.uhcWars.getStateManager().getGameState() == GameState.INGAME){
+            if (pl.hasPermission("uhcwars.spectate")){
+                this.uhcWars.getSpectatorManager().addSpectator(pl);
+            }else{
+                pl.kickPlayer(ChatColor.RED + "Uh oh, you shouldn't of made it this far!");
+            }
+        }
     }
 
     @EventHandler

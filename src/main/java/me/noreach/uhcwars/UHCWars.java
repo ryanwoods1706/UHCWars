@@ -2,15 +2,14 @@ package me.noreach.uhcwars;
 
 import me.noreach.uhcwars.chest.ChestManager;
 import me.noreach.uhcwars.chest.Fill;
-import me.noreach.uhcwars.commands.LocationCMD;
-import me.noreach.uhcwars.commands.ObjectiveCMD;
-import me.noreach.uhcwars.commands.RegionCMD;
-import me.noreach.uhcwars.commands.TestCMD;
+import me.noreach.uhcwars.commands.*;
 import me.noreach.uhcwars.enums.GameState;
 import me.noreach.uhcwars.enums.StateManager;
+import me.noreach.uhcwars.game.BlockManager;
 import me.noreach.uhcwars.game.GameManager;
 import me.noreach.uhcwars.listeners.*;
 import me.noreach.uhcwars.player.PlayerManager;
+import me.noreach.uhcwars.player.SpectatorManager;
 import me.noreach.uhcwars.teams.Teams;
 import me.noreach.uhcwars.util.Invent;
 import me.noreach.uhcwars.locations.ObjectiveManager;
@@ -22,6 +21,7 @@ import me.noreach.uhcwars.util.ConfigHandler;
 import me.noreach.uhcwars.util.InventoryStringDeSerializer;
 import me.noreach.uhcwars.util.References;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -50,6 +50,8 @@ public class UHCWars extends JavaPlugin {
     private PlayerManager playerManager;
     private Fill fill;
     private ChestManager chestManager;
+    private SpectatorManager spectatorManager;
+    private BlockManager blockManager;
 
     @Override
     public void onEnable() {
@@ -69,9 +71,12 @@ public class UHCWars extends JavaPlugin {
         this.gameManager = new GameManager(this);
         this.regionManager = new RegionManager(this);
         this.invent = new Invent(this);
+        this.spectatorManager = new SpectatorManager(this);
+        this.blockManager = new BlockManager(this);
+        for (Chunk chunk : this.references.getGameWorld().getLoadedChunks()){
+            chunk.unload();
+        }
         new PreGame(this).runTaskTimer(this, 0, 100L);
-
-
         registerCommands();
         registerEvents();
         generateWall();
@@ -88,6 +93,7 @@ public class UHCWars extends JavaPlugin {
         getCommand("test").setExecutor(new TestCMD());
         getCommand("region").setExecutor(new RegionCMD(this));
         getCommand("setlocation").setExecutor(new LocationCMD(this));
+        getCommand("statistics").setExecutor(new StatsCMD(this));
         getCommand("objective").setExecutor(new ObjectiveCMD(this));
     }
 
@@ -105,6 +111,8 @@ public class UHCWars extends JavaPlugin {
     public void generateWall() {
         Location corner1 = this.regionManager.getWallLocation().get(0);
         Location corner2 = this.regionManager.getWallLocation().get(1);
+        corner1.getChunk().load();
+        corner2.getChunk().load();
         for (Block block : this.gameManager.blocksFromTwoPoints(corner1, corner2)) {
             block.setType(this.references.getWallMaterial());
             block.getState().update();
@@ -174,5 +182,9 @@ public class UHCWars extends JavaPlugin {
     public ChestManager getChestManager() {
         return this.chestManager;
     }
+
+    public SpectatorManager getSpectatorManager(){ return this.spectatorManager;}
+
+    public BlockManager getBlockManager(){ return this.blockManager;}
 
 }

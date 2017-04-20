@@ -26,6 +26,9 @@ public class InventoryListener implements Listener {
         Player pl = (Player) e.getWhoClicked();
         if (e.getClickedInventory().getTitle() != null) {
             if (e.getCurrentItem() != null) {
+                if (e.getClickedInventory().getTitle().contains(this.uhcWars.getReferences().getMainColor() + "Statistics")){
+                    e.setCancelled(true);
+                }
                 if (e.getClickedInventory().getTitle().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Select a Team!")) {
                     if (e.getCurrentItem().getType() == Material.WOOL){
                         if (!pl.hasPermission("sgwars.chooseteam")){

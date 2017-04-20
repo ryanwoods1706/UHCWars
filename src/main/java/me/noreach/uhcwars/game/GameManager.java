@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class GameManager {
     }
 
 
-    public void startGame(){
+    public void startGame() {
         this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1).getChunk().load();
         this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2).getChunk().load();
         this.uhcWars.getTeamManager().splitPlayers();
@@ -40,15 +41,15 @@ public class GameManager {
         this.uhcWars.getTeamManager().getTeamKills().put(Teams.Team_2, 0);
         this.uhcWars.getTeamManager().splitPlayers();
 
-        for (Player player : this.uhcWars.getTeamManager().getTeam1()){
+        for (Player player : this.uhcWars.getTeamManager().getTeam1()) {
             player.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1));
             this.uhcWars.getInvent().giveItems(player);
         }
-        for (Player player : this.uhcWars.getTeamManager().getTeam2()){
+        for (Player player : this.uhcWars.getTeamManager().getTeam2()) {
             player.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2));
             this.uhcWars.getInvent().giveItems(player);
         }
-        for (Player player : Bukkit.getServer().getOnlinePlayers()){
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             this.uhcWars.getPlayerManager().getPlayerKills().put(player.getUniqueId(), 0);
         }
         this.uhcWars.getChestManager().fillTeam1Chests(true);
@@ -79,6 +80,7 @@ public class GameManager {
         Bukkit.getScheduler().runTaskLater(this.uhcWars, new Runnable() {
             @Override
             public void run() {
+                uhcWars.getBlockManager().resetAllBlocks();
                 for (UUID uuid : uhcWars.getPlayerManager().getPlayerData().keySet()){
                     GamePlayer gamePlayer = uhcWars.getPlayerManager().getPlayerData().get(uuid);
                     gamePlayer.saveInformation();
