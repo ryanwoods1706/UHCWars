@@ -34,7 +34,7 @@ public class ChestManager {
             }
         }
         if(bool) {
-            Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Team 1 has had their chests refilled!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Team 1 has had their chests refilled!");
         }
     }
 
@@ -55,7 +55,7 @@ public class ChestManager {
             }
         }
         if (bool) {
-            Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Team 2 Has had their chests refilled!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Team 2 Has had their chests refilled!");
         }
     }
 }

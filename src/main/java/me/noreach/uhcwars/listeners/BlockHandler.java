@@ -46,7 +46,7 @@ public class BlockHandler implements Listener{
                     e.setCancelled(true);
                 }
                 if (objective.getHealth() == this.uhcWars.getReferences().getObjectiveHealth() /2){
-                    Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + this.uhcWars.getTeamManager().getOppositeTeam(pl) + mainColor + " is at 50% health!");
+                    Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + this.uhcWars.getTeamManager().getOppositeTeam(pl) + mainColor + " is at 50% health!");
                 }
                 if (objective.getHealth() == 0){
                     e.setCancelled(true);

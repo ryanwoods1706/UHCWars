@@ -36,32 +36,38 @@ public class GameManager {
     public void startGame() {
         this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1).getChunk().load();
         this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2).getChunk().load();
-        this.uhcWars.getTeamManager().splitPlayers();
-        this.uhcWars.getTeamManager().getTeamKills().put(Teams.Team_1, 0);
-        this.uhcWars.getTeamManager().getTeamKills().put(Teams.Team_2, 0);
-        this.uhcWars.getTeamManager().splitPlayers();
+        Bukkit.getScheduler().runTaskLater(this.uhcWars, new Runnable() {
+            @Override
+            public void run() {
+                uhcWars.getTeamManager().splitPlayers();
+                uhcWars.getTeamManager().getTeamKills().put(Teams.Team_1, 0);
+                uhcWars.getTeamManager().getTeamKills().put(Teams.Team_2, 0);
+                uhcWars.getTeamManager().splitPlayers();
 
-        for (Player player : this.uhcWars.getTeamManager().getTeam1()) {
-            player.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1));
-            this.uhcWars.getInvent().giveItems(player);
-        }
-        for (Player player : this.uhcWars.getTeamManager().getTeam2()) {
-            player.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2));
-            this.uhcWars.getInvent().giveItems(player);
-        }
-        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-            this.uhcWars.getPlayerManager().getPlayerKills().put(player.getUniqueId(), 0);
-        }
-        this.uhcWars.getChestManager().fillTeam1Chests(true);
-        this.uhcWars.getChestManager().fillTeam2Chests(true);
-        new InGame(uhcWars).runTaskTimer(this.uhcWars, 0, 20L);
-        this.uhcWars.getStateManager().setGameState(GameState.INGAME);
+                for (Player player : uhcWars.getTeamManager().getTeam1()) {
+                    player.teleport(uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1));
+                    uhcWars.getInvent().giveItems(player);
+                }
+                for (Player player : uhcWars.getTeamManager().getTeam2()) {
+                    player.teleport(uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2));
+                    uhcWars.getInvent().giveItems(player);
+                }
+                for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                    uhcWars.getPlayerManager().getPlayerKills().put(player.getUniqueId(), 0);
+                }
+                //uhcWars.getChestManager().fillTeam1Chests(true);
+                //uhcWars.getChestManager().fillTeam2Chests(true);
+                new InGame(uhcWars).runTaskTimer(uhcWars, 0, 20L);
+                uhcWars.getStateManager().setGameState(GameState.INGAME);
+            }
+        },20L);
+
     }
 
     public void endGame(){
         if (this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_1).getHealth() == 0){
             int health = this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_2).getHealth();
-            Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + "Team 2" + mainColor + " has won the game with " + secondaryColor + health + mainColor + " health remaining!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + "Team 2" + mainColor + " has won the game with " + secondaryColor + health + mainColor + " health remaining!");
             for (Player player : this.uhcWars.getTeamManager().getTeam2()){
                 GamePlayer gamePlayer = this.uhcWars.getPlayerManager().getPlayerData().get(player.getUniqueId());
                 gamePlayer.getWins().incrementValue();
@@ -70,7 +76,7 @@ public class GameManager {
         }
         if (this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_2).getHealth() == 0){
             int health = this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_1).getHealth();
-            Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + "Team 1" + mainColor + " has won the game with " + secondaryColor + health + mainColor + " health remaining!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + "Team 1" + mainColor + " has won the game with " + secondaryColor + health + mainColor + " health remaining!");
             for (Player player : this.uhcWars.getTeamManager().getTeam1()){
                 GamePlayer gamePlayer = this.uhcWars.getPlayerManager().getPlayerData().get(player.getUniqueId());
                 gamePlayer.getWins().incrementValue();

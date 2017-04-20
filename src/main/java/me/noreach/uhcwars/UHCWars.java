@@ -76,6 +76,7 @@ public class UHCWars extends JavaPlugin {
         for (Chunk chunk : this.references.getGameWorld().getLoadedChunks()){
             chunk.unload();
         }
+        Bukkit.getLogger().log(Level.INFO, "[Chunks] Successfully unloaded all gameworld chunks!");
         new PreGame(this).runTaskTimer(this, 0, 100L);
         registerCommands();
         registerEvents();

@@ -29,13 +29,13 @@ public class InGame extends BukkitRunnable {
         second--;
         if (second == this.uhcWars.getReferences().getHalfTime()){
             this.uhcWars.generateWall();
-            Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half Time! All chests have been refilled and you have 2 minutes to collect Items!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half Time! All chests have been refilled and you have 2 minutes to collect Items!");
             this.uhcWars.getChestManager().fillTeam1Chests(false);
             this.uhcWars.getChestManager().fillTeam2Chests(false);
         }
         if (second == this.uhcWars.getReferences().getHalfTime() - 120){
             this.uhcWars.degenerateWall();
-            Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half time has now ended! May the odds be ever in your favour!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half time has now ended! May the odds be ever in your favour!");
         }
         if (second == 0){
             this.uhcWars.getGameManager().endGame();
@@ -52,7 +52,7 @@ public class InGame extends BukkitRunnable {
                     mainColor + "Your Objective: " + secondaryColor  + this.uhcWars.getObjectiveManager().getActiveObjectives().get(this.uhcWars.getTeamManager().getPlayerTeam(player)).getHealth(),
                     mainColor + "Enemy Objective: " + secondaryColor + this.uhcWars.getObjectiveManager().getActiveObjectives().get(this.uhcWars.getTeamManager().getOppositeTeam(player)).getHealth(),
                     ChatColor.GOLD.toString(),
-                    mainColor + this.uhcWars.getReferences().getSbIP()
+                    this.uhcWars.getReferences().getSbIP()
             });
         }
 
