@@ -4,7 +4,9 @@ import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.enums.GameState;
 import me.noreach.uhcwars.player.GamePlayer;
 import me.noreach.uhcwars.teams.Teams;
+import me.noreach.uhcwars.util.ItemCreator;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -71,6 +73,10 @@ public class DamageHandler implements Listener {
             int teamKills = this.uhcWars.getTeamManager().getTeamKills().get(killerTeam);
             teamKills +=1;
             this.uhcWars.getTeamManager().getTeamKills().put(killerTeam, teamKills);
+            if (this.uhcWars.getReferences().isGoldenHeadsOnDeath()){
+                killer.getInventory().addItem(new ItemCreator(Material.GOLDEN_APPLE).setName(ChatColor.GOLD + "Golden Head").toItemStack());
+                killer.updateInventory();
+            }
         }
     }
 }

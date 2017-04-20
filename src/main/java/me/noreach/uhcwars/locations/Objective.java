@@ -64,7 +64,9 @@ public class Objective {
     }
 
     public int getHealth(){ return this.health;}
-    public void decrementHealth(){ this.health -=1;}
+    public void decrementHealth(){
+        this.health -= this.uhcWars.getReferences().getObjectiveDmgPerHit();
+    }
 
     public Teams getTeamObjective(){ return this.teamObjective;}
     public void setTeamObjective(Teams teamObjective){ this.teamObjective = teamObjective;}

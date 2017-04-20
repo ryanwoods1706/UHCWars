@@ -98,6 +98,7 @@ public class UHCWars extends JavaPlugin {
         plm.registerEvents(new LoginHandler(this), this);
         plm.registerEvents(new DamageHandler(this), this);
         plm.registerEvents(new BlockHandler(this), this);
+        plm.registerEvents(new InventoryListener(this), this);
 
     }
 
