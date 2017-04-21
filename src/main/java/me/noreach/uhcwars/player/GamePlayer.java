@@ -138,8 +138,9 @@ public class GamePlayer {
             return;
         }
         try {
-            statement = this.uhcWars.getSqlHandler().getConnection().prepareStatement("UPDATE `uhcwars_kits` SET `inv` WHERE `uuid` = ?;");
-            statement.setString(1, uuid.toString());
+            statement = this.uhcWars.getSqlHandler().getConnection().prepareStatement("UPDATE `uhcwars_kits` SET `inv` = ? WHERE `uuid` = ?;");
+            statement.setString(1, this.uhcWars.getInventorySerializer().InventoryToString(inventory));
+            statement.setString(2, uuid.toString());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

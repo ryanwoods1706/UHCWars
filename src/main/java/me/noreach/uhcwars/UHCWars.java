@@ -1,5 +1,6 @@
 package me.noreach.uhcwars;
 
+import me.noreach.uhcwars.chest.ChestFill;
 import me.noreach.uhcwars.chest.ChestManager;
 import me.noreach.uhcwars.commands.*;
 import me.noreach.uhcwars.enums.GameState;
@@ -50,6 +51,7 @@ public class UHCWars extends JavaPlugin {
     private ChestManager chestManager;
     private SpectatorManager spectatorManager;
     private BlockManager blockManager;
+    private ChestFill chestFill;
 
     @Override
     public void onEnable() {
@@ -70,6 +72,7 @@ public class UHCWars extends JavaPlugin {
         this.invent = new Invent(this);
         this.spectatorManager = new SpectatorManager(this);
         this.blockManager = new BlockManager(this);
+        this.chestFill = new ChestFill(this);
         for (Chunk chunk : this.references.getGameWorld().getLoadedChunks()){
             chunk.unload();
         }
@@ -92,6 +95,7 @@ public class UHCWars extends JavaPlugin {
 
 
     private void registerCommands() {
+        getCommand("teamchat").setExecutor(new TeamChatCMD(this));
         getCommand("world").setExecutor(new WorldCMD(this));
         getCommand("region").setExecutor(new RegionCMD(this));
         getCommand("setlocation").setExecutor(new LocationCMD(this));
@@ -195,5 +199,7 @@ public class UHCWars extends JavaPlugin {
     public SpectatorManager getSpectatorManager(){ return this.spectatorManager;}
 
     public BlockManager getBlockManager(){ return this.blockManager;}
+
+    public ChestFill getChestFill(){ return this.chestFill;}
 
 }

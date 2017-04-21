@@ -4,6 +4,7 @@ import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.locations.Objective;
 import me.noreach.uhcwars.locations.Region;
 import me.noreach.uhcwars.teams.Teams;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -63,7 +64,7 @@ public class InteractListener implements Listener {
         if (pl.getItemInHand().getType() == Material.PAPER && pl.getInventory().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Team Chooser")){
             pl.openInventory(this.uhcWars.getInvent().getTeamInventory());
         }
-        if (pl.getItemInHand().getType() == Material.CHEST){
+        if (pl.getItemInHand().getType() == Material.CHEST && pl.getInventory().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Kit Editor")){
             this.uhcWars.getInvent().giveItems(pl, false);
             pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Save your hotbar layout by doing /kit save");
         }

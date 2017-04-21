@@ -1,5 +1,5 @@
 name: UHCWars
-version: 0.6.0
+version: 0.7.0
 author: NoReach
 main: me.noreach.uhcwars.UHCWars
 commands:
@@ -10,3 +10,5 @@ commands:
   statistics:
     aliases: [stats]
   world:
+  teamchat:
+    aliases: [tc, teamc, chat]

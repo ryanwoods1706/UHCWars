@@ -2,6 +2,7 @@ package me.noreach.uhcwars.listeners;
 
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.teams.Teams;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -34,6 +35,11 @@ public class InventoryListener implements Listener {
                         if (!pl.hasPermission("sgwars.chooseteam")){
                             pl.closeInventory();
                             pl.sendMessage(ChatColor.RED + "Uh oh, you do not have permission to choose a team!");
+                            return;
+                        }
+                        if (Bukkit.getServer().getOnlinePlayers().size() < 5){
+                            pl.closeInventory();
+                            pl.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "There must be a minimum of 5 players for players to choose their team!");
                             return;
                         }
                         switch (e.getCurrentItem().getDurability()){

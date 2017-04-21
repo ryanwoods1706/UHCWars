@@ -6,6 +6,7 @@ import me.noreach.uhcwars.locations.Objective;
 import me.noreach.uhcwars.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,7 +43,7 @@ public class BlockHandler implements Listener{
                 e.setCancelled(true);
                 pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "You cannot break your own objective!");
             }
-            if (this.uhcWars.getRegionManager().getTeamAreas().get(this.uhcWars.getTeamManager().getOppositeTeam(pl)).contains(block)){
+            else if (this.uhcWars.getRegionManager().getTeamAreas().get(this.uhcWars.getTeamManager().getOppositeTeam(pl)).contains(this.uhcWars.getObjectiveManager().getActiveObjectives().get(this.uhcWars.getTeamManager().getPlayerTeam(pl)).getBlock())){
                 Objective objective = this.uhcWars.getObjectiveManager().getActiveObjectives().get(this.uhcWars.getTeamManager().getOppositeTeam(pl));
                 objective.decrementHealth();
                 this.uhcWars.getObjectiveManager().getActiveObjectives().put(this.uhcWars.getTeamManager().getOppositeTeam(pl), objective);
@@ -55,6 +56,12 @@ public class BlockHandler implements Listener{
                 if (objective.getHealth() == 0){
                     e.setCancelled(true);
                     this.uhcWars.getGameManager().endGame();
+                }
+            }
+            else{
+                if (pl.getGameMode() != GameMode.CREATIVE) {
+                    e.setCancelled(true);
+                    pl.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You cannot break blocks here!");
                 }
             }
         }
@@ -75,7 +82,8 @@ public class BlockHandler implements Listener{
             return;
         }
         if (this.uhcWars.getStateManager().getGameState() == GameState.INGAME) {
-            this.uhcWars.getBlockManager().updatePlayerBlocks(pl, block);
+            e.setCancelled(true);
+            pl.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You cannot place blocks here!");
         }
         else if (this.uhcWars.getStateManager().getGameState() == GameState.LOBBY){
             if (!pl.hasPermission("uhcwars.build.lobby")) {
