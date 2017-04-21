@@ -81,16 +81,18 @@ public class RegionManager {
                 World Team1world = Bukkit.getWorld(this.configuration.getString("Settings.Objective.Team_1.location.world"));
                 Block block = Team1world.getBlockAt(this.configuration.getInt(path3 + "x"), this.configuration.getInt(path3 + "y"), this.configuration.getInt(path3 + "z"));
                 block.getChunk().load();
-                Objective objective = new Objective(block);
+                Objective objective = new Objective(block, uhcWars);
                 objective.setTeamObjective(Teams.Team_1);
+                objective.setHealth(this.uhcWars);
                 this.uhcWars.getObjectiveManager().getActiveObjectives().put(objective.getTeamObjective(), objective);
 
                 String path4 = "Settings.Objective.Team_1.location.";
                 World Team2world = Bukkit.getWorld(this.configuration.getString("Settings.Objective.Team_2.location.world"));
                 Block block2 = Team2world.getBlockAt(this.configuration.getInt(path4 + "x"), this.configuration.getInt(path4 + "y"), this.configuration.getInt(path4 + "z"));
                 block2.getChunk().load();
-                Objective objective2 = new Objective(block2);
+                Objective objective2 = new Objective(block2, uhcWars);
                 objective2.setTeamObjective(Teams.Team_2);
+                objective2.setHealth(this.uhcWars);
                 this.uhcWars.getObjectiveManager().getActiveObjectives().put(objective2.getTeamObjective(), objective2);
                 Bukkit.getLogger().log(Level.INFO, "[CONFIG] Successfully loaded all objectives from the config");
             } catch (Exception e) {

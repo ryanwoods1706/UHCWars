@@ -1,6 +1,7 @@
 package me.noreach.uhcwars.timers;
 
 import me.noreach.uhcwars.UHCWars;
+import me.noreach.uhcwars.teams.Teams;
 import me.noreach.uhcwars.util.ScoreboardManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,17 +28,32 @@ public class InGame extends BukkitRunnable {
     @Override
     public void run() {
         second--;
-        if (second == this.uhcWars.getReferences().getHalfTime()){
+        if (second == this.uhcWars.getReferences().getTimeLimit() - this.uhcWars.getReferences().getWallDropTime()){
+            this.uhcWars.degenerateWall();
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "PvP is now enabled! May the odds be ever in your favour!");
+        }
+        else if (second == this.uhcWars.getReferences().getHalfTime()){
             this.uhcWars.generateWall();
             Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half Time! All chests have been refilled and you have 2 minutes to collect Items!");
             this.uhcWars.getChestManager().fillTeam1Chests(false);
             this.uhcWars.getChestManager().fillTeam2Chests(false);
+            Bukkit.getScheduler().runTaskLater(this.uhcWars, new Runnable() {
+                @Override
+                public void run() {
+                    for (Player player : uhcWars.getTeamManager().getTeam1()){
+                        player.teleport(uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1));
+                    }
+                    for (Player player : uhcWars.getTeamManager().getTeam2()){
+                        player.teleport(uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2));
+                    }
+                }
+            }, 20L);
         }
-        if (second == this.uhcWars.getReferences().getHalfTime() - 120){
+        else if (second == this.uhcWars.getReferences().getHalfTime() - 120){
             this.uhcWars.degenerateWall();
             Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half time has now ended! May the odds be ever in your favour!");
         }
-        if (second == 0){
+        else if (second == 0){
             this.uhcWars.getGameManager().endGame();
         }
         for (Player player : Bukkit.getServer().getOnlinePlayers()){

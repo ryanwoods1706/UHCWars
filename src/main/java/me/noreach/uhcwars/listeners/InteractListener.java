@@ -29,6 +29,10 @@ public class InteractListener implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent e){
         Player pl = e.getPlayer();
+        if (this.uhcWars.getSpectatorManager().getSpectators().contains(pl.getUniqueId())){
+            e.setCancelled(true);
+            return;
+        }
         if (pl.getItemInHand().getType() == Material.GOLD_AXE && pl.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Region Maker")){
             Region region = this.uhcWars.getRegionManager().getRegionFactory().get(pl.getUniqueId());
             if (region == null){
@@ -58,6 +62,10 @@ public class InteractListener implements Listener {
         }
         if (pl.getItemInHand().getType() == Material.PAPER && pl.getInventory().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Team Chooser")){
             pl.openInventory(this.uhcWars.getInvent().getTeamInventory());
+        }
+        if (pl.getItemInHand().getType() == Material.CHEST){
+            this.uhcWars.getInvent().giveItems(pl, false);
+            pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Save your hotbar layout by doing /kit save");
         }
     }
 }

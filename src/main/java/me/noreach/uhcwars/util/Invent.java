@@ -50,7 +50,7 @@ public class Invent {
         player.getInventory().setItem(0, new ItemCreator(Material.GOLD_AXE).setName(this.uhcWars.getReferences().getMainColor() + "Objective Maker").toItemStack());
         player.updateInventory();
     }
-    public void giveItems(Player player){
+    public void giveItems(Player player, boolean bool){
         PlayerInventory pi = player.getInventory();
         GamePlayer gamePlayer = this.uhcWars.getPlayerManager().getPlayerData().get(player.getUniqueId());
         if (gamePlayer.getCustomKit() != null){
@@ -66,7 +66,9 @@ public class Invent {
             pi.setItem(7, new ItemCreator(Material.GOLDEN_APPLE).setAmount(6).toItemStack());
             pi.setItem(8, new ItemCreator(Material.WATER_BUCKET).toItemStack());
         }
-        giveDefaultGameArmour(player);
+        if (bool) {
+            giveDefaultGameArmour(player);
+        }
         player.updateInventory();
     }
     public void giveDefaultGameArmour(Player player){

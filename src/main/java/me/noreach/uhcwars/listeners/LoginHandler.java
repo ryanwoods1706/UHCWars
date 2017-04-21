@@ -3,6 +3,7 @@ package me.noreach.uhcwars.listeners;
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.enums.GameState;
 import me.noreach.uhcwars.player.GamePlayer;
+import me.noreach.uhcwars.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -74,8 +75,26 @@ public class LoginHandler implements Listener {
     @EventHandler
     public void onDisconnect(PlayerQuitEvent e){
         Player pl = e.getPlayer();
+        if (this.uhcWars.getSpectatorManager().getSpectators().contains(pl.getUniqueId())){
+            this.uhcWars.getSpectatorManager().getSpectators().remove(pl.getUniqueId());
+        }
         GamePlayer gamePlayer = this.uhcWars.getPlayerManager().getPlayerData().get(pl.getUniqueId());
         gamePlayer.saveInformation();
         this.uhcWars.getPlayerManager().getPlayerData().remove(pl.getUniqueId());
+        Teams teams = this.uhcWars.getTeamManager().getPlayerTeam(pl);
+        switch (teams){
+            case Team_1:
+                this.uhcWars.getTeamManager().getTeam1().remove(pl);
+                break;
+            case Team_2:
+                this.uhcWars.getTeamManager().getTeam2().remove(pl);
+                break;
+        }
+        if (this.uhcWars.getTeamManager().getTeam1().size() == 0 && this.uhcWars.getTeamManager().getTeam2().size() > 0){
+            this.uhcWars.getGameManager().endGame();
+        }
+        if (this.uhcWars.getTeamManager().getTeam2().size() == 0 && this.uhcWars.getTeamManager().getTeam1().size() > 0){
+            this.uhcWars.getGameManager().endGame();
+        }
     }
 }

@@ -1,16 +1,15 @@
 package me.noreach.uhcwars;
 
 import me.noreach.uhcwars.chest.ChestManager;
-import me.noreach.uhcwars.chest.Fill;
 import me.noreach.uhcwars.commands.*;
 import me.noreach.uhcwars.enums.GameState;
 import me.noreach.uhcwars.enums.StateManager;
 import me.noreach.uhcwars.game.BlockManager;
 import me.noreach.uhcwars.game.GameManager;
 import me.noreach.uhcwars.listeners.*;
+import me.noreach.uhcwars.player.GamePlayer;
 import me.noreach.uhcwars.player.PlayerManager;
 import me.noreach.uhcwars.player.SpectatorManager;
-import me.noreach.uhcwars.teams.Teams;
 import me.noreach.uhcwars.util.Invent;
 import me.noreach.uhcwars.locations.ObjectiveManager;
 import me.noreach.uhcwars.locations.RegionManager;
@@ -27,8 +26,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import redis.clients.jedis.JedisPool;
 
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -48,7 +47,6 @@ public class UHCWars extends JavaPlugin {
     private ConfigHandler configHandler;
     private InventoryStringDeSerializer inventorySerializer;
     private PlayerManager playerManager;
-    private Fill fill;
     private ChestManager chestManager;
     private SpectatorManager spectatorManager;
     private BlockManager blockManager;
@@ -65,7 +63,6 @@ public class UHCWars extends JavaPlugin {
         this.objectiveManager = new ObjectiveManager(this);
         this.inventorySerializer = new InventoryStringDeSerializer(this);
         this.playerManager = new PlayerManager(this);
-        this.fill = new Fill(this);
         this.chestManager = new ChestManager(this);
         this.stateManager.setGameState(GameState.LOBBY);
         this.gameManager = new GameManager(this);
@@ -87,19 +84,25 @@ public class UHCWars extends JavaPlugin {
     public void onDisable() {
         this.sqlHandler.closeConnection();
         degenerateWall();
+        for (UUID uuid : this.playerManager.getPlayerData().keySet()){
+            GamePlayer gamePlayer = this.playerManager.getPlayerData().get(uuid);
+            gamePlayer.saveInformation();
+        }
     }
 
 
     private void registerCommands() {
-        getCommand("test").setExecutor(new TestCMD());
+        getCommand("world").setExecutor(new WorldCMD(this));
         getCommand("region").setExecutor(new RegionCMD(this));
         getCommand("setlocation").setExecutor(new LocationCMD(this));
         getCommand("statistics").setExecutor(new StatsCMD(this));
+        getCommand("kit").setExecutor(new KitCMD(this));
         getCommand("objective").setExecutor(new ObjectiveCMD(this));
     }
 
     private void registerEvents() {
         PluginManager plm = Bukkit.getPluginManager();
+        plm.registerEvents(new SpectatorHandler(this), this);
         plm.registerEvents(new FoodListener(this), this);
         plm.registerEvents(new InteractListener(this), this);
         plm.registerEvents(new LoginHandler(this), this);
@@ -124,6 +127,15 @@ public class UHCWars extends JavaPlugin {
     public void degenerateWall() {
         Location corner1 = this.regionManager.getWallLocation().get(0);
         Location corner2 = this.regionManager.getWallLocation().get(1);
+        /*List<Block> wallBlocks = this.gameManager.blocksFromTwoPoints(corner1, corner2);
+        List<Block> tempList1 = new ArrayList<>();
+        List<Block> tempList2 = new ArrayList<>();
+        List<Block> tempList3 = new ArrayList<>();
+        List<Block> tempList4 = new ArrayList<>();
+        if (wallBlocks.size() <= 500 && wallBlocks.size() > 250){
+            tempList1.subList(0, 250);
+            tempList2.subList(250, wallBlocks.size());
+        }*/
         for (Block block : this.gameManager.blocksFromTwoPoints(corner1, corner2)) {
             block.setType(Material.AIR);
             block.getState().update();
@@ -174,10 +186,6 @@ public class UHCWars extends JavaPlugin {
 
     public PlayerManager getPlayerManager() {
         return this.playerManager;
-    }
-
-    public Fill getFill() {
-        return this.fill;
     }
 
     public ChestManager getChestManager() {

@@ -29,6 +29,10 @@ public class ObjectiveCMD implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+        if (!player.hasPermission("uhcwars.objective.register")){
+            player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You do not have permission to perform this command!");
+            return true;
+        }
         if (this.uhcWars.getStateManager().getGameState() != GameState.LOBBY){
             player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You can only set objective blocks in lobby mode!");
             return true;

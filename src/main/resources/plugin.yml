@@ -1,11 +1,12 @@
 name: UHCWars
-version: 0.5.3
+version: 0.6.0
 author: NoReach
 main: me.noreach.uhcwars.UHCWars
 commands:
   region:
   setlocation:
   objective:
+  kit:
   statistics:
     aliases: [stats]
-  test:
+  world:

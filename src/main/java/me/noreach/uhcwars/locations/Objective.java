@@ -29,9 +29,15 @@ public class Objective {
         this.teamObjective = teams;
         this.health = this.uhcWars.getReferences().getObjectiveHealth();
     }
-    public Objective(Block block){
+    public Objective(Block block, UHCWars uhcWars){
+        this.uhcWars = uhcWars;
         setBlock(block);
 
+    }
+
+
+    public void setHealth(UHCWars uhcWars){
+        this.health = uhcWars.getReferences().getObjectiveHealth();
     }
 
     public void setBlock(Block block){
@@ -62,6 +68,8 @@ public class Objective {
             this.creator.sendMessage("" + message);
         }
     }
+
+    public Block getBlock(){ return this.block;}
 
     public int getHealth(){ return this.health;}
     public void decrementHealth(){

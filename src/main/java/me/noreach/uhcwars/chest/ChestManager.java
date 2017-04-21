@@ -28,7 +28,7 @@ public class ChestManager {
                     if (this.uhcWars.getRegionManager().getTeamAreas().get(Teams.Team_1).contains(b.getBlock())){
                         Chest chest = (Chest) b;
                         chest.getInventory().clear();
-                        this.uhcWars.getFill().fillChest(chest.getInventory());
+                        Tier2Fill.fillChest(chest.getInventory());
                     }
                 }
             }
@@ -49,7 +49,7 @@ public class ChestManager {
                     if (this.uhcWars.getRegionManager().getTeamAreas().get(Teams.Team_2).contains(b.getBlock())){
                         Chest chest = (Chest) b;
                         chest.getInventory().clear();
-                        this.uhcWars.getFill().fillChest(chest.getInventory());
+                        Tier2Fill.fillChest(chest.getInventory());
                     }
                 }
             }

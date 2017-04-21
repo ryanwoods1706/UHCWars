@@ -32,9 +32,13 @@ public class BlockHandler implements Listener{
     public void onBreak(BlockBreakEvent e){
         Block block = e.getBlock();
         Player pl = e.getPlayer();
+        if (this.uhcWars.getSpectatorManager().getSpectators().contains(pl.getUniqueId())){
+            e.setCancelled(true);
+            return;
+        }
         if (this.uhcWars.getStateManager().getGameState() == GameState.INGAME){
             Teams teams = this.uhcWars.getTeamManager().getPlayerTeam(pl);
-            if (this.uhcWars.getRegionManager().getTeamAreas().get(teams).contains(block)){
+            if (this.uhcWars.getRegionManager().getTeamAreas().get(teams).contains(this.uhcWars.getObjectiveManager().getActiveObjectives().get(this.uhcWars.getTeamManager().getPlayerTeam(pl)).getBlock())){
                 e.setCancelled(true);
                 pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "You cannot break your own objective!");
             }
@@ -66,6 +70,10 @@ public class BlockHandler implements Listener{
     public void onPlace(BlockPlaceEvent e){
         Player pl = e.getPlayer();
         Block block = e.getBlock();
+        if (this.uhcWars.getSpectatorManager().getSpectators().contains(pl.getUniqueId())){
+            e.setCancelled(true);
+            return;
+        }
         if (this.uhcWars.getStateManager().getGameState() == GameState.INGAME) {
             this.uhcWars.getBlockManager().updatePlayerBlocks(pl, block);
         }

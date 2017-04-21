@@ -73,7 +73,8 @@ public class RegionCMD implements CommandExecutor{
 
 
         }catch (ArrayIndexOutOfBoundsException e){
-            //TODO ADD USAGE
+            player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "Usage: /region create <team_1/team_2/wall>");
+            player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "Usage: /region save");
         }
 
         return false;

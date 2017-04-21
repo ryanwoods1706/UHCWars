@@ -42,6 +42,7 @@ public class ConfigHandler {
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.timeLimit", 900);
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.wallDropTime", 300);
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.halfTime", 600);
+        this.uhcWars.getConfig().addDefault("Settings.gameSettings.killsTillFill", 10);
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.goldenHeadOnDeath", true);
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.objectiveHealth", 300);
         this.uhcWars.getConfig().addDefault("Settings.gameSettings.objectiveDmgPerHit", 1);

@@ -2,6 +2,7 @@ package me.noreach.uhcwars.commands;
 
 import me.noreach.uhcwars.UHCWars;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,8 +22,10 @@ public class StatsCMD implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
-
         Player pl = (Player) sender;
+        if (!this.uhcWars.getReferences().getStats()){
+            pl.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "Statistics are not enabled!");
+        }
         if (args.length == 0) {
             OfflinePlayer target = Bukkit.getPlayer(pl.getUniqueId());
 

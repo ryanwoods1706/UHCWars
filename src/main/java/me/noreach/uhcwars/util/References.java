@@ -26,6 +26,7 @@ public class References {
     private boolean goldenHeadsOnDeath;
     private int objectiveHealth;
     private int objectiveDmgPerHit;
+    private int killsTillFill;
     private boolean stats;
 
     private String prefix;
@@ -61,6 +62,7 @@ public class References {
         goldenHeadsOnDeath = config.getBoolean("Settings.gameSettings.goldenHeadOnDeath");
         objectiveHealth = config.getInt("Settings.gameSettings.objectiveHealth");
         objectiveDmgPerHit = config.getInt("Settings.gameSettings.objectiveDmgPerHit");
+        killsTillFill = config.getInt("Settings.gameSettings.killsTillFill");
         Bukkit.getLogger().log(Level.INFO, "[CONFIG] Successfully loaded all values from the config");
 
         if (this.timeLimit < this.halfTime) {
@@ -145,6 +147,8 @@ public class References {
     public boolean getStats() {
         return this.stats;
     }
+
+    public int getKillsTillFill(){ return this.killsTillFill;}
 
 
 }

@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 /**
  * Created by Ryan on 18/04/2017.
@@ -77,6 +78,29 @@ public class DamageHandler implements Listener {
                 killer.getInventory().addItem(new ItemCreator(Material.GOLDEN_APPLE).setName(ChatColor.GOLD + "Golden Head").toItemStack());
                 killer.updateInventory();
             }
+            if (this.uhcWars.getTeamManager().getTeamKills().get(killerTeam) % this.uhcWars.getReferences().getKillsTillFill() == 0){
+                switch (killerTeam){
+                    case Team_1:
+                        this.uhcWars.getChestManager().fillTeam1Chests(true);
+                        break;
+                    case Team_2:
+                        this.uhcWars.getChestManager().fillTeam2Chests(true);
+                        break;
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent e){
+        Player pl = e.getPlayer();
+        if (this.uhcWars.getTeamManager().getPlayerTeam(pl) == Teams.Team_1){
+            pl.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1));
+            this.uhcWars.getInvent().giveItems(pl, true);
+        }
+        else if (this.uhcWars.getTeamManager().getPlayerTeam(pl) == Teams.Team_2){
+            pl.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2));
+            this.uhcWars.getInvent().giveItems(pl, true);
         }
     }
 }
