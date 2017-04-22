@@ -112,6 +112,7 @@ public class UHCWars extends JavaPlugin {
 
     private void registerEvents() {
         PluginManager plm = Bukkit.getPluginManager();
+        plm.registerEvents(new ConsumeListener(this), this);
         plm.registerEvents(new SpectatorHandler(this), this);
         plm.registerEvents(new FoodListener(this), this);
         plm.registerEvents(new InteractListener(this), this);

@@ -57,6 +57,7 @@ public class Invent {
 
     public void giveItems(Player player, boolean bool) {
         PlayerInventory pi = player.getInventory();
+        pi.clear();
         GamePlayer gamePlayer = this.uhcWars.getPlayerManager().getPlayerData().get(player.getUniqueId());
         if (gamePlayer.getCustomKit() != null) {
             pi.setContents(gamePlayer.getCustomKit().getContents());
@@ -75,6 +76,7 @@ public class Invent {
 
     public void giveDefaultItems(Player player) {
         PlayerInventory pi = player.getInventory();
+        pi.clear();
         pi.setItem(0, new ItemCreator(Material.IRON_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
         pi.setItem(1, new ItemCreator(Material.FISHING_ROD).toItemStack());
         pi.setItem(2, new ItemCreator(Material.BOW).addEnchant(Enchantment.ARROW_DAMAGE, 3).toItemStack());
