@@ -78,6 +78,9 @@ public class LoginHandler implements Listener {
         if (this.uhcWars.getSpectatorManager().getSpectators().contains(pl.getUniqueId())){
             this.uhcWars.getSpectatorManager().getSpectators().remove(pl.getUniqueId());
         }
+        if (this.uhcWars.getModManager().getActiveModerators().contains(pl.getUniqueId())){
+            this.uhcWars.getModManager().getActiveModerators().remove(pl.getUniqueId());
+        }
         GamePlayer gamePlayer = this.uhcWars.getPlayerManager().getPlayerData().get(pl.getUniqueId());
         gamePlayer.saveInformation();
         this.uhcWars.getPlayerManager().getPlayerData().remove(pl.getUniqueId());

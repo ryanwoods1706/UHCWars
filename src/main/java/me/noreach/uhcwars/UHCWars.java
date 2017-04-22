@@ -1,5 +1,8 @@
 package me.noreach.uhcwars;
 
+import com.boydti.fawe.bukkit.wrapper.AsyncWorld;
+import com.boydti.fawe.util.TaskManager;
+import com.boydti.fawe.util.task.TaskBuilder;
 import me.noreach.uhcwars.chest.ChestFill;
 import me.noreach.uhcwars.chest.ChestManager;
 import me.noreach.uhcwars.commands.*;
@@ -7,6 +10,7 @@ import me.noreach.uhcwars.enums.GameState;
 import me.noreach.uhcwars.enums.StateManager;
 import me.noreach.uhcwars.game.BlockManager;
 import me.noreach.uhcwars.game.GameManager;
+import me.noreach.uhcwars.game.ModManager;
 import me.noreach.uhcwars.listeners.*;
 import me.noreach.uhcwars.player.GamePlayer;
 import me.noreach.uhcwars.player.PlayerManager;
@@ -20,10 +24,7 @@ import me.noreach.uhcwars.timers.PreGame;
 import me.noreach.uhcwars.util.ConfigHandler;
 import me.noreach.uhcwars.util.InventoryStringDeSerializer;
 import me.noreach.uhcwars.util.References;
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -52,6 +53,7 @@ public class UHCWars extends JavaPlugin {
     private SpectatorManager spectatorManager;
     private BlockManager blockManager;
     private ChestFill chestFill;
+    private ModManager modManager;
 
     @Override
     public void onEnable() {
@@ -73,6 +75,9 @@ public class UHCWars extends JavaPlugin {
         this.spectatorManager = new SpectatorManager(this);
         this.blockManager = new BlockManager(this);
         this.chestFill = new ChestFill(this);
+        this.modManager = new ModManager(this);
+
+
         for (Chunk chunk : this.references.getGameWorld().getLoadedChunks()){
             chunk.unload();
         }
@@ -95,6 +100,7 @@ public class UHCWars extends JavaPlugin {
 
 
     private void registerCommands() {
+        getCommand("moderation").setExecutor(new ModerationCMD(this));
         getCommand("teamchat").setExecutor(new TeamChatCMD(this));
         getCommand("world").setExecutor(new WorldCMD(this));
         getCommand("region").setExecutor(new RegionCMD(this));
@@ -121,31 +127,26 @@ public class UHCWars extends JavaPlugin {
         Location corner2 = this.regionManager.getWallLocation().get(1);
         corner1.getChunk().load();
         corner2.getChunk().load();
+        Bukkit.getLogger().log(Level.INFO, "[Wall] Generating using default method");
         for (Block block : this.gameManager.blocksFromTwoPoints(corner1, corner2)) {
             block.setType(this.references.getWallMaterial());
-            block.getState().update();
         }
         Bukkit.getLogger().log(Level.INFO, "[Walls] Successfully generated the wall!");
     }
 
+
+
     public void degenerateWall() {
         Location corner1 = this.regionManager.getWallLocation().get(0);
         Location corner2 = this.regionManager.getWallLocation().get(1);
-        /*List<Block> wallBlocks = this.gameManager.blocksFromTwoPoints(corner1, corner2);
-        List<Block> tempList1 = new ArrayList<>();
-        List<Block> tempList2 = new ArrayList<>();
-        List<Block> tempList3 = new ArrayList<>();
-        List<Block> tempList4 = new ArrayList<>();
-        if (wallBlocks.size() <= 500 && wallBlocks.size() > 250){
-            tempList1.subList(0, 250);
-            tempList2.subList(250, wallBlocks.size());
-        }*/
         for (Block block : this.gameManager.blocksFromTwoPoints(corner1, corner2)) {
             block.setType(Material.AIR);
             block.getState().update();
         }
         Bukkit.getLogger().log(Level.INFO, "[Walls] Successfully REMOVED the wall!");
     }
+
+
 
 
     public References getReferences() {
@@ -201,5 +202,7 @@ public class UHCWars extends JavaPlugin {
     public BlockManager getBlockManager(){ return this.blockManager;}
 
     public ChestFill getChestFill(){ return this.chestFill;}
+
+    public ModManager getModManager(){ return this.modManager;}
 
 }

@@ -95,11 +95,11 @@ public class DamageHandler implements Listener {
     public void onRespawn(PlayerRespawnEvent e){
         Player pl = e.getPlayer();
         if (this.uhcWars.getTeamManager().getPlayerTeam(pl) == Teams.Team_1){
-            pl.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1));
+            e.setRespawnLocation(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1));
             this.uhcWars.getInvent().giveItems(pl, true);
         }
         else if (this.uhcWars.getTeamManager().getPlayerTeam(pl) == Teams.Team_2){
-            pl.teleport(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2));
+            e.setRespawnLocation(this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_2));
             this.uhcWars.getInvent().giveItems(pl, true);
         }
     }

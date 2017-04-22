@@ -56,9 +56,19 @@ public class GameManager {
                 uhcWars.getChestManager().fillTeam1Chests(true);
                 uhcWars.getChestManager().fillTeam2Chests(true);
                 new InGame(uhcWars).runTaskTimer(uhcWars, 0, 20L);
-                uhcWars.getStateManager().setGameState(GameState.INGAME);
             }
         },10L);
+        for (UUID uuid : this.uhcWars.getModManager().getActiveModerators()){
+            Player player = Bukkit.getPlayer(uuid);
+            for (Player gamePl : Bukkit.getServer().getOnlinePlayers()){
+                gamePl.hidePlayer(player);
+            }
+            Location spawnLoc = this.uhcWars.getRegionManager().getTeamsLocations().get(Teams.Team_1);
+            Location specLocation = new Location(spawnLoc.getWorld(), spawnLoc.getX(), spawnLoc.getY() + 15, spawnLoc.getZ());
+            player.teleport(specLocation);
+            this.uhcWars.getInvent().giveModInv(player);
+        }
+        this.uhcWars.getStateManager().setGameState(GameState.INGAME);
 
     }
 

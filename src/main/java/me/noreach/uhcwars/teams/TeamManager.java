@@ -27,7 +27,9 @@ public class TeamManager {
         boolean bool = false;
         List<Player> tempList = new ArrayList<>();
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-            tempList.add(player);
+            if (!this.uhcWars.getModManager().getActiveModerators().contains(player.getUniqueId())) {
+                tempList.add(player);
+            }
         }
         for (UUID uuid : this.preferredTeams.keySet()) {
             if (this.preferredTeams.get(uuid) == Teams.Team_1) {

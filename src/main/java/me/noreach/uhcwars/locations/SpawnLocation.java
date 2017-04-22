@@ -35,7 +35,7 @@ public class SpawnLocation {
         configuration.set(path + "yaw", location.getYaw());
         configuration.set(path + "pitch", location.getPitch());
         uhcWars.saveConfig();
-        player.sendMessage(ChatColor.GREEN + "Successfully set Team 1 Location");
+        player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.GREEN + "Successfully set Team 1 Location");
     }
 
     public void setTeam2Location(Location location){
@@ -48,7 +48,7 @@ public class SpawnLocation {
         configuration.set(path + "yaw", location.getYaw());
         configuration.set(path + "pitch", location.getPitch());
         uhcWars.saveConfig();
-        player.sendMessage(ChatColor.GREEN + "Successfully set Team 2 Location");
+        player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.GREEN + "Successfully set Team 2 Location");
     }
 
     public Location getTeam1Location(){

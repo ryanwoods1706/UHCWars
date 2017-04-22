@@ -47,6 +47,10 @@ public class Objective {
         //sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Objective ready to save: /objective save");
     }
 
+    public void setLocation(Location location){
+        this.location = location;
+    }
+
     public boolean saveObjective(){
         if (block == null || location == null || this.teamObjective == null){
             return false;
@@ -55,9 +59,9 @@ public class Objective {
         String path2 = "Settings.Objective." + this.teamObjective + ".location";
         config.set(path, block.getType().toString());
         config.set(path2 + ".world", location.getWorld().getName());
-        config.set(path2 + ".x", location.getX());
-        config.set(path2 + ".y", location.getY());
-        config.set(path2 + ".z", location.getZ());
+        config.set(path2 + ".x", (float) location.getX());
+        config.set(path2 + ".y", (float) location.getY());
+        config.set(path2 + ".z", (float) location.getZ());
         this.uhcWars.saveConfig();
         sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Successfully saved Objective!");
         return true;

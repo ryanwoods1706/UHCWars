@@ -67,6 +67,7 @@ public class RegionManager {
             try {
                 Location team1Location = new Location(Bukkit.getWorld(configuration.getString(path + "world")), configuration.getDouble(path + "x"), configuration.getDouble(path + "y"), configuration.getDouble(path + "z"));
                 Location team2Location = new Location(Bukkit.getWorld(configuration.getString(path2 + "world")), configuration.getDouble(path2 + "x"), configuration.getDouble(path2 + "y"), configuration.getDouble(path2 + "z"));
+
                 team1Location.getChunk().load();
                 team2Location.getChunk().load();
                 this.teamsLocations.put(Teams.Team_1, team1Location);
@@ -79,16 +80,18 @@ public class RegionManager {
             try {
                 String path3 = "Settings.Objective.Team_1.location.";
                 World Team1world = Bukkit.getWorld(this.configuration.getString("Settings.Objective.Team_1.location.world"));
-                Block block = Team1world.getBlockAt(this.configuration.getInt(path3 + "x"), this.configuration.getInt(path3 + "y"), this.configuration.getInt(path3 + "z"));
+                Location blockLocation = new Location(Team1world, this.configuration.getDouble(path3 + "x"), this.configuration.getDouble(path3 + "y"), this.configuration.getDouble(path3 + "z"));
+                Block block = Team1world.getBlockAt(blockLocation);
                 block.getChunk().load();
                 Objective objective = new Objective(block, uhcWars);
                 objective.setTeamObjective(Teams.Team_1);
                 objective.setHealth(this.uhcWars);
                 this.uhcWars.getObjectiveManager().getActiveObjectives().put(objective.getTeamObjective(), objective);
 
-                String path4 = "Settings.Objective.Team_1.location.";
+                String path4 = "Settings.Objective.Team_2.location.";
                 World Team2world = Bukkit.getWorld(this.configuration.getString("Settings.Objective.Team_2.location.world"));
-                Block block2 = Team2world.getBlockAt(this.configuration.getInt(path4 + "x"), this.configuration.getInt(path4 + "y"), this.configuration.getInt(path4 + "z"));
+                Location blockLocation2 = new Location(Team2world, this.configuration.getDouble(path4 + "x"), this.configuration.getDouble(path4 + "y"), this.configuration.getDouble(path4 + "z"));
+                Block block2 = Team2world.getBlockAt(blockLocation2);
                 block2.getChunk().load();
                 Objective objective2 = new Objective(block2, uhcWars);
                 objective2.setTeamObjective(Teams.Team_2);

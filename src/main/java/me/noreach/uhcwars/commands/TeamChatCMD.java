@@ -33,6 +33,9 @@ public class TeamChatCMD implements CommandExecutor {
         }
         Player player = (Player) sender;
         Teams teams = this.uhcWars.getTeamManager().getPlayerTeam(player);
+        if (args.length == 0){
+            player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "Usage: /teamchat <message>");
+        }
         try{
             StringBuilder msg = new StringBuilder();
             for (String string : args) {
@@ -41,12 +44,12 @@ public class TeamChatCMD implements CommandExecutor {
             switch (teams){
                 case Team_1:
                     for (Player teamPlayers : this.uhcWars.getTeamManager().getTeam1()){
-                        teamPlayers.sendMessage(this.uhcWars.getReferences().getSecondaryColor() + msg.toString());
+                        teamPlayers.sendMessage(ChatColor.DARK_PURPLE+ "[TeamChat] " + this.uhcWars.getReferences().getSecondaryColor() + msg.toString());
                     }
                     break;
                 case Team_2:
                     for (Player teamPlayers : this.uhcWars.getTeamManager().getTeam2()){
-                        teamPlayers.sendMessage(this.uhcWars.getReferences().getSecondaryColor() + msg.toString());
+                        teamPlayers.sendMessage(ChatColor.DARK_PURPLE+ "[TeamChat] " + this.uhcWars.getReferences().getSecondaryColor() + msg.toString());
                     }
                     break;
             }

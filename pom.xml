@@ -12,6 +12,10 @@
             <id>md-5</id>
             <url>http://repo.md-5.net/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>FAWE</id>
+            <url>http://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -26,6 +30,11 @@
             <version>2.9.0</version>
             <type>jar</type>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.boydti</groupId>
+            <artifactId>fawe-api</artifactId>
+            <version>latest</version>
         </dependency>
     </dependencies>
     <properties>

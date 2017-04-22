@@ -13,6 +13,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+
+import java.util.logging.Level;
 
 /**
  * Created by Ryan on 18/04/2017.
@@ -29,6 +32,7 @@ public class BlockHandler implements Listener{
         this.secondaryColor = this.uhcWars.getReferences().getSecondaryColor();
     }
 
+
     @EventHandler
     public void onBreak(BlockBreakEvent e){
         Block block = e.getBlock();
@@ -37,16 +41,19 @@ public class BlockHandler implements Listener{
             e.setCancelled(true);
             return;
         }
+
         if (this.uhcWars.getStateManager().getGameState() == GameState.INGAME){
             Teams teams = this.uhcWars.getTeamManager().getPlayerTeam(pl);
-            if (this.uhcWars.getRegionManager().getTeamAreas().get(teams).contains(this.uhcWars.getObjectiveManager().getActiveObjectives().get(this.uhcWars.getTeamManager().getPlayerTeam(pl)).getBlock())){
+            Teams oppositeTeam = this.uhcWars.getTeamManager().getOppositeTeam(pl);
+            if (block.equals(this.uhcWars.getObjectiveManager().getActiveObjectives().get(teams).getBlock())){
                 e.setCancelled(true);
                 pl.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "You cannot break your own objective!");
+                return;
             }
-            else if (this.uhcWars.getRegionManager().getTeamAreas().get(this.uhcWars.getTeamManager().getOppositeTeam(pl)).contains(this.uhcWars.getObjectiveManager().getActiveObjectives().get(this.uhcWars.getTeamManager().getPlayerTeam(pl)).getBlock())){
-                Objective objective = this.uhcWars.getObjectiveManager().getActiveObjectives().get(this.uhcWars.getTeamManager().getOppositeTeam(pl));
+            else if (block.equals(this.uhcWars.getObjectiveManager().getActiveObjectives().get(oppositeTeam).getBlock())){
+                Objective objective = this.uhcWars.getObjectiveManager().getActiveObjectives().get(oppositeTeam);
                 objective.decrementHealth();
-                this.uhcWars.getObjectiveManager().getActiveObjectives().put(this.uhcWars.getTeamManager().getOppositeTeam(pl), objective);
+                this.uhcWars.getObjectiveManager().getActiveObjectives().put(oppositeTeam, objective);
                 if (objective.getHealth() > 0){
                     e.setCancelled(true);
                 }
@@ -57,6 +64,7 @@ public class BlockHandler implements Listener{
                     e.setCancelled(true);
                     this.uhcWars.getGameManager().endGame();
                 }
+
             }
             else{
                 if (pl.getGameMode() != GameMode.CREATIVE) {
@@ -67,6 +75,7 @@ public class BlockHandler implements Listener{
         }
         else if (this.uhcWars.getStateManager().getGameState() == GameState.LOBBY){
             if (!pl.hasPermission("uhcwars.build.lobby")) {
+                Bukkit.getLogger().log(Level.INFO, "[Blocks]"  + pl.getName() + " Tried to break lobby");
                 e.setCancelled(true);
                 pl.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You cannot break blocks here!");
             }
@@ -91,5 +100,10 @@ public class BlockHandler implements Listener{
                 pl.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You cannot place blocks here!");
             }
         }
+    }
+
+    @EventHandler
+    public void onBEmpty(PlayerBucketEmptyEvent e){
+        e.setCancelled(true);
     }
 }
