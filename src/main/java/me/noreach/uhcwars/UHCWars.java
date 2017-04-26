@@ -1,8 +1,5 @@
 package me.noreach.uhcwars;
 
-import com.boydti.fawe.bukkit.wrapper.AsyncWorld;
-import com.boydti.fawe.util.TaskManager;
-import com.boydti.fawe.util.task.TaskBuilder;
 import me.noreach.uhcwars.chest.ChestFill;
 import me.noreach.uhcwars.chest.ChestManager;
 import me.noreach.uhcwars.commands.*;

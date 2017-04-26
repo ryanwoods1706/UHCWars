@@ -1,12 +1,7 @@
 package me.noreach.uhcwars.util;
 
 import me.noreach.uhcwars.UHCWars;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 /**
  * Created by Ryan on 15/04/2017.
@@ -24,6 +19,12 @@ public class ConfigHandler {
     }
 
     private void checkConfig(){
+        this.uhcWars.getConfig().addDefault("Settings.storageType", "SQL");
+        this.uhcWars.getConfig().addDefault("Settings.MongoDB.ip", "localhost");
+        this.uhcWars.getConfig().addDefault("Settings.MongoDB.port", 27017);
+        this.uhcWars.getConfig().addDefault("Settings.MongoDB.database", "database");
+        this.uhcWars.getConfig().addDefault("Settings.MongoDB.username", "username");
+        this.uhcWars.getConfig().addDefault("Settings.MongoDB.password", "password");
         this.uhcWars.getConfig().addDefault("Settings.SQL.stats", false);
         this.uhcWars.getConfig().addDefault("Settings.SQL.ip", "localhost");
         this.uhcWars.getConfig().addDefault("Settings.SQL.database", "database");
