@@ -12,6 +12,10 @@ import me.noreach.uhcwars.listeners.*;
 import me.noreach.uhcwars.player.GamePlayer;
 import me.noreach.uhcwars.player.PlayerManager;
 import me.noreach.uhcwars.player.SpectatorManager;
+import me.noreach.uhcwars.sql.StorageHandler;
+import me.noreach.uhcwars.storage.IDatabase;
+import me.noreach.uhcwars.storage.MongoDataStore;
+import me.noreach.uhcwars.storage.SQLDatastore;
 import me.noreach.uhcwars.util.Invent;
 import me.noreach.uhcwars.locations.ObjectiveManager;
 import me.noreach.uhcwars.locations.RegionManager;
@@ -51,6 +55,10 @@ public class UHCWars extends JavaPlugin {
     private BlockManager blockManager;
     private ChestFill chestFill;
     private ModManager modManager;
+    private StorageHandler storageHandler;
+
+    private IDatabase iDatabase;
+
 
     @Override
     public void onEnable() {
@@ -73,10 +81,20 @@ public class UHCWars extends JavaPlugin {
         this.blockManager = new BlockManager(this);
         this.chestFill = new ChestFill(this);
         this.modManager = new ModManager(this);
+        this.storageHandler = new StorageHandler(this);
 
 
         for (Chunk chunk : this.references.getGameWorld().getLoadedChunks()){
             chunk.unload();
+        }
+        if (getConfig().getString("Settings.storageType") == "MySQL"){
+            iDatabase = new SQLDatastore();
+        }
+        else if(getConfig().getString("Settings.storageType") == "MongoDB"){
+            iDatabase = new MongoDataStore();
+        }else{
+            Bukkit.getLogger().log(Level.SEVERE, "[Storage] Error you did not select a correct storage type! MySQL/MongoDB");
+            this.setEnabled(false);
         }
         Bukkit.getLogger().log(Level.INFO, "[Chunks] Successfully unloaded all gameworld chunks!");
         new PreGame(this).runTaskTimer(this, 0, 100L);
@@ -202,5 +220,7 @@ public class UHCWars extends JavaPlugin {
     public ChestFill getChestFill(){ return this.chestFill;}
 
     public ModManager getModManager(){ return this.modManager;}
+
+    public StorageHandler getStorageHandler(){ return this.storageHandler;}
 
 }

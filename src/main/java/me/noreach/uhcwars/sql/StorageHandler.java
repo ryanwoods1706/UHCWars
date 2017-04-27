@@ -5,13 +5,8 @@ import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.player.UHCPlayer;
 import org.bukkit.Bukkit;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.sql.*;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -23,6 +18,7 @@ public class StorageHandler {
     private UHCWars uhcWars;
     private StorageTypes storageType;
 
+    private Map<UUID, List<Integer>> inUseMap = new HashMap<>();
 
     /**
      * MySQL Connection Object
@@ -34,11 +30,11 @@ public class StorageHandler {
     private MongoClient client;
 
 
-    public StorageHandler(UHCWars uhcWars){
+    public StorageHandler(UHCWars uhcWars) {
         this.uhcWars = uhcWars;
-        try{
+        try {
             this.storageType = StorageTypes.valueOf(this.uhcWars.getConfig().getString("Settings.storageType"));
-        }catch (Exception e){
+        } catch (Exception e) {
             Bukkit.getLogger().log(Level.SEVERE, "[Storage] Error please enter a valid storage type");
             Bukkit.getLogger().log(Level.SEVERE, "[Storage] Storage Types: MySQL/MongoDB/None");
         }
@@ -51,8 +47,8 @@ public class StorageHandler {
     }
 
 
-    public boolean connect(){
-        switch (storageType){
+    public boolean connect() {
+        switch (storageType) {
             case None:
                 Bukkit.getLogger().log(Level.INFO, "[Storage] Not storing any data for this plugin!");
                 return true;
@@ -70,13 +66,13 @@ public class StorageHandler {
                     statement.close();
                     statement1.close();
                     Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully connected to the MySQL Server/Database");
-                }catch (SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                     Bukkit.getLogger().log(Level.SEVERE, "[Storage] Could not connect to the MySQL Server/Database");
                     return false;
                 }
                 return true;
-            case  MongoDB:
+            case MongoDB:
                 try {
                     String mongoIP = this.uhcWars.getConfig().getString("Settings.MongoDB.ip");
                     int mongoPort = this.uhcWars.getConfig().getInt("Settings.MongoDB.port");
@@ -89,7 +85,7 @@ public class StorageHandler {
                     client = new MongoClient(addr, credentials);
                     this.database = client.getDB(mongoDB);
                     this.collection = this.database.getCollection("uhcwars_data");
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     Bukkit.getLogger().log(Level.SEVERE, "[Storage] Could not connect to the MongoDB Server/Database");
                 }
@@ -99,15 +95,15 @@ public class StorageHandler {
     }
 
 
-    public void closeStorage(){
-        switch (storageType){
+    public void closeStorage() {
+        switch (storageType) {
             case None:
                 Bukkit.getLogger().log(Level.INFO, "[Storage] No storage type found, nothing to close");
                 break;
             case MySQL:
                 try {
                     this.connection.close();
-                }catch (SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                     Bukkit.getLogger().log(Level.SEVERE, "[Storage] Could not close the MySQL Connection");
                 }
@@ -115,8 +111,7 @@ public class StorageHandler {
             case MongoDB:
                 try {
                     this.database.getMongo().close();
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     Bukkit.getLogger().log(Level.SEVERE, "[Storage] Could not close the MongoDB pool");
                 }
@@ -124,21 +119,57 @@ public class StorageHandler {
     }
 
 
-    public UHCPlayer manageUser(UUID uuid){
-        int kills = 0;
-        int deaths = 0;
-        int wins = 0;
-        switch (storageType){
+    public UHCPlayer generateData(UUID uuid) {
+        UHCPlayer uhcPlayer = new UHCPlayer(uuid);
+        switch (storageType) {
             case None:
                 Bukkit.getLogger().log(Level.INFO, "[Storage]  No storage type found, nothing to create");
                 break;
             case MySQL:
-                break;
+                Bukkit.getScheduler().runTaskAsynchronously(this.uhcWars, new Runnable() {
+                    @Override
+                    public void run() {
+                        PreparedStatement statement = null;
+                        PreparedStatement statement1 = null;
+                        ResultSet resultSet = null;
+                        try {
+                            assert connection != null;
+                            statement = connection.prepareStatement("SELECT * FROM `uhcwars_stats` WHERE `uuid` = ?;");
+                            statement.setString(1, uuid.toString());
+                            statement.executeQuery();
+                            resultSet = statement.getResultSet();
+                            if (resultSet.next()) {
+                                uhcPlayer.getKills().setAmount(resultSet.getInt("kills"));
+                                uhcPlayer.getDeaths().setAmount(resultSet.getInt("deaths"));
+                                uhcPlayer.getWins().setAmount(resultSet.getInt("wins"));;
+                            }else{
+                                statement1 = connection.prepareStatement("INSERT INTO `uhcwars_stats` (uuid) VALUES(?);");
+                                statement1.setString(1, uuid.toString());
+                                statement1.executeUpdate();
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                return uhcPlayer;
             case MongoDB:
+                DBObject dbObject = new BasicDBObject("uuid", uuid);
+                DBObject found = collection.findOne(dbObject);
+                if (found == null){
+                    dbObject.put("kills", 0);
+                    dbObject.put("deaths", 0);
+                    dbObject.put("wins", 0);
+                    collection.insert(dbObject);
+                    Bukkit.getLogger().log(Level.INFO, "[Storage] Could not find user in the collection, creating the user!");
+                    found = collection.findOne(dbObject);
+                }
+                uhcPlayer.getKills().setAmount((int) found.get("kills"));
+                uhcPlayer.getDeaths().setAmount((int) found.get("deaths"));
+                uhcPlayer.getWins().setAmount((int) found.get("wins"));
+                return uhcPlayer;
         }
-
-
-        return new UHCPlayer(uuid, kills, deaths, wins);
+        return null;
     }
 
 }

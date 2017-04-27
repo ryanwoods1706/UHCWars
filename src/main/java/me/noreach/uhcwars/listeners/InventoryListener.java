@@ -28,7 +28,7 @@ public class InventoryListener implements Listener {
         if (e.getClickedInventory() != null) {
             if (e.getClickedInventory().getTitle() != null) {
                 if (e.getCurrentItem() != null) {
-                    if (e.getClickedInventory().getTitle().contains(this.uhcWars.getReferences().getMainColor() + "Statistics")) {
+                    if (e.getClickedInventory().getTitle().contains("Statistics")) {
                         e.setCancelled(true);
                     }
                     if (e.getClickedInventory().getTitle().contains(this.uhcWars.getReferences().getMainColor() + "Game Stats:")) {

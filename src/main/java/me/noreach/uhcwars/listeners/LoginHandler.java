@@ -3,6 +3,7 @@ package me.noreach.uhcwars.listeners;
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.enums.GameState;
 import me.noreach.uhcwars.player.GamePlayer;
+import me.noreach.uhcwars.player.UHCPlayer;
 import me.noreach.uhcwars.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -70,6 +71,9 @@ public class LoginHandler implements Listener {
         GamePlayer gamePlayer = new GamePlayer(e.getUniqueId(), uhcWars);
         gamePlayer.getInformation();
         this.uhcWars.getPlayerManager().getPlayerData().put(e.getUniqueId(), gamePlayer);
+
+        UHCPlayer uhcPlayer = this.uhcWars.getStorageHandler().generateData(e.getUniqueId());
+
     }
 
     @EventHandler
