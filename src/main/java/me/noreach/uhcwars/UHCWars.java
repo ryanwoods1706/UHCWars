@@ -223,4 +223,6 @@ public class UHCWars extends JavaPlugin {
 
     public StorageHandler getStorageHandler(){ return this.storageHandler;}
 
+    public IDatabase getStorage(){ return this.iDatabase;}
+
 }

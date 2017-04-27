@@ -1,5 +1,7 @@
 package me.noreach.uhcwars.storage;
 
+import me.noreach.uhcwars.player.UHCPlayer;
+
 /**
  * Created by NoReach_ on 27/04/2017.
  */
@@ -12,6 +14,21 @@ public class SQLDatastore extends IDatabase {
     @Override
     public boolean initalize() {
         return false;
+    }
+
+    @Override
+    public boolean doesPlayerExist() {
+        return false;
+    }
+
+    @Override
+    public void createPlayer() {
+
+    }
+
+    @Override
+    public UHCPlayer getPlayer() {
+        return null;
     }
 
     @Override
