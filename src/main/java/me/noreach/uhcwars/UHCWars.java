@@ -9,9 +9,9 @@ import me.noreach.uhcwars.game.BlockManager;
 import me.noreach.uhcwars.game.GameManager;
 import me.noreach.uhcwars.game.ModManager;
 import me.noreach.uhcwars.listeners.*;
-import me.noreach.uhcwars.player.GamePlayer;
 import me.noreach.uhcwars.player.PlayerManager;
 import me.noreach.uhcwars.player.SpectatorManager;
+import me.noreach.uhcwars.player.UHCPlayer;
 import me.noreach.uhcwars.sql.StorageHandler;
 import me.noreach.uhcwars.storage.IDatabase;
 import me.noreach.uhcwars.storage.MongoDataStore;
@@ -19,7 +19,6 @@ import me.noreach.uhcwars.storage.SQLDatastore;
 import me.noreach.uhcwars.util.Invent;
 import me.noreach.uhcwars.locations.ObjectiveManager;
 import me.noreach.uhcwars.locations.RegionManager;
-import me.noreach.uhcwars.sql.SQLHandler;
 import me.noreach.uhcwars.teams.TeamManager;
 import me.noreach.uhcwars.timers.PreGame;
 import me.noreach.uhcwars.util.ConfigHandler;
@@ -40,7 +39,7 @@ public class UHCWars extends JavaPlugin {
 
 
     private References references;
-    private SQLHandler sqlHandler;
+    //private SQLHandler sqlHandler;
     private StateManager stateManager;
     private TeamManager teamManager;
     private GameManager gameManager;
@@ -68,7 +67,7 @@ public class UHCWars extends JavaPlugin {
         this.configHandler = new ConfigHandler(this);
         this.references = new References(this);
         this.references.loadValues();
-        this.sqlHandler = new SQLHandler(this, getConfig().getString("Settings.SQL.ip"), getConfig().getString("Settings.SQL.database"), getConfig().getString("Settings.SQL.username"), getConfig().getString("Settings.SQL.password"));
+     //   this.sqlHandler = new SQLHandler(this, getConfig().getString("Settings.SQL.ip"), getConfig().getString("Settings.SQL.database"), getConfig().getString("Settings.SQL.username"), getConfig().getString("Settings.SQL.password"));
         this.stateManager = new StateManager(this);
         this.teamManager = new TeamManager(this);
         this.objectiveManager = new ObjectiveManager(this);
@@ -94,16 +93,20 @@ public class UHCWars extends JavaPlugin {
         for (Chunk chunk : this.references.getGameWorld().getLoadedChunks()){
             chunk.unload();
         }
-       // if (getConfig().getString("Settings.storageType") == "MySQL"){
-        //    iDatabase = new SQLDatastore(this);
-       // }
-       // else if(getConfig().getString("Settings.storageType") == "MongoDB"){
-         //   iDatabase = new MongoDataStore(this);
-        //}
-        //else{
-          //  Bukkit.getLogger().log(Level.SEVERE, "[Storage] Error you did not select a correct storage type! MySQL/MongoDB");
-           // this.setEnabled(false);
-        //}
+        if (getConfig().getString("Settings.storageType") == "MySQL"){
+            iDatabase = new SQLDatastore(this);
+        }
+        else if(getConfig().getString("Settings.storageType") == "MongoDB"){
+            iDatabase = new MongoDataStore(this);
+        }
+        else if (getConfig().getString("Settings.storageType") == "None"){
+            //REDUNDANT Just makes a data store
+            iDatabase = new SQLDatastore(this);
+        }
+        else{
+            Bukkit.getLogger().log(Level.SEVERE, "[Storage] Error you did not select a correct storage type! MySQL/MongoDB/None");
+            this.setEnabled(false);
+        }
         Bukkit.getLogger().log(Level.INFO, "[Chunks] Successfully unloaded all gameworld chunks!");
         new PreGame(this).runTaskTimer(this, 0, 100L);
         registerCommands();
@@ -113,11 +116,12 @@ public class UHCWars extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.sqlHandler.closeConnection();
+        this.iDatabase.closeDataStore();
+        //this.sqlHandler.closeConnection();
         degenerateWall();
-        for (UUID uuid : this.playerManager.getPlayerData().keySet()){
-            GamePlayer gamePlayer = this.playerManager.getPlayerData().get(uuid);
-            gamePlayer.saveInformation();
+        for (UUID uuid : this.playerManager.getUhcPlayers().keySet()){
+            UHCPlayer uhcPlayer = this.playerManager.getUhcPlayers().get(uuid);
+            this.iDatabase.updatePlayer(uhcPlayer);
         }
     }
 
@@ -177,9 +181,9 @@ public class UHCWars extends JavaPlugin {
         return this.references;
     }
 
-    public SQLHandler getSqlHandler() {
-        return this.sqlHandler;
-    }
+   // public SQLHandler getSqlHandler() {
+   //     return this.sqlHandler;
+    //}
 
     public StateManager getStateManager() {
         return this.stateManager;

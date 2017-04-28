@@ -29,14 +29,14 @@ public class StatsCMD implements CommandExecutor {
         if (args.length == 0) {
             OfflinePlayer target = Bukkit.getPlayer(pl.getUniqueId());
 
-            pl.openInventory(this.uhcWars.getPlayerManager().getPlayerData().get(target.getUniqueId()).getStatsInventory());
+            pl.openInventory(this.uhcWars.getPlayerManager().getUhcPlayers().get(target.getUniqueId()).getStatsInventory());
         } else {
             Player target = Bukkit.getPlayer(args[0]);
             if (target == null) {
                 pl.sendMessage("§cThat player is not online!");
                 return true;
             }
-            pl.openInventory(this.uhcWars.getPlayerManager().getPlayerData().get(target.getUniqueId()).getStatsInventory());
+            pl.openInventory(this.uhcWars.getPlayerManager().getUhcPlayers().get(target.getUniqueId()).getStatsInventory());
         }
         return false;
     }

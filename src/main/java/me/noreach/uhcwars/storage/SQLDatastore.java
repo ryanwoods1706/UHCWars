@@ -1,14 +1,14 @@
 package me.noreach.uhcwars.storage;
 
-import com.sun.org.apache.regexp.internal.RE;
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.player.UHCPlayer;
+import me.noreach.uhcwars.sql.StorageTypes;
+import me.noreach.uhcwars.util.InventoryStringDeSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
 
 import java.sql.*;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
 /**
@@ -16,18 +16,27 @@ import java.util.logging.Level;
  */
 public class SQLDatastore extends IDatabase {
 
+
+    //ON ASYNC JOIN GENERATE THE PLAYER DATA AND SET THE LOADOUT OBJECT IN THEIR UHCPLAYER CLASS
+    //if result set is null, i.e no kit is found set it to the default inv
     private UHCWars uhcWars;
     private Connection connection;
 
 
-    public SQLDatastore(UHCWars uhcWars){
+    public SQLDatastore(UHCWars uhcWars) {
         this.uhcWars = uhcWars;
         this.initalize();
     }
 
+
+    @Override
+    public StorageTypes storageType() {
+        return StorageTypes.MySQL;
+    }
+
     @Override
     public boolean initalize() {
-        if (!this.uhcWars.getStats()){
+        if (!this.uhcWars.getStats()) {
             Bukkit.getLogger().log(Level.INFO, "[Storage] Stats are disabled");
             return false;
         }
@@ -54,168 +63,164 @@ public class SQLDatastore extends IDatabase {
     }
 
     @Override
-    public boolean doesPlayerExist(UUID uuid) {
-        AtomicBoolean bool = new AtomicBoolean(false);
+    public void createPlayer(UUID uuid) {
+        if (!this.uhcWars.getStats()) {
+            return;
+        }
         Bukkit.getScheduler().runTaskAsynchronously(this.uhcWars, new Runnable() {
             @Override
             public void run() {
-                PreparedStatement statement = null;
-                ResultSet resultSet = null;
-                try {
-                    statement = connection.prepareStatement("SELECT * FROM `uhcwars_stats` WHERE `uuid` = ?");
-                    statement.executeQuery();
-                    resultSet = statement.getResultSet();
-                    if (resultSet.next()){
-                        bool.set(true);
-                    }else{
-                        bool.set(false);
-                    }
-                }catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                finally {
-                    try{
-                        if (statement != null){
-                            statement.close();
-                        }
-                        if (resultSet != null){
-                            resultSet.close();
-                        }
-                    }catch (SQLException e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        return bool.get();
-    }
-
-    @Override
-    public void createPlayer(UUID uuid) {
-    Bukkit.getScheduler().runTaskAsynchronously(this.uhcWars, new Runnable() {
-        @Override
-        public void run() {
-            PreparedStatement statement1 = null;
-            if (!doesPlayerExist(uuid)){
+                PreparedStatement statement1 = null;
                 try {
                     statement1 = connection.prepareStatement("INSERT INTO `uhcwars_stats` (uuid) VALUES (?);");
                     statement1.setString(1, uuid.toString());
                     statement1.executeUpdate();
                     Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully created user: " + uuid);
-                }catch (SQLException e){
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-        }
-    });
+
+        });
     }
 
     @Override
     public UHCPlayer getPlayer(UUID uuid) {
-        return new UHCPlayer(uuid, this.uhcWars.getStorage().getKills(uuid), this.uhcWars.getStorage().getDeaths(uuid), this.uhcWars.getStorage().getWins(uuid));
-    }
-
-    @Override
-    public int getKills(UUID uuid) {
-        AtomicInteger kills = new AtomicInteger(0);
-
+        UHCPlayer uhcPlayer = new UHCPlayer(uuid);
+        if (!this.uhcWars.getStats()){
+            return uhcPlayer;
+        }
         Bukkit.getScheduler().runTaskAsynchronously(this.uhcWars, new Runnable() {
             @Override
             public void run() {
-                PreparedStatement statement = null;
-                ResultSet resultSet = null;
-                try{
-                    statement = connection.prepareStatement("SELECT `kills` FROM `uhcwars_stats` WHERE `uuid` = ?");
-                    statement.setString(1, uuid.toString());
-                    statement.executeQuery();
-                    resultSet = statement.getResultSet();
-                    if (resultSet.next()){
-                        kills.set(resultSet.getInt("kills"));
-                    }else{
-                        Bukkit.getLogger().log(Level.SEVERE, "[Storage] Error retrieving player kills for: " + uuid);
+                    PreparedStatement statement = null;
+                    PreparedStatement statement1 = null;
+                    ResultSet resultSet = null;
+                    ResultSet resultSet1 = null;
+                    try{
+                        statement = connection.prepareStatement("SELECT * FROM `uhcwars_stats` WHERE `uuid` = ?;");
+                        statement.setString(1, uuid.toString());
+                        statement.executeQuery();
+                        resultSet = statement.getResultSet();
+                        if (resultSet.next()){
+                            uhcPlayer.getKills().setAmount(resultSet.getInt("kills"));
+                            uhcPlayer.getDeaths().setAmount(resultSet.getInt("deaths"));
+                            uhcPlayer.getWins().setAmount(resultSet.getInt("wins"));
+                            Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully retrieved UHCPlayer for: " + uuid);
+                        }else{
+                            createPlayer(uuid);
+                        }
+
+                    }catch (SQLException e){
+                        e.printStackTrace();
                     }
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-
-
             }
         });
-        return kills.get();
+        return uhcPlayer;
     }
 
     @Override
-    public int getDeaths(UUID uuid) {
-        AtomicInteger deaths = new AtomicInteger(0);
-
-        Bukkit.getScheduler().runTaskAsynchronously(this.uhcWars, new Runnable() {
-            @Override
-            public void run() {
-                PreparedStatement statement = null;
-                ResultSet resultSet = null;
-                try{
-                    statement = connection.prepareStatement("SELECT `deaths` FROM `uhcwars_stats` WHERE `uuid` = ?");
-                    statement.setString(1, uuid.toString());
-                    statement.executeQuery();
-                    resultSet = statement.getResultSet();
-                    if (resultSet.next()){
-                        deaths.set(resultSet.getInt("deaths"));
-                    }else{
-                        Bukkit.getLogger().log(Level.SEVERE, "[Storage] Error retrieving player deaths for: " + uuid);
-                    }
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }
-        });
-        return deaths.get();
+    public void updatePlayer(UHCPlayer uhcPlayer) {
+        try{
+            PreparedStatement statement = connection.prepareStatement("UPDATE `uhcwars_stats` SET `kills` = ?,  `deaths` = ?, `wins` = ? WHERE `uuid` = ?;");
+            statement.setInt(1, uhcPlayer.getKills().getAmount());
+            statement.setInt(2, uhcPlayer.getDeaths().getAmount());
+            statement.setInt(3, uhcPlayer.getWins().getAmount());
+            statement.setString(1, uhcPlayer.getUuid().toString());
+            statement.executeUpdate();
+            statement.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+            Bukkit.getLogger().log(Level.SEVERE, "[Storage] Failed to update player: " + uhcPlayer.getUuid());
+        }
     }
 
-    @Override
-    public int getWins(UUID uuid) {
-        AtomicInteger wins = new AtomicInteger(0);
-
-        Bukkit.getScheduler().runTaskAsynchronously(this.uhcWars, new Runnable() {
-            @Override
-            public void run() {
-                PreparedStatement statement = null;
-                ResultSet resultSet = null;
-                try{
-                    statement = connection.prepareStatement("SELECT `wins` FROM `uhcwars_stats` WHERE `uuid` = ?");
-                    statement.setString(1, uuid.toString());
-                    statement.executeQuery();
-                    resultSet = statement.getResultSet();
-                    if (resultSet.next()){
-                        wins.set(resultSet.getInt("wins"));
-                    }else{
-                        Bukkit.getLogger().log(Level.SEVERE, "[Storage] Error retrieving player wins for: " + uuid);
-                    }
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }
-            }
-        });
-        return wins.get();
-    }
-
-    @Override
-    public void updateKills(UUID uuid) {
-
-    }
-
-    @Override
-    public void updateDeaths(UUID uuid) {
-
-    }
-
-    @Override
-    public void updateWins(UUID uuid) {
-
-    }
 
     @Override
     public void closeDataStore() {
+        try{
+            this.connection.close();
+        }catch (SQLException e){
+            e.printStackTrace();
+            Bukkit.getLogger().log(Level.SEVERE, "[Storage] Could not close the SQL connection, please report this issue ASAP!");
+        }
+    }
 
+    @Override
+    public Inventory playerKit(UUID uuid) {
+        Inventory inventory = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = this.connection.prepareStatement("SELECT `inv` FROM `uhcwars_kits` WHERE `uuid` = ?;");
+            statement.setString(1, uuid.toString());
+            statement.executeQuery();
+            resultSet = statement.getResultSet();
+            if (resultSet.next()) {
+                inventory = this.uhcWars.getInventorySerializer().StringToInventory(resultSet.getString("inv"));
+            } else {
+                inventory = null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            try{
+                if (statement != null){
+                    statement.close();
+                }
+                if (resultSet != null){
+                    resultSet.close();
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+        return inventory;
+    }
+
+    @Override
+    public void saveCustomKit(UUID uuid, Inventory inventory) {
+        PreparedStatement statement = null;
+        if (playerKit(uuid) == null) {
+            createKit(uuid, inventory);
+            return;
+        }
+        try {
+            statement = this.connection.prepareStatement("UPDATE `uhcwars_kits` SET `inv` = ? WHERE `uuid` = ?;");
+            statement.setString(1, this.uhcWars.getInventorySerializer().InventoryToString(inventory));
+            statement.setString(2, uuid.toString());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (statement != null){
+                    statement.close();
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void createKit(UUID uuid, Inventory inventory) {
+        PreparedStatement statement = null;
+        try {
+            statement = this.connection.prepareStatement("INSERT INTO `uhcwars_kits` (uuid, inv) VALUES (?, ?);");
+            statement.setString(1, uuid.toString());
+            statement.setString(2, this.uhcWars.getInventorySerializer().InventoryToString(inventory));
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                assert (statement != null);
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

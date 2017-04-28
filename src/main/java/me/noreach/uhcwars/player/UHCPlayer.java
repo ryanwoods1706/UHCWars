@@ -1,10 +1,13 @@
 package me.noreach.uhcwars.player;
 
+import me.noreach.uhcwars.util.Invent;
 import me.noreach.uhcwars.util.ItemCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -14,8 +17,6 @@ import java.util.UUID;
 public class UHCPlayer {
 
     private UUID uuid;
-
-
     /**
      * Statistic Objects for player
      */
@@ -31,12 +32,6 @@ public class UHCPlayer {
         this.uuid = uuid;
     }
 
-    public UHCPlayer(UUID uuid, int kills, int deaths, int wins){
-        this.uuid = uuid;
-        this.kills.setAmount(kills);
-        this.deaths.setAmount(deaths);
-        this.wins.setAmount(wins);
-    }
 
 
 
@@ -60,6 +55,8 @@ public class UHCPlayer {
     public Stat getDeaths(){ return this.deaths;}
 
     public Stat getWins(){ return this.wins;}
+
+    public UUID getUuid(){ return this.uuid;}
 
 
 }

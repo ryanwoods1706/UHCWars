@@ -1,9 +1,7 @@
 package me.noreach.uhcwars.util;
 
 import me.noreach.uhcwars.UHCWars;
-import me.noreach.uhcwars.player.GamePlayer;
 import me.noreach.uhcwars.teams.Teams;
-import me.noreach.uhcwars.util.ItemCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -58,9 +56,8 @@ public class Invent {
     public void giveItems(Player player, boolean bool) {
         PlayerInventory pi = player.getInventory();
         pi.clear();
-        GamePlayer gamePlayer = this.uhcWars.getPlayerManager().getPlayerData().get(player.getUniqueId());
-        if (gamePlayer.getCustomKit() != null) {
-            pi.setContents(gamePlayer.getCustomKit().getContents());
+        if (this.uhcWars.getStorage().playerKit(player.getUniqueId()) != null){
+            pi.setContents(this.uhcWars.getStorage().playerKit(player.getUniqueId()).getContents());
         } else {
             pi.setItem(0, new ItemCreator(Material.IRON_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
             pi.setItem(1, new ItemCreator(Material.FISHING_ROD).toItemStack());
@@ -74,7 +71,7 @@ public class Invent {
         player.updateInventory();
     }
 
-    public void giveDefaultItems(Player player) {
+    public static ItemStack[] giveDefaultItems(Player player) {
         PlayerInventory pi = player.getInventory();
         pi.clear();
         pi.setItem(0, new ItemCreator(Material.IRON_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
@@ -83,6 +80,7 @@ public class Invent {
         pi.setItem(3, new ItemCreator(Material.GOLDEN_APPLE).setName(ChatColor.GOLD + "Golden Head").setAmount(3).toItemStack());
         pi.setItem(4, new ItemCreator(Material.GOLDEN_APPLE).setAmount(6).toItemStack());
         player.updateInventory();
+        return pi.getContents();
     }
 
 

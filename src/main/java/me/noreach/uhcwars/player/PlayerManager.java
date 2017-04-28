@@ -12,16 +12,15 @@ import java.util.UUID;
 public class PlayerManager {
 
     private UHCWars uhcWars;
-    private Map<UUID, GamePlayer> playerData = new HashMap<>();
+    private Map<UUID, UHCPlayer> uhcPlayers = new HashMap<>();
     private Map<UUID, Integer> playerKills = new HashMap<>();
 
     public PlayerManager(UHCWars uhcWars){
         this.uhcWars = uhcWars;
     }
 
-
-    public Map<UUID, GamePlayer> getPlayerData(){ return this.playerData;}
     public Map<UUID, Integer> getPlayerKills(){ return this.playerKills;}
+    public Map<UUID, UHCPlayer> getUhcPlayers(){ return this.uhcPlayers;}
 
 
 }

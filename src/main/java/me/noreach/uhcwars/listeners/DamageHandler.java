@@ -2,7 +2,7 @@ package me.noreach.uhcwars.listeners;
 
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.enums.GameState;
-import me.noreach.uhcwars.player.GamePlayer;
+import me.noreach.uhcwars.player.UHCPlayer;
 import me.noreach.uhcwars.teams.Teams;
 import me.noreach.uhcwars.util.ItemCreator;
 import org.bukkit.ChatColor;
@@ -60,16 +60,16 @@ public class DamageHandler implements Listener {
     public void onPlayerDeath(PlayerDeathEvent e){
         Player pl = e.getEntity();
         if (e.getEntity().getKiller() != null){
-            GamePlayer victimPlayer = this.uhcWars.getPlayerManager().getPlayerData().get(pl.getUniqueId());
+            UHCPlayer victimPlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(pl.getUniqueId());
             Player killer = e.getEntity().getKiller();
-            GamePlayer killerPlayer = this.uhcWars.getPlayerManager().getPlayerData().get(killer.getUniqueId());
+            UHCPlayer killerPlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(killer.getUniqueId());
             int kills = this.uhcWars.getPlayerManager().getPlayerKills().get(killer.getUniqueId());
             kills +=1;
             this.uhcWars.getPlayerManager().getPlayerKills().put(killer.getUniqueId(), kills);
             killerPlayer.getKills().incrementValue();
             victimPlayer.getDeaths().incrementValue();
-            this.uhcWars.getPlayerManager().getPlayerData().put(pl.getUniqueId(), victimPlayer);
-            this.uhcWars.getPlayerManager().getPlayerData().put(killer.getUniqueId(), killerPlayer);
+            this.uhcWars.getPlayerManager().getUhcPlayers().put(pl.getUniqueId(), victimPlayer);
+            this.uhcWars.getPlayerManager().getUhcPlayers().put(killer.getUniqueId(), killerPlayer);
             Teams killerTeam = this.uhcWars.getTeamManager().getPlayerTeam(killer);
             int teamKills = this.uhcWars.getTeamManager().getTeamKills().get(killerTeam);
             teamKills +=1;

@@ -2,12 +2,10 @@ package me.noreach.uhcwars.listeners;
 
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.enums.GameState;
-import me.noreach.uhcwars.player.GamePlayer;
 import me.noreach.uhcwars.player.UHCPlayer;
 import me.noreach.uhcwars.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -52,8 +50,8 @@ public class LoginHandler implements Listener {
             if (!pl.hasPermission("uhcwars.spectate")){
                 e.setKickMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You do not have permission to spectate games!");
                 e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
-                if (this.uhcWars.getPlayerManager().getPlayerData().containsKey(e.getPlayer().getUniqueId())) {
-                    this.uhcWars.getPlayerManager().getPlayerData().remove(e.getPlayer().getUniqueId());
+                if (this.uhcWars.getPlayerManager().getUhcPlayers().containsKey(e.getPlayer().getUniqueId())) {
+                    this.uhcWars.getPlayerManager().getUhcPlayers().remove(e.getPlayer().getUniqueId());
                 }
             }
         }
@@ -68,10 +66,13 @@ public class LoginHandler implements Listener {
                 return;
             }
         }
-        GamePlayer gamePlayer = new GamePlayer(e.getUniqueId(), uhcWars);
-        gamePlayer.getInformation();
-        this.uhcWars.getPlayerManager().getPlayerData().put(e.getUniqueId(), gamePlayer);
+     //   GamePlayer gamePlayer = new GamePlayer(e.getUniqueId(), uhcWars);
+      //  gamePlayer.getInformation();
+       // this.uhcWars.getPlayerManager().getPlayerData().put(e.getUniqueId(), gamePlayer);
 
+
+        UHCPlayer uhcPlayer = this.uhcWars.getStorage().getPlayer(e.getUniqueId());
+        this.uhcWars.getPlayerManager().getUhcPlayers().put(e.getUniqueId(), uhcPlayer);
 
         //BETA TESTING STUFF
 
@@ -95,9 +96,9 @@ public class LoginHandler implements Listener {
         if (this.uhcWars.getModManager().getActiveModerators().contains(pl.getUniqueId())){
             this.uhcWars.getModManager().getActiveModerators().remove(pl.getUniqueId());
         }
-        GamePlayer gamePlayer = this.uhcWars.getPlayerManager().getPlayerData().get(pl.getUniqueId());
-        gamePlayer.saveInformation();
-        this.uhcWars.getPlayerManager().getPlayerData().remove(pl.getUniqueId());
+        UHCPlayer gamePlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(pl.getUniqueId());
+        this.uhcWars.getStorage().updatePlayer(gamePlayer);
+        this.uhcWars.getPlayerManager().getUhcPlayers().remove(pl.getUniqueId());
         Teams teams = this.uhcWars.getTeamManager().getPlayerTeam(pl);
         switch (teams){
             case Team_1:

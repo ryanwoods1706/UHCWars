@@ -94,7 +94,7 @@ public class InteractListener implements Listener {
                 if (pl.getInventory().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Player Overall Stats")) {
                     if (e.getRightClicked() instanceof Player) {
                         Player clickedPlayer = (Player) e.getRightClicked();
-                        pl.openInventory(this.uhcWars.getPlayerManager().getPlayerData().get(clickedPlayer.getUniqueId()).getStatsInventory());
+                        pl.openInventory(this.uhcWars.getPlayerManager().getUhcPlayers().get(clickedPlayer.getUniqueId()).getStatsInventory());
                     }
                 }
                 if (pl.getInventory().getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase(this.uhcWars.getReferences().getMainColor() + "Player Game Stats")){
