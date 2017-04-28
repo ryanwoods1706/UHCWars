@@ -31,6 +31,14 @@ public class UHCPlayer {
         this.uuid = uuid;
     }
 
+    public UHCPlayer(UUID uuid, int kills, int deaths, int wins){
+        this.uuid = uuid;
+        this.kills.setAmount(kills);
+        this.deaths.setAmount(deaths);
+        this.wins.setAmount(wins);
+    }
+
+
 
     /**
      * Method to get the stats inventory for the user

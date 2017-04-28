@@ -1,16 +1,21 @@
 package me.noreach.uhcwars.storage;
 
+import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.player.UHCPlayer;
+
+import java.util.UUID;
 
 /**
  * Created by NoReach_ on 27/04/2017.
  */
 public class MongoDataStore extends IDatabase {
 
-    public MongoDataStore() {
+    private UHCWars uhcWars;
+
+    public MongoDataStore(UHCWars uhcWars) {
+        this.uhcWars = uhcWars;
         this.initalize();
     }
-
 
     @Override
     public boolean initalize() {
@@ -18,47 +23,47 @@ public class MongoDataStore extends IDatabase {
     }
 
     @Override
-    public boolean doesPlayerExist() {
+    public boolean doesPlayerExist(UUID uuid) {
         return false;
     }
 
     @Override
-    public void createPlayer() {
+    public void createPlayer(UUID uuid) {
 
     }
 
     @Override
-    public UHCPlayer getPlayer() {
+    public UHCPlayer getPlayer(UUID uuid) {
         return null;
     }
 
     @Override
-    public boolean getKills() {
-        return false;
+    public int getKills(UUID uuid) {
+        return 0;
     }
 
     @Override
-    public boolean getDeaths() {
-        return false;
+    public int getDeaths(UUID uuid) {
+        return 0;
     }
 
     @Override
-    public boolean getWins() {
-        return false;
+    public int getWins(UUID uuid) {
+        return 0;
     }
 
     @Override
-    public void updateKills() {
-
-    }
-
-    @Override
-    public void updateDeaths() {
+    public void updateKills(UUID uuid) {
 
     }
 
     @Override
-    public void updateWins() {
+    public void updateDeaths(UUID uuid) {
+
+    }
+
+    @Override
+    public void updateWins(UUID uuid) {
 
     }
 

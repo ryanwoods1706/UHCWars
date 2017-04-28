@@ -56,6 +56,8 @@ public class UHCWars extends JavaPlugin {
     private ChestFill chestFill;
     private ModManager modManager;
     private StorageHandler storageHandler;
+    private boolean stats = false;
+
 
     private IDatabase iDatabase;
 
@@ -82,20 +84,26 @@ public class UHCWars extends JavaPlugin {
         this.chestFill = new ChestFill(this);
         this.modManager = new ModManager(this);
         this.storageHandler = new StorageHandler(this);
-
+        if (!getConfig().getBoolean("Settings.stats")){
+            this.stats = false;
+        }
+        if (getConfig().getBoolean("Settings.stats")){
+            this.stats = true;
+        }
 
         for (Chunk chunk : this.references.getGameWorld().getLoadedChunks()){
             chunk.unload();
         }
-        if (getConfig().getString("Settings.storageType") == "MySQL"){
-            iDatabase = new SQLDatastore();
-        }
-        else if(getConfig().getString("Settings.storageType") == "MongoDB"){
-            iDatabase = new MongoDataStore();
-        }else{
-            Bukkit.getLogger().log(Level.SEVERE, "[Storage] Error you did not select a correct storage type! MySQL/MongoDB");
-            this.setEnabled(false);
-        }
+       // if (getConfig().getString("Settings.storageType") == "MySQL"){
+        //    iDatabase = new SQLDatastore(this);
+       // }
+       // else if(getConfig().getString("Settings.storageType") == "MongoDB"){
+         //   iDatabase = new MongoDataStore(this);
+        //}
+        //else{
+          //  Bukkit.getLogger().log(Level.SEVERE, "[Storage] Error you did not select a correct storage type! MySQL/MongoDB");
+           // this.setEnabled(false);
+        //}
         Bukkit.getLogger().log(Level.INFO, "[Chunks] Successfully unloaded all gameworld chunks!");
         new PreGame(this).runTaskTimer(this, 0, 100L);
         registerCommands();
@@ -224,5 +232,7 @@ public class UHCWars extends JavaPlugin {
     public StorageHandler getStorageHandler(){ return this.storageHandler;}
 
     public IDatabase getStorage(){ return this.iDatabase;}
+
+    public boolean getStats(){ return this.stats;}
 
 }
