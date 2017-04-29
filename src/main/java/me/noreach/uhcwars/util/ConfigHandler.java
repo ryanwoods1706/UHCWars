@@ -19,13 +19,13 @@ public class ConfigHandler {
     }
 
     private void checkConfig(){
-        this.uhcWars.getConfig().addDefault("Settings.storageType", "SQL");
+        this.uhcWars.getConfig().addDefault("Settings.storageType", "MySQL");
+        this.uhcWars.getConfig().addDefault("Settings.stats", true);
         this.uhcWars.getConfig().addDefault("Settings.MongoDB.ip", "localhost");
         this.uhcWars.getConfig().addDefault("Settings.MongoDB.port", 27017);
         this.uhcWars.getConfig().addDefault("Settings.MongoDB.database", "database");
         this.uhcWars.getConfig().addDefault("Settings.MongoDB.username", "username");
         this.uhcWars.getConfig().addDefault("Settings.MongoDB.password", "password");
-        this.uhcWars.getConfig().addDefault("Settings.SQL.stats", false);
         this.uhcWars.getConfig().addDefault("Settings.SQL.ip", "localhost");
         this.uhcWars.getConfig().addDefault("Settings.SQL.database", "database");
         this.uhcWars.getConfig().addDefault("Settings.SQL.username", "username");

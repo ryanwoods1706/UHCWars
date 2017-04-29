@@ -1,5 +1,5 @@
 name: UHCWars
-version: 0.9.4
+version: 1.0.0
 author: NoReach
 main: me.noreach.uhcwars.UHCWars
 commands:

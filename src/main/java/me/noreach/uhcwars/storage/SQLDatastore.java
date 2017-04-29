@@ -80,7 +80,6 @@ public class SQLDatastore extends IDatabase {
                     e.printStackTrace();
                 }
             }
-
         });
     }
 
@@ -94,9 +93,7 @@ public class SQLDatastore extends IDatabase {
             @Override
             public void run() {
                     PreparedStatement statement = null;
-                    PreparedStatement statement1 = null;
                     ResultSet resultSet = null;
-                    ResultSet resultSet1 = null;
                     try{
                         statement = connection.prepareStatement("SELECT * FROM `uhcwars_stats` WHERE `uuid` = ?;");
                         statement.setString(1, uuid.toString());
@@ -109,6 +106,9 @@ public class SQLDatastore extends IDatabase {
                             Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully retrieved UHCPlayer for: " + uuid);
                         }else{
                             createPlayer(uuid);
+                            uhcPlayer.getKills().setAmount(0);
+                            uhcPlayer.getDeaths().setAmount(0);
+                            uhcPlayer.getWins().setAmount(0);
                         }
 
                     }catch (SQLException e){

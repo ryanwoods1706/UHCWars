@@ -13,9 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class ChestFill {
 
-    private final int NUM_ITEMS = 7;
+    private final int TOTAL_ITEMS = 7;
     private UHCWars uhcWars;
-    private List<ItemStack> items = new ArrayList<>();
 
     public ChestFill(UHCWars uhcWars) {
         this.uhcWars = uhcWars;
@@ -25,7 +24,7 @@ public class ChestFill {
     public void fillChest(Inventory inv) {
         List<ItemStack> added = new ArrayList<ItemStack>();
 
-        for (int i = 0; i < NUM_ITEMS; i++) {
+        for (int i = 0; i < TOTAL_ITEMS; i++) {
             int slot = (int) (Math.random() * 27);
             ItemStack item = null;
 
@@ -41,7 +40,7 @@ public class ChestFill {
                     }
                 }
 
-                if (i == 1) {
+                else if (i == 1) {
                     int k = (int) (Math.random() * 3);
 
                     if (k == 0) {
@@ -58,11 +57,11 @@ public class ChestFill {
 
                 }
 
-                if (i == 2) {
+                else if (i == 2) {
                     item = getFood();
                 }
 
-                if (i == 3 || i == 4) {
+                else if (i == 3 || i == 4) {
                     int k = (int) (Math.random() * 2);
 
                     if (k == 0) {
@@ -74,7 +73,8 @@ public class ChestFill {
                     }
                 }
 
-                if (i == 5 || i == 6) {
+                else
+                    if (i == 5 || i == 6) {
                     int k = (int) (Math.random() * 2);
 
                     if (k == 0) {
@@ -86,21 +86,6 @@ public class ChestFill {
                     }
                 }
 
-                if (i == 7) {
-                    int k = (int) (Math.random() * 3);
-
-                    if (k == 0) {
-                        item = getFood();
-                    }
-
-                    if (k == 2) {
-                        item = getMisc();
-                    }
-
-                    if (k == 3) {
-                        item = getArmor();
-                    }
-                }
             }
 
             inv.setItem(slot, item);
@@ -172,7 +157,7 @@ public class ChestFill {
     }
 
     private ItemStack getMisc() {
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> items = new ArrayList<>();
 
         items.add(new ItemCreator(Material.ARROW).setAmount(32).toItemStack());
         items.add(new ItemCreator(Material.GOLDEN_APPLE).setName(ChatColor.GOLD + "Golden Head").setAmount(3).toItemStack());

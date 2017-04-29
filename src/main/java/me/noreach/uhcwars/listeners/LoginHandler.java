@@ -99,14 +99,16 @@ public class LoginHandler implements Listener {
         UHCPlayer gamePlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(pl.getUniqueId());
         this.uhcWars.getStorage().updatePlayer(gamePlayer);
         this.uhcWars.getPlayerManager().getUhcPlayers().remove(pl.getUniqueId());
-        Teams teams = this.uhcWars.getTeamManager().getPlayerTeam(pl);
-        switch (teams){
-            case Team_1:
-                this.uhcWars.getTeamManager().getTeam1().remove(pl);
-                break;
-            case Team_2:
-                this.uhcWars.getTeamManager().getTeam2().remove(pl);
-                break;
+        if (this.uhcWars.getStateManager().getGameState() == GameState.INGAME) {
+            Teams teams = this.uhcWars.getTeamManager().getPlayerTeam(pl);
+            switch (teams) {
+                case Team_1:
+                    this.uhcWars.getTeamManager().getTeam1().remove(pl);
+                    break;
+                case Team_2:
+                    this.uhcWars.getTeamManager().getTeam2().remove(pl);
+                    break;
+            }
         }
         if (this.uhcWars.getTeamManager().getTeam1().size() == 0 && this.uhcWars.getTeamManager().getTeam2().size() > 0){
             this.uhcWars.getGameManager().endGame();

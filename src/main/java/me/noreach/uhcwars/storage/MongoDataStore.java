@@ -80,6 +80,11 @@ public class MongoDataStore extends IDatabase {
         if (found == null){
             createPlayer(uuid);
             found = collection.findOne(dbObject);
+            uhcPlayer.getKills().setAmount(0);
+            uhcPlayer.getDeaths().setAmount(0);
+            uhcPlayer.getWins().setAmount(0);
+            Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully created and retrieved: " + uhcPlayer.getUuid());
+            return uhcPlayer;
         }
         uhcPlayer.getKills().setAmount((int) found.get("kills"));
         uhcPlayer.getDeaths().setAmount((int) found.get("deaths"));
