@@ -31,6 +31,7 @@ import org.bukkit.block.Block;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -154,22 +155,49 @@ public class UHCWars extends JavaPlugin {
         Location corner2 = this.regionManager.getWallLocation().get(1);
         corner1.getChunk().load();
         corner2.getChunk().load();
+       /* Iterator blocks = this.gameManager.blocksFromTwoPoints(corner1, corner2).iterator();
         Bukkit.getLogger().log(Level.INFO, "[Wall] Generating using default method");
+        Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+            @Override
+            public void run() {
+                if (blocks.hasNext()) {
+                    Block block = (Block) blocks.next();
+                    block.setType(references.getWallMaterial());
+                    block.getState().update();
+                }
+            }
+        }, 0L, 1L);
+        */
         for (Block block : this.gameManager.blocksFromTwoPoints(corner1, corner2)) {
             block.setType(this.references.getWallMaterial());
         }
         Bukkit.getLogger().log(Level.INFO, "[Walls] Successfully generated the wall!");
+
     }
 
 
 
     public void degenerateWall() {
+
         Location corner1 = this.regionManager.getWallLocation().get(0);
         Location corner2 = this.regionManager.getWallLocation().get(1);
+        /*Iterator iterator = this.gameManager.blocksFromTwoPoints(corner1, corner2).iterator();
+        Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+            @Override
+            public void run() {
+                if (iterator.hasNext()){
+                    Block block = (Block) iterator.next();
+                    block.setType(Material.AIR);
+                    block.getState().update();
+                }
+            }
+        }, 0L, 1L);
+        */
         for (Block block : this.gameManager.blocksFromTwoPoints(corner1, corner2)) {
             block.setType(Material.AIR);
             block.getState().update();
         }
+
         Bukkit.getLogger().log(Level.INFO, "[Walls] Successfully REMOVED the wall!");
     }
 

@@ -23,8 +23,9 @@ public class StatsCMD implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         Player pl = (Player) sender;
-        if (!this.uhcWars.getReferences().getStats()){
+        if (!this.uhcWars.getStats()){
             pl.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "Statistics are not enabled!");
+            return true;
         }
         if (args.length == 0) {
             OfflinePlayer target = Bukkit.getPlayer(pl.getUniqueId());

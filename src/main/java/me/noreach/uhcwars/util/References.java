@@ -45,7 +45,7 @@ public class References {
     }
 
     public void loadValues(){
-        stats = config.getBoolean("Settings.SQL.stats");
+        stats = config.getBoolean("Settings.stats");
         prefix = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.prefix"));
         sbTitle = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardTitle"));
         sbIP = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardIP"));

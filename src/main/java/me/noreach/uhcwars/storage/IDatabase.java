@@ -1,7 +1,6 @@
 package me.noreach.uhcwars.storage;
 
 import me.noreach.uhcwars.player.UHCPlayer;
-import me.noreach.uhcwars.sql.StorageTypes;
 import org.bukkit.inventory.Inventory;
 
 import java.util.UUID;
@@ -11,7 +10,6 @@ import java.util.UUID;
  */
 public abstract class IDatabase {
 
-    public abstract StorageTypes storageType();
 
     public abstract boolean initalize();
 
@@ -29,5 +27,4 @@ public abstract class IDatabase {
 
     public abstract void createKit(UUID uuid, Inventory inventory);
 
-    //public abstract Inventory getPlayersKit(UUID uuid);
 }

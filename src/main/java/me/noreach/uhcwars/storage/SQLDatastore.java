@@ -2,8 +2,6 @@ package me.noreach.uhcwars.storage;
 
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.player.UHCPlayer;
-import me.noreach.uhcwars.sql.StorageTypes;
-import me.noreach.uhcwars.util.InventoryStringDeSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 
@@ -29,10 +27,6 @@ public class SQLDatastore extends IDatabase {
     }
 
 
-    @Override
-    public StorageTypes storageType() {
-        return StorageTypes.MySQL;
-    }
 
     @Override
     public boolean initalize() {

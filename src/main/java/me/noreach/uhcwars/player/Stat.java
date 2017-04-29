@@ -1,5 +1,7 @@
 package me.noreach.uhcwars.player;
 
+import me.noreach.uhcwars.util.ItemCreator;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -15,7 +17,9 @@ public class Stat {
         this.amount = amount;
     }
 
-    public ItemStack getItemStack(){ return this.itemStack;}
+    public ItemStack getItemStack(){
+        ItemStack itemStack = new ItemCreator(this.itemStack.getType()).setName(this.itemStack.getItemMeta().getDisplayName() + ": " + ChatColor.YELLOW + amount).toItemStack();
+        return itemStack;}
 
     public int getAmount(){ return this.amount;}
 

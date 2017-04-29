@@ -40,14 +40,14 @@ public class RegionCMD implements CommandExecutor{
         try{
             if (args[0].equalsIgnoreCase("create")){
                 String name;
-                if (args[1].equalsIgnoreCase(Teams.Team_1.toString())){
+                if (args[1].equalsIgnoreCase("team1")){
                     name = Teams.Team_1.toString();
-                }else if (args[1].equalsIgnoreCase(Teams.Team_2.toString())){
+                }else if (args[1].equalsIgnoreCase("team2")){
                     name = Teams.Team_2.toString();
                 }else if (args[1].equalsIgnoreCase("wall")){
                     name = "wall";
                 }else{
-                    player.sendMessage(this.uhcWars.getReferences().getPrefix() +ChatColor.RED + "Region names: 'Team_1' 'Team_2' or 'wall'");
+                    player.sendMessage(this.uhcWars.getReferences().getPrefix() +ChatColor.RED + "Region names: 'Team1' 'Team2' or 'wall'");
                     return true;
                 }
                 this.uhcWars.getInvent().giveRegionInv(player);
@@ -73,7 +73,7 @@ public class RegionCMD implements CommandExecutor{
 
 
         }catch (ArrayIndexOutOfBoundsException e){
-            player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "Usage: /region create <team_1/team_2/wall>");
+            player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "Usage: /region create <team1/team2/wall>");
             player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "Usage: /region save");
         }
 

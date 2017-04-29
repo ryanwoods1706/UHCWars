@@ -28,7 +28,7 @@ public class InGame extends BukkitRunnable {
     @Override
     public void run() {
         second--;
-        if (second == this.uhcWars.getReferences().getTimeLimit() - this.uhcWars.getReferences().getWallDropTime()){
+        if (second == this.uhcWars.getReferences().getWallDropTime()){
             this.uhcWars.degenerateWall();
             Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "PvP is now enabled! May the odds be ever in your favour!");
         }

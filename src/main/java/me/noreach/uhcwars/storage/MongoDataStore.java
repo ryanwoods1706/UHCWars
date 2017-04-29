@@ -3,7 +3,6 @@ package me.noreach.uhcwars.storage;
 import com.mongodb.*;
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.player.UHCPlayer;
-import me.noreach.uhcwars.sql.StorageTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 
@@ -29,10 +28,6 @@ public class MongoDataStore extends IDatabase {
         this.initalize();
     }
 
-    @Override
-    public StorageTypes storageType() {
-        return StorageTypes.MongoDB;
-    }
 
     @Override
     public boolean initalize() {
@@ -43,6 +38,7 @@ public class MongoDataStore extends IDatabase {
             String mongoPassword = this.uhcWars.getConfig().getString("Settings.MongoDB.password");
             String mongoDB = this.uhcWars.getConfig().getString("Settings.MongoDB.database");
             ServerAddress addr = new ServerAddress(mongoIP, mongoPort);
+
             List<MongoCredential> credentials = new ArrayList<>();
             credentials.add(MongoCredential.createCredential(mongoUser, mongoDB, mongoPassword.toCharArray()));
             client = new MongoClient(addr, credentials);
