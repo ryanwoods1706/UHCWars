@@ -73,20 +73,25 @@ public class MongoDataStore extends IDatabase {
         }
         DBObject dbObject = new BasicDBObject("uuid", uuid);
         DBObject found = collection.findOne(dbObject);
+        DBObject foundKit = playerKitsCol.findOne(dbObject);
         if (found == null){
             createPlayer(uuid);
-            found = collection.findOne(dbObject);
             uhcPlayer.getKills().setAmount(0);
             uhcPlayer.getDeaths().setAmount(0);
             uhcPlayer.getWins().setAmount(0);
+            if (foundKit != null){
+                uhcPlayer.setSerialisedKit((String) foundKit.get("kit"));
+            }
             Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully created and retrieved: " + uhcPlayer.getUuid());
             return uhcPlayer;
+        }
+        if (foundKit != null){
+            uhcPlayer.setSerialisedKit((String) foundKit.get("kit"));
         }
         uhcPlayer.getKills().setAmount((int) found.get("kills"));
         uhcPlayer.getDeaths().setAmount((int) found.get("deaths"));
         uhcPlayer.getWins().setAmount((int) found.get("wins"));
         Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully retrieved player info for: " + uhcPlayer.getUuid());
-
         return uhcPlayer;
     }
 
@@ -97,9 +102,20 @@ public class MongoDataStore extends IDatabase {
         }
         DBObject dbObject = new BasicDBObject("uuid", uhcPlayer.getUuid());
         DBObject found = this.collection.findOne(dbObject);
+        DBObject foundKit = this.playerKitsCol.findOne(dbObject);
         if (found == null){
             createPlayer(uhcPlayer.getUuid());
             return;
+        }
+        if (uhcPlayer.getSerialisedKit() != null){
+            DBObject replacement = new BasicDBObject("uuid", uhcPlayer.getUuid());
+            replacement.put("kit", uhcPlayer.getSerialisedKit());
+            if (foundKit != null) {
+                this.playerKitsCol.update(foundKit, replacement);
+            }else{
+                this.playerKitsCol.insert(replacement);
+            }
+            Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully updated player kit for: " + uhcPlayer.getUuid());
         }
         DBObject replacement = new BasicDBObject("uuid", uhcPlayer.getUuid());
         replacement.put("kills", uhcPlayer.getKills().getAmount());
@@ -118,7 +134,7 @@ public class MongoDataStore extends IDatabase {
         Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully closed the MongoDB Client!");
 
     }
-
+/*
     @Override
     public Inventory playerKit(UUID uuid) {
         DBObject dbObject1 = new BasicDBObject("uuid", uuid);
@@ -157,5 +173,18 @@ public class MongoDataStore extends IDatabase {
         dbObject.put("kit", this.uhcWars.getInventorySerializer().InventoryToString(inventory));
         this.playerKitsCol.insert(dbObject);
         Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully created player kit for: " + uuid);
+    }*/
+
+    @Override
+    public void scrubPlayer(UUID uuid) {
+        DBObject dbObject = new BasicDBObject("uuid", uuid);
+        DBObject found = collection.findOne(dbObject);
+        if (found != null){
+            collection.remove(found);
+            Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully scrubbed all statistics for player: " + uuid);
+        }else{
+            Bukkit.getLogger().log(Level.SEVERE, "[Storage] Could not find any player data for: " + uuid);
+        }
+
     }
 }

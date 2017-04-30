@@ -2,6 +2,7 @@ package me.noreach.uhcwars.commands;
 
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.enums.GameState;
+import me.noreach.uhcwars.player.UHCPlayer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -32,6 +33,7 @@ public class KitCMD implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
+        UHCPlayer uhcPlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(player.getUniqueId());
         if (this.uhcWars.getStateManager().getGameState() != GameState.LOBBY){
             player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "This command can only be used whilst in the lobby!");
             return true;
@@ -39,7 +41,7 @@ public class KitCMD implements CommandExecutor {
         try{
             if (args[0].equalsIgnoreCase("save")){
                 Inventory inventory = player.getInventory();
-                this.uhcWars.getStorage().saveCustomKit(player.getUniqueId(), inventory);
+                uhcPlayer.setSerialisedKit(this.uhcWars.getInventorySerializer().InventoryToString(inventory));
                 player.sendMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Successfully saved your hotbar layout!");
                 this.uhcWars.getInvent().giveJoinInventory(player);
             }

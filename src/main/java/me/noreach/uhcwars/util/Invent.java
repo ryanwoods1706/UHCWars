@@ -1,6 +1,7 @@
 package me.noreach.uhcwars.util;
 
 import me.noreach.uhcwars.UHCWars;
+import me.noreach.uhcwars.player.UHCPlayer;
 import me.noreach.uhcwars.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -54,10 +55,15 @@ public class Invent {
     }
 
     public void giveItems(Player player, boolean bool) {
+        UHCPlayer uhcPlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(player.getUniqueId());
         PlayerInventory pi = player.getInventory();
         pi.clear();
-        if (this.uhcWars.getStorage().playerKit(player.getUniqueId()) != null){
-            pi.setContents(this.uhcWars.getStorage().playerKit(player.getUniqueId()).getContents());
+        if (uhcPlayer.getSerialisedKit() != null){
+            try {
+                pi.setContents(this.uhcWars.getInventorySerializer().StringToInventory(uhcPlayer.getSerialisedKit()).getContents());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         } else {
             pi.setItem(0, new ItemCreator(Material.IRON_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
             pi.setItem(1, new ItemCreator(Material.FISHING_ROD).toItemStack());

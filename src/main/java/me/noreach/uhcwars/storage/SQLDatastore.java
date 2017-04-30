@@ -88,6 +88,8 @@ public class SQLDatastore extends IDatabase {
             public void run() {
                     PreparedStatement statement = null;
                     ResultSet resultSet = null;
+                    PreparedStatement statement1 = null;
+                    ResultSet resultSet1 = null;
                     try{
                         statement = connection.prepareStatement("SELECT * FROM `uhcwars_stats` WHERE `uuid` = ?;");
                         statement.setString(1, uuid.toString());
@@ -104,9 +106,32 @@ public class SQLDatastore extends IDatabase {
                             uhcPlayer.getDeaths().setAmount(0);
                             uhcPlayer.getWins().setAmount(0);
                         }
-
+                        statement1 = connection.prepareStatement("SELECT * FROM `uhcwars_kits` WHERE `uuid` = ?;");
+                        statement1.setString(1, uuid.toString());
+                        statement1.executeQuery();
+                        resultSet1 = statement1.getResultSet();
+                        if (resultSet1.next()){
+                            uhcPlayer.setSerialisedKit(resultSet1.getString("inv"));
+                        }
                     }catch (SQLException e){
                         e.printStackTrace();
+                    }finally {
+                        try {
+                            if (statement != null){
+                                statement.close();
+                            }
+                            if (statement1 != null){
+                                statement1.close();
+                            }
+                            if (resultSet != null){
+                                resultSet.close();
+                            }
+                            if (resultSet1 != null){
+                                resultSet1.close();
+                            }
+                        }catch (SQLException e){
+                            e.printStackTrace();
+                        }
                     }
             }
         });
@@ -123,6 +148,14 @@ public class SQLDatastore extends IDatabase {
             statement.setString(1, uhcPlayer.getUuid().toString());
             statement.executeUpdate();
             statement.close();
+
+            if (uhcPlayer.getSerialisedKit() != null) {
+                PreparedStatement statement1 = connection.prepareStatement("UPDATE `uhcwars_kits` SET `inv` = ? WHERE `uuid` = ?;");
+                statement1.setString(1, uhcPlayer.getSerialisedKit());
+                statement1.setString(2, uhcPlayer.getUuid().toString());
+                statement1.executeUpdate();
+            }
+
         }catch (SQLException e){
             e.printStackTrace();
             Bukkit.getLogger().log(Level.SEVERE, "[Storage] Failed to update player: " + uhcPlayer.getUuid());
@@ -140,7 +173,7 @@ public class SQLDatastore extends IDatabase {
         }
     }
 
-    @Override
+   /* @Override
     public Inventory playerKit(UUID uuid) {
         Inventory inventory = null;
         PreparedStatement statement = null;
@@ -212,6 +245,29 @@ public class SQLDatastore extends IDatabase {
                 assert (statement != null);
                 statement.close();
             } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
+
+
+
+    @Override
+    public void scrubPlayer(UUID uuid) {
+        PreparedStatement statement = null;
+        try{
+            statement = this.connection.prepareStatement("DELETE FROM `uhcwars_stats` WHERE `uuid` = ?;");
+            statement.setString(1, uuid.toString());
+            statement.executeUpdate();
+            Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully scrubbed all data from player: " + uuid);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            }catch (SQLException e){
                 e.printStackTrace();
             }
         }

@@ -24,6 +24,8 @@ public class UHCPlayer {
     private Stat deaths = new Stat(new ItemCreator(Material.SKULL_ITEM).setName(ChatColor.AQUA + "Deaths").toItemStack(), 0);
     private Stat wins = new Stat(new ItemCreator(Material.PAPER).setName(ChatColor.AQUA + "Wins").toItemStack(), 0);
 
+    private String serialisedKit;
+
     /**
      * Constructor to build a new UHCPlayer
      * @param uuid
@@ -58,5 +60,10 @@ public class UHCPlayer {
 
     public UUID getUuid(){ return this.uuid;}
 
+    public String getSerialisedKit(){ return this.serialisedKit;}
+
+    public void setSerialisedKit(String string){
+        this.serialisedKit = string;
+    }
 
 }

@@ -66,24 +66,12 @@ public class LoginHandler implements Listener {
                 return;
             }
         }
-     //   GamePlayer gamePlayer = new GamePlayer(e.getUniqueId(), uhcWars);
-      //  gamePlayer.getInformation();
-       // this.uhcWars.getPlayerManager().getPlayerData().put(e.getUniqueId(), gamePlayer);
-
-
         UHCPlayer uhcPlayer = this.uhcWars.getStorage().getPlayer(e.getUniqueId());
         this.uhcWars.getPlayerManager().getUhcPlayers().put(e.getUniqueId(), uhcPlayer);
 
-        //BETA TESTING STUFF
 
 
-        /*
-        UHCPlayer uhcPlayer = new UHCPlayer(e.getUniqueId(), this.uhcWars.getStorage().getKills(e.getUniqueId()), this.uhcWars.getStorage().getDeaths(e.getUniqueId()), this.uhcWars.getStorage().getWins(e.getUniqueId()));
-        Bukkit.getLogger().info("[Storage] Created UHCPlayer for:" + e.getUniqueId());
-        Bukkit.getLogger().info("[Storage] Kills: " + this.uhcWars.getStorage().getKills(e.getUniqueId()));
-        Bukkit.getLogger().info("[Storage] Deaths: " + this.uhcWars.getStorage().getDeaths(e.getUniqueId()));
-        Bukkit.getLogger().info("[Storage] Wins: " + this.uhcWars.getStorage().getWins(e.getUniqueId()));
-        */
+
 
     }
 
