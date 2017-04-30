@@ -28,9 +28,7 @@ public class StatsResetCMD implements CommandExecutor{
         }
         try{
             Player target = Bukkit.getPlayer(args[0]);
-
-
-
+            this.uhcWars.getStorage().scrubPlayer(target.getUniqueId());
         }catch (ArrayIndexOutOfBoundsException e){
             sender.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "Usage: /statsreset <player>");
         }

@@ -2,10 +2,7 @@ package me.noreach.uhcwars.locations;
 
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.teams.Teams;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -83,6 +80,7 @@ public class RegionManager {
                 Location blockLocation = new Location(Team1world, this.configuration.getDouble(path3 + "x"), this.configuration.getDouble(path3 + "y"), this.configuration.getDouble(path3 + "z"));
                 Block block = Team1world.getBlockAt(blockLocation);
                 block.getChunk().load();
+                block.setType(Material.valueOf(this.configuration.getString("Settings.Objective.Team_1.blockType")));
                 Objective objective = new Objective(block, uhcWars);
                 objective.setTeamObjective(Teams.Team_1);
                 objective.setHealth(this.uhcWars);
@@ -92,6 +90,7 @@ public class RegionManager {
                 World Team2world = Bukkit.getWorld(this.configuration.getString("Settings.Objective.Team_2.location.world"));
                 Location blockLocation2 = new Location(Team2world, this.configuration.getDouble(path4 + "x"), this.configuration.getDouble(path4 + "y"), this.configuration.getDouble(path4 + "z"));
                 Block block2 = Team2world.getBlockAt(blockLocation2);
+                block2.setType(Material.valueOf(this.configuration.getString("Settings.Objective.Team_2.blockType")));
                 block2.getChunk().load();
                 Objective objective2 = new Objective(block2, uhcWars);
                 objective2.setTeamObjective(Teams.Team_2);

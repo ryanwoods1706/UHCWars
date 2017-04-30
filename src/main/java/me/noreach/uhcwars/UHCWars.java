@@ -17,6 +17,7 @@ import me.noreach.uhcwars.player.UHCPlayer;
 import me.noreach.uhcwars.storage.IDatabase;
 import me.noreach.uhcwars.storage.MongoDataStore;
 import me.noreach.uhcwars.storage.SQLDatastore;
+import me.noreach.uhcwars.storage.YmlDatastore;
 import me.noreach.uhcwars.teams.TeamManager;
 import me.noreach.uhcwars.timers.PreGame;
 import me.noreach.uhcwars.util.ConfigHandler;
@@ -81,6 +82,9 @@ public class UHCWars extends JavaPlugin {
         else if(getConfig().getString("Settings.storageType").equalsIgnoreCase("MongoDB")){
             iDatabase = new MongoDataStore(this);
         }
+        else if (getConfig().getString("Settings.storageType").equalsIgnoreCase("YML")){
+            iDatabase = new YmlDatastore(this);
+        }
         else if (getConfig().getString("Settings.storageType").equalsIgnoreCase("None")){
             //REDUNDANT Just makes a data store
             iDatabase = new SQLDatastore(this);
@@ -127,6 +131,7 @@ public class UHCWars extends JavaPlugin {
 
 
     private void registerCommands() {
+        getCommand("statsreset").setExecutor(new StatsResetCMD(this));
         getCommand("moderation").setExecutor(new ModerationCMD(this));
         getCommand("teamchat").setExecutor(new TeamChatCMD(this));
         getCommand("world").setExecutor(new WorldCMD(this));

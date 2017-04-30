@@ -3,6 +3,8 @@ package me.noreach.uhcwars.storage;
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.player.UHCPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.sql.*;
@@ -43,7 +45,7 @@ public class SQLDatastore extends IDatabase {
             Statement statement = this.connection.createStatement();
             Statement statement1 = this.connection.createStatement();
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS `uhcwars_stats` (`uuid` VARCHAR(60), `kills` INT NOT NULL DEFAULT '0', `deaths` INT NOT NULL DEFAULT '0', `wins` INT NOT NULL DEFAULT '0');");
-            statement1.executeUpdate("CREATE TABLE IF NOT EXISTS `uhcwars_kits` (`uuid` VARCHAR(60), `inv` VARCHAR(999));");
+            statement1.executeUpdate("CREATE TABLE IF NOT EXISTS `uhcwars_kits` (`uuid` VARCHAR(60), `inv` TEXT NOT NULL);");
             statement.close();
             statement1.close();
             Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully connected to the MySQL Server/Database");
@@ -173,93 +175,24 @@ public class SQLDatastore extends IDatabase {
         }
     }
 
-   /* @Override
-    public Inventory playerKit(UUID uuid) {
-        Inventory inventory = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = this.connection.prepareStatement("SELECT `inv` FROM `uhcwars_kits` WHERE `uuid` = ?;");
-            statement.setString(1, uuid.toString());
-            statement.executeQuery();
-            resultSet = statement.getResultSet();
-            if (resultSet.next()) {
-                inventory = this.uhcWars.getInventorySerializer().StringToInventory(resultSet.getString("inv"));
-            } else {
-                inventory = null;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            try{
-                if (statement != null){
-                    statement.close();
-                }
-                if (resultSet != null){
-                    resultSet.close();
-                }
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
-        }
-        return inventory;
-    }
-
-    @Override
-    public void saveCustomKit(UUID uuid, Inventory inventory) {
-        PreparedStatement statement = null;
-        if (playerKit(uuid) == null) {
-            createKit(uuid, inventory);
-            return;
-        }
-        try {
-            statement = this.connection.prepareStatement("UPDATE `uhcwars_kits` SET `inv` = ? WHERE `uuid` = ?;");
-            statement.setString(1, this.uhcWars.getInventorySerializer().InventoryToString(inventory));
-            statement.setString(2, uuid.toString());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }finally {
-            try {
-                if (statement != null){
-                    statement.close();
-                }
-            }catch (SQLException e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void createKit(UUID uuid, Inventory inventory) {
-        PreparedStatement statement = null;
-        try {
-            statement = this.connection.prepareStatement("INSERT INTO `uhcwars_kits` (uuid, inv) VALUES (?, ?);");
-            statement.setString(1, uuid.toString());
-            statement.setString(2, this.uhcWars.getInventorySerializer().InventoryToString(inventory));
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                assert (statement != null);
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }*/
-
-
 
     @Override
     public void scrubPlayer(UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
+        UHCPlayer uhcPlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(uuid);
         PreparedStatement statement = null;
         try{
             statement = this.connection.prepareStatement("DELETE FROM `uhcwars_stats` WHERE `uuid` = ?;");
             statement.setString(1, uuid.toString());
             statement.executeUpdate();
+            createPlayer(uuid);
+            uhcPlayer.getKills().setAmount(0);
+            uhcPlayer.getWins().setAmount(0);
+            uhcPlayer.getDeaths().setAmount(0);
             Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully scrubbed all data from player: " + uuid);
+            if (player.isOnline()) {
+                player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.GREEN + "Successfully reset all your statistics!");
+            }
         }catch (SQLException e){
             e.printStackTrace();
         }finally {

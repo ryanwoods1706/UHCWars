@@ -132,59 +132,29 @@ public class YmlDatastore extends IDatabase {
 
     }
 
-    /*@Override
-    public Inventory playerKit(UUID uuid) {
-        File userData = new File(uhcWars.getDataFolder(), File.separator + "playerKits");
-        File userFile = new File(userData, File.separator + uuid + ".yml");
-        FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(userFile);
-        Inventory inv = null;
-        if (userFile.exists()) {
-            inv = uhcWars.getInventorySerializer().StringToInventory(playerConfig.getString("Kits.inv"));
-        }
-        return inv;
-
-    }
-
     @Override
-    public void saveCustomKit(UUID uuid, Inventory inventory) {
-        File userData = new File(uhcWars.getDataFolder(), File.separator + "playerKits");
+    public void scrubPlayer(UUID uuid) {
+        UHCPlayer uhcPlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(uuid);
+        File userData = new File(uhcWars.getDataFolder(), File.separator + "playerData");
         File userFile = new File(userData, File.separator + uuid + ".yml");
         FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(userFile);
         try{
             if (userFile.exists()){
-                playerConfig.set("Kit.inv", this.uhcWars.getInventorySerializer().InventoryToString(inventory));
+                playerConfig.set("Stats.kills", 0);
+                playerConfig.set("Stats.deaths", 0);
+                playerConfig.set("Stats.wins", 0);
+                uhcPlayer.getKills().setAmount(0);
+                uhcPlayer.getDeaths().setAmount(0);
+                uhcPlayer.getWins().setAmount(0);
                 playerConfig.save(userFile);
-                Bukkit.getLogger().log(Level.INFO, "[Storgage] Successfully updated player kit for: " + uuid);
+                Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully scrubbed statistics for:" + uuid);
             }else{
-                createKit(uuid, inventory);
+                throw new IOException("[Storage] Tried to save to a file that did not exist!");
             }
         }catch (IOException e){
             e.printStackTrace();
-            Bukkit.getLogger().log(Level.SEVERE, "[Storage] An IO Exception occured whilst trying to update players kit: " + uuid);
+            Bukkit.getLogger().log(Level.SEVERE, "[Storage] An IO Exception occured whilst trying to update player: " + uuid);
         }
-    }
-
-    @Override
-    public void createKit(UUID uuid, Inventory inventory) {
-        File userData = new File(uhcWars.getDataFolder(), File.separator + "playerKits");
-        File userFile = new File(userData, File.separator + uuid + ".yml");
-        FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(userFile);
-        try{
-            if (!userFile.exists()){
-                playerConfig.createSection("Kit");
-                playerConfig.set("Kit.inv", this.uhcWars.getInventorySerializer().InventoryToString(inventory));
-                playerConfig.save(userFile);
-                Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully created players kit: " + uuid);
-            }
-
-        }catch (IOException e){
-            e.printStackTrace();
-            Bukkit.getLogger().log(Level.SEVERE, "[Storage] An IO Exception occured whilst trying to create players kit: " + uuid);
-        }
-    }*/
-
-    @Override
-    public void scrubPlayer(UUID uuid) {
 
     }
 }

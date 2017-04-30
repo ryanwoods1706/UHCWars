@@ -4,6 +4,8 @@ import com.mongodb.*;
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.player.UHCPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import java.util.ArrayList;
@@ -134,54 +136,23 @@ public class MongoDataStore extends IDatabase {
         Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully closed the MongoDB Client!");
 
     }
-/*
-    @Override
-    public Inventory playerKit(UUID uuid) {
-        DBObject dbObject1 = new BasicDBObject("uuid", uuid);
-        DBObject found1 = playerKitsCol.findOne(dbObject1);
-        if (found1 == null){
-            Bukkit.getLogger().log(Level.INFO, "[Storage] Could not find a player kit for: " + uuid);
-            return null;
-        }
-        Inventory inv = this.uhcWars.getInventorySerializer().StringToInventory((String) found1.get("kit"));
-        Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully retrieved the kit for: " + uuid);
-        return inv;
-    }
-
-    @Override
-    public void saveCustomKit(UUID uuid, Inventory inventory) {
-        DBObject dbObject = new BasicDBObject("uuid", uuid);
-        DBObject found = playerKitsCol.findOne(dbObject);
-        if (found == null){
-            createKit(uuid, inventory);
-            return;
-        }
-        DBObject replacement = new BasicDBObject("uuid", uuid);
-        replacement.put("kit", this.uhcWars.getInventorySerializer().InventoryToString(inventory));
-        this.playerKitsCol.update(found, replacement);
-        Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully updated and saved kit for: " + uuid);
-    }
-
-    @Override
-    public void createKit(UUID uuid, Inventory inventory) {
-        DBObject dbObject = new BasicDBObject("uuid", uuid);
-        DBObject found = playerKitsCol.findOne(dbObject);
-        if (found != null){
-            saveCustomKit(uuid, inventory);
-            return;
-        }
-        dbObject.put("kit", this.uhcWars.getInventorySerializer().InventoryToString(inventory));
-        this.playerKitsCol.insert(dbObject);
-        Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully created player kit for: " + uuid);
-    }*/
 
     @Override
     public void scrubPlayer(UUID uuid) {
+        Player player = Bukkit.getPlayer(uuid);
+        UHCPlayer uhcPlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(uuid);
         DBObject dbObject = new BasicDBObject("uuid", uuid);
         DBObject found = collection.findOne(dbObject);
         if (found != null){
             collection.remove(found);
+            createPlayer(uuid);
+            uhcPlayer.getKills().setAmount(0);
+            uhcPlayer.getWins().setAmount(0);
+            uhcPlayer.getDeaths().setAmount(0);
             Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully scrubbed all statistics for player: " + uuid);
+            if (player.isOnline()) {
+                player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.GREEN + "Successfully reset all your statistics!");
+            }
         }else{
             Bukkit.getLogger().log(Level.SEVERE, "[Storage] Could not find any player data for: " + uuid);
         }
