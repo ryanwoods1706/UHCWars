@@ -149,7 +149,7 @@ public class YmlDatastore extends IDatabase {
                 playerConfig.save(userFile);
                 Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully scrubbed statistics for:" + uuid);
             }else{
-                throw new IOException("[Storage] Tried to save to a file that did not exist!");
+                throw new IOException("[Storage] Uh oh this shouldn't of happened! Could not find any data for user: " + uuid);
             }
         }catch (IOException e){
             e.printStackTrace();

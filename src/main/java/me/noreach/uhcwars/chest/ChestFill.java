@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class ChestFill {
 
-    private final int TOTAL_ITEMS = 7;
+    private final int MAX_ITEMS = 7;
     private UHCWars uhcWars;
 
     public ChestFill(UHCWars uhcWars) {
@@ -24,145 +24,162 @@ public class ChestFill {
     public void fillChest(Inventory inv) {
         List<ItemStack> added = new ArrayList<ItemStack>();
 
-        for (int i = 0; i < TOTAL_ITEMS; i++) {
+        for (int i = 0; i < MAX_ITEMS; i++) {
             int slot = (int) (Math.random() * 27);
             ItemStack item = null;
 
             while (item == null || added.contains(item)) {
 
-                if (i == 0) {
-                    int k = (int) (Math.random() * 3);
+                switch (i) {
+                    case 0:
+                        int k = (int) (Math.random() * 3);
 
-                    if (k == 0) {
-                        item = getPrimaryWeapon();
-                    } else {
-                        item = getArmor();
-                    }
-                }
+                        if (k == 0) {
+                            item = getSword();
+                        } else {
+                            item = getArmor();
+                        }
+                        break;
+                    case 1:
+                        int l = (int) (Math.random() * 3);
 
-                else if (i == 1) {
-                    int k = (int) (Math.random() * 3);
+                        if (l == 0) {
+                            item = getFood();
+                        }
 
-                    if (k == 0) {
+                        if (l == 1) {
+                            item = getBow();
+                        }
+
+                        if (l == 2) {
+                            item = getMisc();
+                        }
+                        break;
+                    case 2:
                         item = getFood();
-                    }
+                        break;
+                    case 3:
+                        int m = (int) (Math.random() * 2);
 
-                    if (k == 1) {
-                        item = getSecondaryWeapon();
-                    }
+                        if (m == 0) {
+                            item = getArmor();
+                        }
 
-                    if (k == 2) {
-                        item = getMisc();
-                    }
+                        if (m == 1) {
+                            item = getMisc();
+                        }
+                        break;
+                    case 4:
+                        int n = (int) (Math.random() * 2);
+
+                        if (n == 0) {
+                            item = getArmor();
+                        }
+
+                        if (n == 1) {
+                            item = getMisc();
+                        }
+                        break;
+                    case 5:
+                        int o = (int) (Math.random() * 2);
+
+                        if (o == 0) {
+                            item = getArmor();
+                        }
+
+                        if (o == 1) {
+                            item = getFood();
+                        }
+                        break;
+                    case 6:
+                        int p = (int) (Math.random() * 2);
+
+                        if (p == 0) {
+                            item = getArmor();
+                        }
+
+                        if (p == 1) {
+                            item = getFood();
+                        }
+                        break;
+
 
                 }
-
-                else if (i == 2) {
-                    item = getFood();
-                }
-
-                else if (i == 3 || i == 4) {
-                    int k = (int) (Math.random() * 2);
-
-                    if (k == 0) {
-                        item = getArmor();
-                    }
-
-                    if (k == 1) {
-                        item = getMisc();
-                    }
-                }
-
-                else
-                    if (i == 5 || i == 6) {
-                    int k = (int) (Math.random() * 2);
-
-                    if (k == 0) {
-                        item = getArmor();
-                    }
-
-                    if (k == 1) {
-                        item = getFood();
-                    }
-                }
-
             }
-
             inv.setItem(slot, item);
             added.add(item);
         }
     }
 
-    private ItemStack getPrimaryWeapon() {
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+    private ItemStack getSword() {
+        ArrayList<ItemStack> weaponItems = new ArrayList<ItemStack>();
 
-        items.add(new ItemCreator(Material.IRON_SWORD).addEnchant(Enchantment.FIRE_ASPECT, 2).toItemStack());
-        items.add(new ItemCreator(Material.IRON_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).addEnchant(Enchantment.FIRE_ASPECT, 1).toItemStack());
-        items.add(new ItemCreator(Material.IRON_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 3).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_SWORD).addEnchant(Enchantment.FIRE_ASPECT, 1).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).addEnchant(Enchantment.FIRE_ASPECT, 1).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 3).toItemStack());
+        weaponItems.add(new ItemCreator(Material.IRON_SWORD).addEnchant(Enchantment.FIRE_ASPECT, 2).toItemStack());
+        weaponItems.add(new ItemCreator(Material.IRON_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 1).addEnchant(Enchantment.FIRE_ASPECT, 1).toItemStack());
+        weaponItems.add(new ItemCreator(Material.IRON_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 3).toItemStack());
+        weaponItems.add(new ItemCreator(Material.DIAMOND_SWORD).addEnchant(Enchantment.FIRE_ASPECT, 1).toItemStack());
+        weaponItems.add(new ItemCreator(Material.DIAMOND_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).toItemStack());
+        weaponItems.add(new ItemCreator(Material.DIAMOND_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 2).addEnchant(Enchantment.FIRE_ASPECT, 1).toItemStack());
+        weaponItems.add(new ItemCreator(Material.DIAMOND_SWORD).addEnchant(Enchantment.DAMAGE_ALL, 3).toItemStack());
 
-        return items.get((int) (Math.random() * items.size()));
+        return weaponItems.get((int) (Math.random() * weaponItems.size()));
     }
 
-    private ItemStack getSecondaryWeapon() {
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+    private ItemStack getBow() {
+        ArrayList<ItemStack> bowItems = new ArrayList<>();
 
-        items.add(new ItemCreator(Material.BOW).addEnchant(Enchantment.ARROW_DAMAGE, 2).toItemStack());
-        items.add(new ItemCreator(Material.BOW).addEnchant(Enchantment.ARROW_FIRE, 1).toItemStack());
-        items.add(new ItemCreator(Material.BOW).addEnchant(Enchantment.ARROW_DAMAGE, 3).toItemStack());
-        items.add(new ItemCreator(Material.BOW).addEnchant(Enchantment.ARROW_DAMAGE, 4).toItemStack());
-
-        return items.get((int) (Math.random() * items.size()));
+        bowItems.add(new ItemCreator(Material.BOW).addEnchant(Enchantment.ARROW_DAMAGE, 2).toItemStack());
+        bowItems.add(new ItemCreator(Material.BOW).addEnchant(Enchantment.ARROW_FIRE, 1).toItemStack());
+        bowItems.add(new ItemCreator(Material.BOW).addEnchant(Enchantment.ARROW_DAMAGE, 3).toItemStack());
+        bowItems.add(new ItemCreator(Material.BOW).addEnchant(Enchantment.ARROW_DAMAGE, 4).toItemStack());
+        return bowItems.get((int) (Math.random() * bowItems.size()));
     }
 
     private ItemStack getArmor() {
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> armorWeapons = new ArrayList<ItemStack>();
 
-        items.add(new ItemCreator(Material.IRON_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
-        items.add(new ItemCreator(Material.IRON_HELMET).addEnchant(Enchantment.PROTECTION_PROJECTILE, 1).toItemStack());
-        items.add(new ItemCreator(Material.IRON_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3).toItemStack());
-        items.add(new ItemCreator(Material.IRON_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
-        items.add(new ItemCreator(Material.IRON_CHESTPLATE).addEnchant(Enchantment.PROTECTION_PROJECTILE, 2).toItemStack());
-        items.add(new ItemCreator(Material.IRON_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3).toItemStack());
-        items.add(new ItemCreator(Material.IRON_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
-        items.add(new ItemCreator(Material.IRON_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-        items.add(new ItemCreator(Material.IRON_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
-        items.add(new ItemCreator(Material.IRON_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_HELMET).addEnchant(Enchantment.PROTECTION_PROJECTILE, 1).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_CHESTPLATE).addEnchant(Enchantment.PROTECTION_PROJECTILE, 1).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_LEGGINGS).addEnchant(Enchantment.PROTECTION_PROJECTILE, 1).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
-        items.add(new ItemCreator(Material.DIAMOND_BOOTS).addEnchant(Enchantment.PROTECTION_PROJECTILE, 1).toItemStack());
-        return items.get((int) (Math.random() * items.size()));
+        armorWeapons.add(new ItemCreator(Material.IRON_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.IRON_HELMET).addEnchant(Enchantment.PROTECTION_PROJECTILE, 1).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.IRON_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.IRON_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.IRON_CHESTPLATE).addEnchant(Enchantment.PROTECTION_PROJECTILE, 2).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.IRON_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.IRON_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.IRON_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.IRON_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.IRON_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_HELMET).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_HELMET).addEnchant(Enchantment.PROTECTION_PROJECTILE, 1).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_CHESTPLATE).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_CHESTPLATE).addEnchant(Enchantment.PROTECTION_PROJECTILE, 1).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_LEGGINGS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_LEGGINGS).addEnchant(Enchantment.PROTECTION_PROJECTILE, 1).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 1).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_BOOTS).addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 2).toItemStack());
+        armorWeapons.add(new ItemCreator(Material.DIAMOND_BOOTS).addEnchant(Enchantment.PROTECTION_PROJECTILE, 1).toItemStack());
+        return armorWeapons.get((int) (Math.random() * armorWeapons.size()));
     }
 
     private ItemStack getFood() {
-        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> foodItems = new ArrayList<ItemStack>();
 
-        items.add(new ItemCreator(Material.COOKED_BEEF).setAmount(64).toItemStack());
-        items.add(new ItemCreator(Material.COOKED_CHICKEN).setAmount(32).toItemStack());
-        items.add(new ItemCreator(Material.GRILLED_PORK).setAmount(16).toItemStack());
+        foodItems.add(new ItemCreator(Material.COOKED_BEEF).setAmount(64).toItemStack());
+        foodItems.add(new ItemCreator(Material.COOKED_CHICKEN).setAmount(32).toItemStack());
+        foodItems.add(new ItemCreator(Material.GRILLED_PORK).setAmount(16).toItemStack());
 
-        return items.get((int) (Math.random() * items.size()));
+        return foodItems.get((int) (Math.random() * foodItems.size()));
     }
 
     private ItemStack getMisc() {
-        ArrayList<ItemStack> items = new ArrayList<>();
+        ArrayList<ItemStack> miscItems = new ArrayList<>();
 
-        items.add(new ItemCreator(Material.ARROW).setAmount(32).toItemStack());
-        items.add(new ItemCreator(Material.GOLDEN_APPLE).setName(ChatColor.GOLD + "Golden Head").setAmount(3).toItemStack());
-        items.add(new ItemCreator(Material.GOLDEN_APPLE).setAmount(6).toItemStack());
+        miscItems.add(new ItemCreator(Material.ARROW).setAmount(32).toItemStack());
+        miscItems.add(new ItemCreator(Material.GOLDEN_APPLE).setName(ChatColor.GOLD + "Golden Head").setAmount(3).toItemStack());
+        miscItems.add(new ItemCreator(Material.GOLDEN_APPLE).setAmount(6).toItemStack());
 
-        return items.get((int) (Math.random() * items.size()));
+        return miscItems.get((int) (Math.random() * miscItems.size()));
     }
 }
