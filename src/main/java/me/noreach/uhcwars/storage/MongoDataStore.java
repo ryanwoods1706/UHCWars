@@ -33,6 +33,9 @@ public class MongoDataStore extends IDatabase {
 
     @Override
     public boolean initalize() {
+        if (!this.uhcWars.getStats()){
+            return true;
+        }
         try {
             String mongoIP = this.uhcWars.getConfig().getString("Settings.MongoDB.ip");
             int mongoPort = this.uhcWars.getConfig().getInt("Settings.MongoDB.port");
@@ -71,6 +74,9 @@ public class MongoDataStore extends IDatabase {
     public UHCPlayer getPlayer(UUID uuid) {
         UHCPlayer uhcPlayer = new UHCPlayer(uuid);
         if (!this.uhcWars.getStats()){
+            uhcPlayer.getKills().setAmount(0);
+            uhcPlayer.getDeaths().setAmount(0);
+            uhcPlayer.getWins().setAmount(0);
             return uhcPlayer;
         }
         DBObject dbObject = new BasicDBObject("uuid", uuid);
@@ -139,6 +145,9 @@ public class MongoDataStore extends IDatabase {
 
     @Override
     public void scrubPlayer(UUID uuid) {
+        if (!this.uhcWars.getStats()){
+            return;
+        }
         Player player = Bukkit.getPlayer(uuid);
         UHCPlayer uhcPlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(uuid);
         DBObject dbObject = new BasicDBObject("uuid", uuid);

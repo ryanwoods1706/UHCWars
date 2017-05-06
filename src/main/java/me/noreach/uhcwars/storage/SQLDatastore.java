@@ -83,6 +83,9 @@ public class SQLDatastore extends IDatabase {
     public UHCPlayer getPlayer(UUID uuid) {
         UHCPlayer uhcPlayer = new UHCPlayer(uuid);
         if (!this.uhcWars.getStats()){
+            uhcPlayer.getKills().setAmount(0);
+            uhcPlayer.getDeaths().setAmount(0);
+            uhcPlayer.getWins().setAmount(0);
             return uhcPlayer;
         }
         Bukkit.getScheduler().runTaskAsynchronously(this.uhcWars, new Runnable() {
@@ -142,6 +145,9 @@ public class SQLDatastore extends IDatabase {
 
     @Override
     public void updatePlayer(UHCPlayer uhcPlayer) {
+        if (!this.uhcWars.getStats()){
+            return;
+        }
         try{
             PreparedStatement statement = connection.prepareStatement("UPDATE `uhcwars_stats` SET `kills` = ?,  `deaths` = ?, `wins` = ? WHERE `uuid` = ?;");
             statement.setInt(1, uhcPlayer.getKills().getAmount());
@@ -167,6 +173,9 @@ public class SQLDatastore extends IDatabase {
 
     @Override
     public void closeDataStore() {
+        if (!this.uhcWars.getStats()){
+            return;
+        }
         try{
             this.connection.close();
         }catch (SQLException e){
@@ -178,6 +187,9 @@ public class SQLDatastore extends IDatabase {
 
     @Override
     public void scrubPlayer(UUID uuid) {
+        if (!this.uhcWars.getStats()){
+            return;
+        }
         Player player = Bukkit.getPlayer(uuid);
         UHCPlayer uhcPlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(uuid);
         PreparedStatement statement = null;

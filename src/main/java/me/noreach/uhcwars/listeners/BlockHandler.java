@@ -52,8 +52,13 @@ public class BlockHandler implements Listener{
             }
             else if (block.equals(this.uhcWars.getObjectiveManager().getActiveObjectives().get(oppositeTeam).getBlock())){
                 Objective objective = this.uhcWars.getObjectiveManager().getActiveObjectives().get(oppositeTeam);
+                if (objective.getHealth() < 0){
+                    e.setCancelled(true);
+                    return;
+                }
                 objective.decrementHealth();
                 this.uhcWars.getObjectiveManager().getActiveObjectives().put(oppositeTeam, objective);
+
                 if (objective.getHealth() > 0){
                     e.setCancelled(true);
                 }

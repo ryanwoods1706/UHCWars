@@ -27,7 +27,6 @@ public class References {
     private int objectiveHealth;
     private int objectiveDmgPerHit;
     private int killsTillFill;
-    private boolean stats;
 
     private String prefix;
     private String sbTitle;
@@ -45,7 +44,6 @@ public class References {
     }
 
     public void loadValues(){
-        stats = config.getBoolean("Settings.stats");
         prefix = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.prefix"));
         sbTitle = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardTitle"));
         sbIP = ChatColor.translateAlternateColorCodes('&', config.getString("Settings.Messages.scoreboardIP"));
@@ -144,9 +142,6 @@ public class References {
         return this.secondaryColor;
     }
 
-    public boolean getStats() {
-        return this.stats;
-    }
 
     public int getKillsTillFill(){ return this.killsTillFill;}
 
