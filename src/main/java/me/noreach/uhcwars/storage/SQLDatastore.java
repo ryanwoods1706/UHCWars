@@ -44,7 +44,7 @@ public class SQLDatastore extends IDatabase {
             this.connection = DriverManager.getConnection("jdbc:mysql://" + ip + "/" + database, username, password);
             Statement statement = this.connection.createStatement();
             Statement statement1 = this.connection.createStatement();
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `uhcwars_stats` (`uuid` VARCHAR(60), `kills` INT NOT NULL DEFAULT '0', `deaths` INT NOT NULL DEFAULT '0', `wins` INT NOT NULL DEFAULT '0');");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `uhcwars_stats` (`uuid` VARCHAR(60), `kills` INT NOT NULL DEFAULT '0', `deaths` INT NOT NULL DEFAULT '0', `wins` INT NOT NULL DEFAULT '0', `objectiveDmg` INT NOT NULL DEFAULT '0');");
             statement1.executeUpdate("CREATE TABLE IF NOT EXISTS `uhcwars_kits` (`uuid` VARCHAR(60), `inv` TEXT NOT NULL);");
             statement.close();
             statement1.close();
@@ -104,12 +104,14 @@ public class SQLDatastore extends IDatabase {
                             uhcPlayer.getKills().setAmount(resultSet.getInt("kills"));
                             uhcPlayer.getDeaths().setAmount(resultSet.getInt("deaths"));
                             uhcPlayer.getWins().setAmount(resultSet.getInt("wins"));
+                            uhcPlayer.getObjectiveDmg().setAmount(resultSet.getInt("objectiveDmg"));
                             Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully retrieved UHCPlayer for: " + uuid);
                         }else{
                             createPlayer(uuid);
                             uhcPlayer.getKills().setAmount(0);
                             uhcPlayer.getDeaths().setAmount(0);
                             uhcPlayer.getWins().setAmount(0);
+                            uhcPlayer.getObjectiveDmg().setAmount(0);
                         }
                         statement1 = connection.prepareStatement("SELECT * FROM `uhcwars_kits` WHERE `uuid` = ?;");
                         statement1.setString(1, uuid.toString());
@@ -149,11 +151,12 @@ public class SQLDatastore extends IDatabase {
             return;
         }
         try{
-            PreparedStatement statement = connection.prepareStatement("UPDATE `uhcwars_stats` SET `kills` = ?,  `deaths` = ?, `wins` = ? WHERE `uuid` = ?;");
+            PreparedStatement statement = connection.prepareStatement("UPDATE `uhcwars_stats` SET `kills` = ?,  `deaths` = ?, `wins` = ?, `objectiveDmg` = ? WHERE `uuid` = ?;");
             statement.setInt(1, uhcPlayer.getKills().getAmount());
             statement.setInt(2, uhcPlayer.getDeaths().getAmount());
             statement.setInt(3, uhcPlayer.getWins().getAmount());
-            statement.setString(1, uhcPlayer.getUuid().toString());
+            statement.setInt(4, uhcPlayer.getObjectiveDmg().getAmount());
+            statement.setString(5, uhcPlayer.getUuid().toString());
             statement.executeUpdate();
             statement.close();
 

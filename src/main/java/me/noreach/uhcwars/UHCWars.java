@@ -59,7 +59,6 @@ public class UHCWars extends JavaPlugin {
     private ChestFill chestFill;
     private ModManager modManager;
     private boolean stats = false;
-    private boolean testServer = true;
 
 
     private IDatabase iDatabase;
@@ -180,8 +179,6 @@ public class UHCWars extends JavaPlugin {
         Bukkit.getLogger().log(Level.INFO, "[Walls] Successfully generated the wall!");
 
     }
-
-    public boolean getTestServer(){ return this.testServer;}
 
 
 

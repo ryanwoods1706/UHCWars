@@ -3,6 +3,7 @@ package me.noreach.uhcwars.listeners;
 import me.noreach.uhcwars.UHCWars;
 import me.noreach.uhcwars.enums.GameState;
 import me.noreach.uhcwars.locations.Objective;
+import me.noreach.uhcwars.player.UHCPlayer;
 import me.noreach.uhcwars.teams.Teams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,6 +38,7 @@ public class BlockHandler implements Listener{
     public void onBreak(BlockBreakEvent e){
         Block block = e.getBlock();
         Player pl = e.getPlayer();
+        UHCPlayer uhcPlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(pl.getUniqueId());
         if (this.uhcWars.getSpectatorManager().getSpectators().contains(pl.getUniqueId())){
             e.setCancelled(true);
             return;
@@ -57,6 +59,7 @@ public class BlockHandler implements Listener{
                     return;
                 }
                 objective.decrementHealth();
+                uhcPlayer.getObjectiveDmg().incrementValue();
                 this.uhcWars.getObjectiveManager().getActiveObjectives().put(oppositeTeam, objective);
 
                 if (objective.getHealth() > 0){

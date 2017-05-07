@@ -41,6 +41,7 @@ public class YmlDatastore extends IDatabase {
                 playerConfig.set("Stats.kills", 0);
                 playerConfig.set("Stats.deaths", 0);
                 playerConfig.set("Stats.wins", 0);
+                playerConfig.set("Stats.objectiveDmg", 0);
                 playerConfig.save(userFile);
             }
         }catch (IOException e){
@@ -62,6 +63,7 @@ public class YmlDatastore extends IDatabase {
                     uhcPlayer.getKills().setAmount(playerConfig.getInt("Stats.kills"));
                     uhcPlayer.getDeaths().setAmount(playerConfig.getInt("Stats.deaths"));
                     uhcPlayer.getWins().setAmount(playerConfig.getInt("Stats.wins"));
+                    uhcPlayer.getObjectiveDmg().setAmount(playerConfig.getInt("Stats.objectiveDmg"));
                 } else {
                     createPlayer(uuid);
                     uhcPlayer.getKills().setAmount(0);
@@ -100,6 +102,7 @@ public class YmlDatastore extends IDatabase {
                 playerConfig.set("Stats.kills", kills);
                 playerConfig.set("Stats.deaths", deaths);
                 playerConfig.set("Stats.wins", wins);
+                playerConfig.set("Stats.objectiveDmg", uhcPlayer.getObjectiveDmg().getAmount());
                 playerConfig.save(userFile);
                 Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully updated user file for player: " + playerUUID);
             }else{
@@ -143,9 +146,11 @@ public class YmlDatastore extends IDatabase {
                 playerConfig.set("Stats.kills", 0);
                 playerConfig.set("Stats.deaths", 0);
                 playerConfig.set("Stats.wins", 0);
+                playerConfig.set("Stats.objectiveDmg", 0);
                 uhcPlayer.getKills().setAmount(0);
                 uhcPlayer.getDeaths().setAmount(0);
                 uhcPlayer.getWins().setAmount(0);
+                uhcPlayer.getObjectiveDmg().setAmount(0);
                 playerConfig.save(userFile);
                 Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully scrubbed statistics for:" + uuid);
             }else{

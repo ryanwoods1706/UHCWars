@@ -67,6 +67,7 @@ public class MongoDataStore extends IDatabase {
         dbObject.put("kills", 0);
         dbObject.put("deaths", 0);
         dbObject.put("wins", 0);
+        dbObject.put("objectiveDmg", 0);
         this.collection.insert(dbObject);
     }
 
@@ -99,6 +100,8 @@ public class MongoDataStore extends IDatabase {
         uhcPlayer.getKills().setAmount((int) found.get("kills"));
         uhcPlayer.getDeaths().setAmount((int) found.get("deaths"));
         uhcPlayer.getWins().setAmount((int) found.get("wins"));
+        uhcPlayer.getObjectiveDmg().setAmount((int) found.get("objectiveDmg"));
+
         Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully retrieved player info for: " + uhcPlayer.getUuid());
         return uhcPlayer;
     }
@@ -129,6 +132,7 @@ public class MongoDataStore extends IDatabase {
         replacement.put("kills", uhcPlayer.getKills().getAmount());
         replacement.put("deaths", uhcPlayer.getDeaths().getAmount());
         replacement.put("wins", uhcPlayer.getWins().getAmount());
+        replacement.put("objectiveDmg", uhcPlayer.getObjectiveDmg().getAmount());
         this.collection.update(found, replacement);
         Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully updated player info for: " + uhcPlayer.getUuid());
     }
@@ -158,6 +162,7 @@ public class MongoDataStore extends IDatabase {
             uhcPlayer.getKills().setAmount(0);
             uhcPlayer.getWins().setAmount(0);
             uhcPlayer.getDeaths().setAmount(0);
+            uhcPlayer.getObjectiveDmg().setAmount(0);
             Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully scrubbed all statistics for player: " + uuid);
             if (player.isOnline()) {
                 player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.GREEN + "Successfully reset all your statistics!");

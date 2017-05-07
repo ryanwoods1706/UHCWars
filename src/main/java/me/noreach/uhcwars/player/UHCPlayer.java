@@ -23,6 +23,7 @@ public class UHCPlayer {
     private Stat kills = new Stat(new ItemCreator(Material.DIAMOND_SWORD).setName(ChatColor.AQUA + "Kills").toItemStack(), 0);
     private Stat deaths = new Stat(new ItemCreator(Material.SKULL_ITEM).setName(ChatColor.AQUA + "Deaths").toItemStack(), 0);
     private Stat wins = new Stat(new ItemCreator(Material.PAPER).setName(ChatColor.AQUA + "Wins").toItemStack(), 0);
+    private Stat objectiveDmg = new Stat(new ItemCreator(Material.TNT).setName(ChatColor.AQUA + "Objective Damage").toItemStack(), 0);
 
     private String serialisedKit;
 
@@ -57,6 +58,8 @@ public class UHCPlayer {
     public Stat getDeaths(){ return this.deaths;}
 
     public Stat getWins(){ return this.wins;}
+
+    public Stat getObjectiveDmg(){ return this.objectiveDmg;}
 
     public UUID getUuid(){ return this.uuid;}
 
