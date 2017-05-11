@@ -58,7 +58,6 @@ public class RegionManager {
             wallPos2.getChunk().load();
             this.wallLocation.add(wallPos1);
             this.wallLocation.add(wallPos2);
-            FileConfiguration configuration = uhcWars.getConfig();
             String path = "Settings.SpawnLocations.Team1.";
             String path2 = "Settings.SpawnLocations.Team2.";
             try {

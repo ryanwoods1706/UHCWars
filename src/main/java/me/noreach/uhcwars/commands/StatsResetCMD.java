@@ -23,7 +23,8 @@ public class StatsResetCMD implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof Player){
-            sender.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "This command can only be used by the console!");
+            sender.sendMessage(this.uhcWars.getReferences().getConsoleOnlyCmd());
+            //sender.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "This command can only be used by the console!");
             return true;
         }
         try{

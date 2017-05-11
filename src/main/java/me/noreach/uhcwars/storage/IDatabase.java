@@ -21,12 +21,6 @@ public abstract class IDatabase {
 
     public abstract void closeDataStore();
 
-//    public abstract Inventory playerKit(UUID uuid);
-
-   // public abstract void saveCustomKit(UUID uuid, Inventory inventory);
-
- //   public abstract void createKit(UUID uuid, Inventory inventory);
-
     public abstract void scrubPlayer(UUID uuid);
 
 }

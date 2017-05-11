@@ -28,10 +28,12 @@ public class PreGame extends BukkitRunnable {
             else if (Bukkit.getServer().getOnlinePlayers().size() >= this.uhcWars.getReferences().getReqStart()){
                 second-=5;
                 if (second > 0) {
-                    Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Starting game in: " + this.uhcWars.getReferences().getSecondaryColor() + second + this.uhcWars.getReferences().getMainColor() + " seconds!");
+                    Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPreGameStartingIn().replace("{seconds}", String.valueOf(second)));
+                   // Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Starting game in: " + this.uhcWars.getReferences().getSecondaryColor() + second + this.uhcWars.getReferences().getMainColor() + " seconds!");
                 }
                 if (second == 0){
-                    Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "The game is now starting!");
+                    Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getGameStarting());
+                    //Bukkit.broadcastMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "The game is now starting!");
                     this.uhcWars.getGameManager().startGame();
                 }
             }

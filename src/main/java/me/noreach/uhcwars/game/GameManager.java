@@ -74,7 +74,8 @@ public class GameManager {
     public void endGame(){
         if (this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_1).getHealth() > this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_2).getHealth()) {
             int health = this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_1).getHealth();
-            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + "Team 1" + mainColor + " has won the game with " + secondaryColor + health + mainColor + " health remaining!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getTeam1Won().replace("{health}", String.valueOf(health)));
+            //Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + "Team 1" + mainColor + " has won the game with " + secondaryColor + health + mainColor + " health remaining!");
             for (Player player : this.uhcWars.getTeamManager().getTeam1()){
                 UHCPlayer gamePlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(player.getUniqueId());
                 gamePlayer.getWins().incrementValue();
@@ -83,7 +84,8 @@ public class GameManager {
         }
         if (this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_2).getHealth() > this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_1).getHealth()){
             int health = this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_2).getHealth();
-            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + "Team 2" + mainColor + " has won the game with " + secondaryColor + health + mainColor + " health remaining!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getTeam2Won().replace("{health}", String.valueOf(health)));
+           // Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + secondaryColor + "Team 2" + mainColor + " has won the game with " + secondaryColor + health + mainColor + " health remaining!");
             for (Player player : this.uhcWars.getTeamManager().getTeam2()){
                 UHCPlayer gamePlayer = this.uhcWars.getPlayerManager().getUhcPlayers().get(player.getUniqueId());
                 gamePlayer.getWins().incrementValue();
@@ -91,7 +93,8 @@ public class GameManager {
             }
         }
         if (this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_1).getHealth() == this.uhcWars.getObjectiveManager().getActiveObjectives().get(Teams.Team_2).getHealth()){
-            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Its a tie! Both teams have the same health!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getGameTie());
+           // Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Its a tie! Both teams have the same health!");
         }
         Bukkit.getScheduler().runTaskLater(this.uhcWars, new Runnable() {
             @Override

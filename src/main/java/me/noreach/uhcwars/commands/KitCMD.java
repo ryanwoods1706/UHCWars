@@ -29,7 +29,8 @@ public class KitCMD implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof ConsoleCommandSender){
-            sender.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You cannot use this command as console");
+            sender.sendMessage(this.uhcWars.getReferences().getPlayerOnlyCmd());
+           // sender.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You cannot use this command as console");
             return true;
         }
         Player player = (Player) sender;
@@ -42,7 +43,8 @@ public class KitCMD implements CommandExecutor {
             if (args[0].equalsIgnoreCase("save")){
                 Inventory inventory = player.getInventory();
                 uhcPlayer.setSerialisedKit(this.uhcWars.getInventorySerializer().InventoryToString(inventory));
-                player.sendMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Successfully saved your hotbar layout!");
+               // player.sendMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Successfully saved your hotbar layout!");
+                player.sendMessage(this.uhcWars.getReferences().getSuccessKitSave());
                 this.uhcWars.getInvent().giveJoinInventory(player);
             }
 

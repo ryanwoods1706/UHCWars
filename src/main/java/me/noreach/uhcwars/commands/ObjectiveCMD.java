@@ -25,12 +25,14 @@ public class ObjectiveCMD implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
-            sender.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You cannot use this command as console!");
+            sender.sendMessage(this.uhcWars.getReferences().getPlayerOnlyCmd());
+           // sender.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You cannot use this command as console!");
             return true;
         }
         Player player = (Player) sender;
         if (!player.hasPermission("uhcwars.objective.register")) {
-            player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You do not have permission to perform this command!");
+            player.sendMessage(this.uhcWars.getReferences().getNoPerms());
+           // player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You do not have permission to perform this command!");
             return true;
         }
         if (this.uhcWars.getStateManager().getGameState() != GameState.LOBBY) {

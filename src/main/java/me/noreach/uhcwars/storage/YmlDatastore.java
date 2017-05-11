@@ -27,6 +27,7 @@ public class YmlDatastore extends IDatabase {
 
     @Override
     public boolean initalize() {
+        Bukkit.getLogger().log(Level.INFO, "[Storage] Using YML to store data, nothing to initalise");
         return false;
     }
 
@@ -132,6 +133,7 @@ public class YmlDatastore extends IDatabase {
 
     @Override
     public void closeDataStore() {
+        Bukkit.getLogger().log(Level.INFO, "[Storage] Using YML as a datastore, nothing to clean up!");
 
     }
 

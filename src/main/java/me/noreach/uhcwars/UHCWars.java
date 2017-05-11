@@ -70,6 +70,7 @@ public class UHCWars extends JavaPlugin {
         this.configHandler = new ConfigHandler(this);
         this.references = new References(this);
         this.references.loadValues();
+        this.references.generateMessages();
         if (!getConfig().getBoolean("Settings.stats")){
             this.stats = false;
         }

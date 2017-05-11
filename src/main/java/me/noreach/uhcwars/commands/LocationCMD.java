@@ -24,12 +24,14 @@ public class LocationCMD implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof ConsoleCommandSender){
-            sender.sendMessage(ChatColor.RED + "You must be a player to perform this command!");
+            sender.sendMessage(this.uhcWars.getReferences().getPlayerOnlyCmd());
+          //  sender.sendMessage(ChatColor.RED + "You must be a player to perform this command!");
             return true;
         }
         Player player = (Player) sender;
         if (!player.hasPermission("uhcwars.SpawnLocation.set")){
-            player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You do not have permission to perform this command!");
+            player.sendMessage(this.uhcWars.getReferences().getNoPerms());
+            //player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You do not have permission to perform this command!");
             return true;
         }
         try{

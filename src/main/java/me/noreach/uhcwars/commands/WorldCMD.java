@@ -25,11 +25,13 @@ public class WorldCMD implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         if (commandSender instanceof ConsoleCommandSender){
-            commandSender.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You must be a player to use this command!");
+            commandSender.sendMessage(this.uhcWars.getReferences().getPlayerOnlyCmd());
+            //commandSender.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You must be a player to use this command!");
         }
         Player player = (Player) commandSender;
         if (!player.hasPermission("uhcwars.world.teleport")){
-            player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You do not have permission to perform this command!");
+            player.sendMessage(this.uhcWars.getReferences().getNoPerms());
+            //player.sendMessage(this.uhcWars.getReferences().getPrefix() + ChatColor.RED + "You do not have permission to perform this command!");
             return true;
         }
         try{

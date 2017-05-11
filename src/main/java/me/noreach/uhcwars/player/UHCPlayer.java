@@ -48,6 +48,7 @@ public class UHCPlayer {
         inv.setItem(0, kills.getItemStack());
         inv.setItem(1, deaths.getItemStack());
         inv.setItem(2, wins.getItemStack());
+        inv.setItem(3, objectiveDmg.getItemStack());
         return inv;
     }
 

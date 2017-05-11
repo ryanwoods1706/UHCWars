@@ -25,12 +25,14 @@ public class RegionCMD implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
         if (sender instanceof ConsoleCommandSender){
-            sender.sendMessage(this.uhcWars.getReferences().getPrefix() +ChatColor.RED + "You cannot use this command as console!");
+            sender.sendMessage(this.uhcWars.getReferences().getPlayerOnlyCmd());
+        //    sender.sendMessage(this.uhcWars.getReferences().getPrefix() +ChatColor.RED + "You cannot use this command as console!");
             return true;
         }
         Player player = (Player) sender;
         if (!player.hasPermission("uhcwars.region.create")){
-            player.sendMessage(this.uhcWars.getReferences().getPrefix() +ChatColor.RED + "You do not have permission to use this command!");
+            player.sendMessage(this.uhcWars.getReferences().getNoPerms());
+           // player.sendMessage(this.uhcWars.getReferences().getPrefix() +ChatColor.RED + "You do not have permission to use this command!");
             return true;
         }
         if (this.uhcWars.getStateManager().getGameState() != GameState.LOBBY){
@@ -65,7 +67,8 @@ public class RegionCMD implements CommandExecutor{
                     return false;
                 }
                 region.attemptSave();
-                player.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Successfully saved your region!");
+                player.sendMessage(this.uhcWars.getReferences().getSuccessRegionSave());
+                //player.sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Successfully saved your region!");
                 this.uhcWars.getRegionManager().getRegionFactory().remove(player.getUniqueId());
                 this.uhcWars.getRegionManager().getRegionsInUse().add(region);
 

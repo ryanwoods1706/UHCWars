@@ -63,7 +63,8 @@ public class Objective {
         config.set(path2 + ".y", (float) location.getY());
         config.set(path2 + ".z", (float) location.getZ());
         this.uhcWars.saveConfig();
-        sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Successfully saved Objective!");
+        sendMessage(this.uhcWars.getReferences().getSuccessObjectiveSave());
+       // sendMessage(this.uhcWars.getReferences().getPrefix() + this.uhcWars.getReferences().getMainColor() + "Successfully saved Objective!");
         return true;
     }
 

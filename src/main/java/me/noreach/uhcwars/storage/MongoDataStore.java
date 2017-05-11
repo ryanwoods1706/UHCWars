@@ -101,7 +101,6 @@ public class MongoDataStore extends IDatabase {
         uhcPlayer.getDeaths().setAmount((int) found.get("deaths"));
         uhcPlayer.getWins().setAmount((int) found.get("wins"));
         uhcPlayer.getObjectiveDmg().setAmount((int) found.get("objectiveDmg"));
-
         Bukkit.getLogger().log(Level.INFO, "[Storage] Successfully retrieved player info for: " + uhcPlayer.getUuid());
         return uhcPlayer;
     }

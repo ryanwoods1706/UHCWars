@@ -30,11 +30,13 @@ public class InGame extends BukkitRunnable {
         second--;
         if (second == this.uhcWars.getReferences().getWallDropTime()){
             this.uhcWars.degenerateWall();
-            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "PvP is now enabled! May the odds be ever in your favour!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getGamePvP());
+            //Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "PvP is now enabled! May the odds be ever in your favour!");
         }
         else if (second == this.uhcWars.getReferences().getHalfTime()){
             this.uhcWars.generateWall();
-            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half Time! All chests have been refilled and you have 2 minutes to collect Items!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getHalfTimeStarted());
+            //Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half Time! All chests have been refilled and you have 2 minutes to collect Items!");
             this.uhcWars.getChestManager().fillTeam1Chests(false);
             this.uhcWars.getChestManager().fillTeam2Chests(false);
             Bukkit.getScheduler().runTaskLater(this.uhcWars, new Runnable() {
@@ -51,7 +53,8 @@ public class InGame extends BukkitRunnable {
         }
         else if (second == this.uhcWars.getReferences().getHalfTime() - 120){
             this.uhcWars.degenerateWall();
-            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half time has now ended! May the odds be ever in your favour!");
+            Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getHalfTimeEnded());
+            //Bukkit.getServer().broadcastMessage(this.uhcWars.getReferences().getPrefix() + mainColor + "Half time has now ended! May the odds be ever in your favour!");
         }
         else if (second == 0){
             this.uhcWars.getGameManager().endGame();
